@@ -64,8 +64,19 @@ var post = await app.Data.Crud.GetById<Post>("xxxxxxxx").GetAsync();
 ### Querying
 Something like this
 ```csharp
-	app.Data.Posts.QueryAll().GetAsync() // All Posts
-	app.Data.Posts.Query(strQuery).GetAsync() // Filter Posts
-	app.Data.Posts.Query(strQuery).Paged(1, 20).GetAsync() // Query paged
-  app.Data.Posts.Query(strQuery).OrderBy(strOrder).Pagged(1,20).GetAsync() // Ordered and Paged
+app.Data.Posts.QueryAll().GetAsync(); // All Posts
+app.Data.QueryAll<Post>().GetAsync(); // All Posts
+author.Posts.QueryAll().GetAsync(); // All Posts of the author
+
+app.Data.Posts.Query(strQuery).GetAsync(); // Filter Posts
+app.Data.Query<Post>(strQuery).GetAsync(); // Filter Posts
+author.Posts.Query(strQuery).GetAsync(); // Filter Posts of the author
+
+app.Data.Posts.Query(strQuery).Paged(1, 20).GetAsync(); // Query paged
+app.Data.Query<Post>(strQuery).Paged(1, 20).GetAsync(); // Query paged
+author.Posts.Query(strQuery).GetAsync(); // Query paged Posts of the author
+
+app.Data.Posts.Query(strQuery).OrderBy(strOrder).Pagged(1,20).GetAsync(); // Ordered and Paged
+app.Data.Query<Post>(strQuery).OrderBy(strOrder).Pagged(1,20).GetAsync();
+author.Posts.Query(strQuery).OrderBy(strOrder).Pagged(1,20).GetAsync(); // Query ordered and paged Posts of the author
 ```
