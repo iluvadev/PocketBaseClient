@@ -31,16 +31,9 @@ namespace PocketBaseClient
         //    return pagedCollection;
         //}
 
-        internal static Dictionary<string, string> AddAuthorizationHeader(this PocketBase pocketBase, Dictionary<string, string>? headers = null)
-        {
-            headers ??= new Dictionary<string, string>();
-            if (!headers.ContainsKey("Authorization") && pocketBase.AuthStore.IsValid && pocketBase.AuthStore.Token != null)
-                headers["Authorization"] = pocketBase.AuthStore.Token;
-            return headers;
-        }
         internal static async Task<T?> HttpGetAsync<T>(this PocketBase pocketBase, string url)
         {
-            return await pocketBase.SendAsync<T>(url, HttpMethod.Get, headers: AddAuthorizationHeader(pocketBase));
+            return await pocketBase.SendAsync<T>(url, HttpMethod.Get);
         }
 
         internal static async Task<PagedCollectionModel<T>?> HttpGetListAsync<T>(this PocketBase pocketBase, string url, int? page = null, int? perPage = null)
@@ -53,7 +46,7 @@ namespace PocketBaseClient
                 { "sort", null },
                 { "expand", null },
             };
-            var pagedCollection = await pocketBase.SendAsync<PagedCollectionModel<T>>(url, HttpMethod.Get, headers: AddAuthorizationHeader(pocketBase), query: query);
+            var pagedCollection = await pocketBase.SendAsync<PagedCollectionModel<T>>(url, HttpMethod.Get, query: query);
             if (pagedCollection is null) throw new ClientException(url);
 
             return pagedCollection;

@@ -21,7 +21,7 @@ namespace PocketBaseClient.Services
             => await App.Sdk.User.AuthenticateViaOAuth2(provider, code, codeVerifier, redirectUrl);
 
         public async Task<UserAuthModel?> RefreshAsync()
-            => await App.Sdk.User.RefreshAsync(headers: App.Sdk.AddAuthorizationHeader());
+            => await App.Sdk.User.RefreshAsync();
 
         public async Task RequestPasswordResetAsync(string email)
             => await App.Sdk.User.RequestPasswordResetAsync(email);
@@ -36,7 +36,7 @@ namespace PocketBaseClient.Services
             => await App.Sdk.User.ConfirmVerificationAsync(token);
 
         public async Task RequestEmailChangeAsync(string newEmail)
-            => await App.Sdk.User.RequestEmailChangeAsync(newEmail, headers: App.Sdk.AddAuthorizationHeader());
+            => await App.Sdk.User.RequestEmailChangeAsync(newEmail);
 
         public async Task<UserAuthModel?> ConfirmEmailChangeAsync(string emailChangeToken, string userPassword)
             => await App.Sdk.User.ConfirmEmailChangeAsync(emailChangeToken, userPassword);

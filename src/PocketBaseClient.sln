@@ -11,6 +11,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "pocketbase-csharp-sdk", "ex
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "pocketbase-csharp-sdk.Tests", "externals\pocketbase-csharp-sdk\pocketbase-csharp-sdk.Tests\pocketbase-csharp-sdk.Tests.csproj", "{61EDA16D-7032-40C4-BB43-9878BDE12131}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PocketBaseClient.CodeGenerator", "PocketBaseClient.CodeGenerator\PocketBaseClient.CodeGenerator.csproj", "{5F9F967E-54F7-4713-BF59-B8C72FF3C37F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -29,6 +31,10 @@ Global
 		{61EDA16D-7032-40C4-BB43-9878BDE12131}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{61EDA16D-7032-40C4-BB43-9878BDE12131}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{61EDA16D-7032-40C4-BB43-9878BDE12131}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5F9F967E-54F7-4713-BF59-B8C72FF3C37F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5F9F967E-54F7-4713-BF59-B8C72FF3C37F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5F9F967E-54F7-4713-BF59-B8C72FF3C37F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5F9F967E-54F7-4713-BF59-B8C72FF3C37F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

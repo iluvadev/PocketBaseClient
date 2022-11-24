@@ -20,31 +20,31 @@ namespace pocketbase_csharp_sdk.Services
             this.itemProperties = this.GetPropertyNames().ToArray();
         }
 
-        //public async Task<PagedCollectionModel<T>> ListAsync(
-        //    int? page = null,
-        //    int? perPage = null,
-        //    string? sort = null,
-        //    string? filter = null,
-        //    string? expand = null,
-        //    IDictionary<string, string>? headers = null)
-        //{
-        //    var query = new Dictionary<string, object?>()
-        //    {
-        //        { "filter", filter },
-        //        { "page", page },
-        //        { "perPage", perPage },
-        //        { "sort", sort },
-        //        { "expand", expand },
-        //    };
-        //    var pagedCollection = await client.SendAsync<PagedCollectionModel<T>>(
-        //        BasePath(),
-        //        HttpMethod.Get,
-        //        headers: headers,
-        //        query: query);
-        //    if (pagedCollection is null) throw new ClientException(BasePath());
+        public async Task<PagedCollectionModel<T>> ListAsync(
+            int? page = null,
+            int? perPage = null,
+            string? sort = null,
+            string? filter = null,
+            string? expand = null,
+            IDictionary<string, string>? headers = null)
+        {
+            var query = new Dictionary<string, object?>()
+            {
+                { "filter", filter },
+                { "page", page },
+                { "perPage", perPage },
+                { "sort", sort },
+                { "expand", expand },
+            };
+            var pagedCollection = await client.SendAsync<PagedCollectionModel<T>>(
+                BasePath(),
+                HttpMethod.Get,
+                headers: headers,
+                query: query);
+            if (pagedCollection is null) throw new ClientException(BasePath());
 
-        //    return pagedCollection;
-        //}
+            return pagedCollection;
+        }
 
         //public async Task<T> CreateAsync(
         //    IDictionary<string, object>? body)
