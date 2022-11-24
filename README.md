@@ -1,4 +1,4 @@
-# PocketClient-csharp
+# PocketBaseClient-csharp
 (WARNING: At the moment this is only a concept. In active development) Basic client in C# for interacting with PocketBase, with a simple ORM to manage Collections and Registries
 
 There is no available release yet. Is only a concept
