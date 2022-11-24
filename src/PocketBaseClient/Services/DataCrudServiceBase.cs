@@ -1,4 +1,4 @@
-﻿namespace PocketClient.Services
+﻿namespace PocketBaseClient.Services
 {
     public abstract class DataCrudServiceBase : ServiceBase
     {

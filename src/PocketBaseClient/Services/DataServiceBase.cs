@@ -1,10 +1,10 @@
-﻿using PocketClient.Orm;
+﻿using PocketBaseClient.Orm;
 
-namespace PocketClient.Services
+namespace PocketBaseClient.Services
 {
     public abstract class DataServiceBase: ServiceBase
     {
-        public DataServiceBase(PocketClientAppication app): base(app) { }
+        public DataServiceBase(PocketBaseClientApplication app): base(app) { }
 
         #region Collections
         private Dictionary<Type, CollectionBase> RegisteredCollections { get; } = new Dictionary<Type, CollectionBase>();

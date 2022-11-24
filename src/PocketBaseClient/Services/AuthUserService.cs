@@ -2,11 +2,11 @@
 using pocketbase_csharp_sdk.Models.Auth;
 using pocketbase_csharp_sdk.Models.Log;
 
-namespace PocketClient.Services
+namespace PocketBaseClient.Services
 {
     public class AuthUserService: ServiceBase
     {
-        public AuthUserService(PocketClientAppication app): base(app) { }
+        public AuthUserService(PocketBaseClientApplication app): base(app) { }
 
         public async Task<UserModel> CreateAsync(string email, string password, string passwordConfirm)
             => await App.Sdk.User.CreateAsync(email, password, passwordConfirm);

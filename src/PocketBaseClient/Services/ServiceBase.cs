@@ -4,13 +4,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PocketClient.Services
+namespace PocketBaseClient.Services
 {
     public abstract class ServiceBase
     {
-        public PocketClientAppication App { get; }
+        public PocketBaseClientApplication App { get; }
 
-        public ServiceBase(PocketClientAppication app)
+        public ServiceBase(PocketBaseClientApplication app)
         {
             App = app;
         }

@@ -1,4 +1,4 @@
-﻿namespace PocketClient.Orm
+﻿namespace PocketBaseClient.Orm
 {
     public class CollectionMetadata
     {

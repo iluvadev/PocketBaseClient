@@ -1,10 +1,10 @@
 ﻿using pocketbase_csharp_sdk.Models.Auth;
 
-namespace PocketClient.Services
+namespace PocketBaseClient.Services
 {
     public class AuthAdminService : ServiceBase
     {
-        public AuthAdminService(PocketClientAppication app) : base(app) { }
+        public AuthAdminService(PocketBaseClientApplication app) : base(app) { }
 
         public async Task<AdminAuthModel?> AuthenticateWithPassword(string email, string password)
             => await App.Sdk.Admin.AuthenticateWithPassword(email, password);

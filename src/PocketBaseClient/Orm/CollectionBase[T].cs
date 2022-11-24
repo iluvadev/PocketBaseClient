@@ -1,10 +1,10 @@
 ﻿using pocketbase_csharp_sdk;
 using pocketbase_csharp_sdk.Models;
-using PocketClient.Orm.Cache;
-using PocketClient.Services;
+using PocketBaseClient.Orm.Cache;
+using PocketBaseClient.Services;
 using System.Web;
 
-namespace PocketClient.Orm
+namespace PocketBaseClient.Orm
 {
     public abstract class CollectionBase<T> : CollectionBase
         where T : ItemBase

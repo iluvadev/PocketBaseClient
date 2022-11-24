@@ -1,4 +1,4 @@
-﻿namespace PocketClient.Orm.Cache
+﻿namespace PocketBaseClient.Orm.Cache
 {
     internal class CacheItems<T>
         where T : ItemBase

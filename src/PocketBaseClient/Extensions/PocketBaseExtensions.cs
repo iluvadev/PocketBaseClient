@@ -1,7 +1,7 @@
 ﻿using pocketbase_csharp_sdk;
 using pocketbase_csharp_sdk.Models;
 
-namespace PocketClient
+namespace PocketBaseClient
 {
     internal static class PocketBaseExtensions
     {

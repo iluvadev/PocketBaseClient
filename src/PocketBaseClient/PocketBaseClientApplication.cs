@@ -1,9 +1,9 @@
 ﻿using pocketbase_csharp_sdk;
-using PocketClient.Services;
+using PocketBaseClient.Services;
 
-namespace PocketClient
+namespace PocketBaseClient
 {
-    public class PocketClientAppication
+    public class PocketBaseClientApplication
     {
         public string? AppName { get; set; }
         public string AppUrl { get; init; }
@@ -13,7 +13,7 @@ namespace PocketClient
 
         public PocketBase Sdk { get; }
 
-        public PocketClientAppication(string url, string? appName = null)
+        public PocketBaseClientApplication(string url, string? appName = null)
         {
             AppUrl = url;
             AppName = appName;

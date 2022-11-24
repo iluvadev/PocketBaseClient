@@ -1,4 +1,4 @@
-﻿namespace PocketClient.Services
+﻿namespace PocketBaseClient.Services
 {
     public class AuthService: ServiceBase
     {
@@ -8,6 +8,6 @@
         private AuthUserService? _User = null;
         public AuthUserService User => _User ??= new AuthUserService(App);
 
-        public AuthService(PocketClientAppication app) : base(app) { }
+        public AuthService(PocketBaseClientApplication app) : base(app) { }
     }
 }

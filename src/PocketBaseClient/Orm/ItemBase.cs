@@ -1,7 +1,7 @@
 ﻿using pocketbase_csharp_sdk.Json;
 using System.Text.Json.Serialization;
 
-namespace PocketClient.Orm
+namespace PocketBaseClient.Orm
 {
     public abstract class ItemBase
     {

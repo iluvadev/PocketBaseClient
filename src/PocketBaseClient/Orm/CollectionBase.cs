@@ -1,7 +1,7 @@
 ﻿using pocketbase_csharp_sdk;
-using PocketClient.Services;
+using PocketBaseClient.Services;
 
-namespace PocketClient.Orm
+namespace PocketBaseClient.Orm
 {
     public abstract class CollectionBase
     {

@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.4.33110.190
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PocketClient", "PocketClient\PocketClient.csproj", "{6D50750D-05F6-4F07-BF45-2F69CFB5E12F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PocketBaseClient", "PocketBaseClient\PocketBaseClient.csproj", "{6D50750D-05F6-4F07-BF45-2F69CFB5E12F}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "sdk", "sdk", "{437E22C7-9D08-42BF-895C-FAFF7431CB65}"
 EndProject
