@@ -62,6 +62,7 @@ var post = await Post.GetById("xxxxxxxx").GetAsync();
 var post = await app.Data.Posts.GetById("xxxxxxxx").GetAsync();
 // Or
 var post = await app.Data.Crud.GetById<Post>("xxxxxxxx").GetAsync();
+```
 
 Creating an element (only creates the object in memory):
 ```csharp
