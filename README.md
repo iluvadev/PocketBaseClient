@@ -120,11 +120,16 @@ author.Posts.Query(strQuery).GetAsync(); // Filter Posts of the author
 
 app.Data.Posts.Query(strQuery).Paged(1, 20).GetAsync(); // Query paged
 app.Data.Query<Post>(strQuery).Paged(1, 20).GetAsync(); // Query paged
-author.Posts.Query(strQuery).GetAsync(); // Query paged Posts of the author
+author.Posts.Query(strQuery).Paged(1, 20).GetAsync(); // Query paged Posts of the author
 
-app.Data.Posts.Query(strQuery).OrderBy(strOrder).Pagged(1,20).GetAsync(); // Ordered and Paged
-app.Data.Query<Post>(strQuery).OrderBy(strOrder).Pagged(1,20).GetAsync();
-author.Posts.Query(strQuery).OrderBy(strOrder).Pagged(1,20).GetAsync(); // Query ordered and paged Posts of the author
+app.Data.Posts.Query(strQuery).OrderBy(strOrder).Paged(1,20).GetAsync(); // Ordered and Paged
+app.Data.Query<Post>(strQuery).OrderBy(strOrder).Paged(1,20).GetAsync();
+author.Posts.Query(strQuery).OrderBy(strOrder).Paged(1,20).GetAsync(); // Query ordered and paged Posts of the author
+
+app.Data.Posts.Query(strQuery).OrderBy(strOrder).First().GetAsync(); 
+app.Data.Query<Post>(strQuery).OrderBy(strOrder).First().GetAsync();
+author.Posts.Query(strQuery).OrderBy(strOrder).First().GetAsync();
+
 ```
 
 ### More...
