@@ -1,0 +1,15 @@
+C:\Dev\iluvadev\projects\PocketClient-csharp\src\PocketClient\bin\Debug\net6.0\PocketClient.deps.json
+C:\Dev\iluvadev\projects\PocketClient-csharp\src\PocketClient\bin\Debug\net6.0\PocketClient.dll
+C:\Dev\iluvadev\projects\PocketClient-csharp\src\PocketClient\bin\Debug\net6.0\PocketClient.pdb
+C:\Dev\iluvadev\projects\PocketClient-csharp\src\PocketClient\bin\Debug\net6.0\pocketbase-csharp-sdk.dll
+C:\Dev\iluvadev\projects\PocketClient-csharp\src\PocketClient\bin\Debug\net6.0\pocketbase-csharp-sdk.pdb
+C:\Dev\iluvadev\projects\PocketClient-csharp\src\PocketClient\obj\Debug\net6.0\PocketClient.csproj.AssemblyReference.cache
+C:\Dev\iluvadev\projects\PocketClient-csharp\src\PocketClient\obj\Debug\net6.0\PocketClient.GeneratedMSBuildEditorConfig.editorconfig
+C:\Dev\iluvadev\projects\PocketClient-csharp\src\PocketClient\obj\Debug\net6.0\PocketClient.AssemblyInfoInputs.cache
+C:\Dev\iluvadev\projects\PocketClient-csharp\src\PocketClient\obj\Debug\net6.0\PocketClient.AssemblyInfo.cs
+C:\Dev\iluvadev\projects\PocketClient-csharp\src\PocketClient\obj\Debug\net6.0\PocketClient.csproj.CoreCompileInputs.cache
+C:\Dev\iluvadev\projects\PocketClient-csharp\src\PocketClient\obj\Debug\net6.0\PocketClient.csproj.CopyComplete
+C:\Dev\iluvadev\projects\PocketClient-csharp\src\PocketClient\obj\Debug\net6.0\PocketClient.dll
+C:\Dev\iluvadev\projects\PocketClient-csharp\src\PocketClient\obj\Debug\net6.0\refint\PocketClient.dll
+C:\Dev\iluvadev\projects\PocketClient-csharp\src\PocketClient\obj\Debug\net6.0\PocketClient.pdb
+C:\Dev\iluvadev\projects\PocketClient-csharp\src\PocketClient\obj\Debug\net6.0\ref\PocketClient.dll
