@@ -1,29 +1,31 @@
-﻿using pocketbase_csharp_sdk.Json;
+﻿using PocketBaseClient.Orm.Json;
 using System.Text.Json.Serialization;
 
 namespace PocketBaseClient.Orm
 {
     public abstract class ItemBase
     {
-        private ItemMetadata? _Metadata = null;
-        public ItemMetadata Metadata => _Metadata ??= new ItemMetadata(this);
-
+        [JsonPropertyName("collectionId")]
+        [JsonConverter(typeof(CollectionIdConverter))]
         public CollectionBase? Collection { get; internal set; }
 
-        //public string? CollectionId { get; set; }
-        //public string? CollectionName { get; set; }
-
+        [JsonPropertyName("id")]
         public string? Id { get; init; }
 
+        [JsonPropertyName("created")]
         [JsonConverter(typeof(DateTimeConverter))]
         public DateTime? Created { get; set; }
 
+        [JsonPropertyName("updated")]
         [JsonConverter(typeof(DateTimeConverter))]
         public DateTime? Updated { get; set; }
 
 
-        public bool IsValid()
-            => Metadata.IsLoaded && !Metadata.IsTrash;
 
+        private ItemMetadata? _Metadata = null;
+        public ItemMetadata Metadata() => _Metadata ??= new ItemMetadata(this);
+
+        public bool IsValid()
+            => Metadata().IsLoaded && !Metadata().IsTrash;
     }
 }

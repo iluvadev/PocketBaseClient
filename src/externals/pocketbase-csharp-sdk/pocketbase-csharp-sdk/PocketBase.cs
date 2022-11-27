@@ -99,7 +99,8 @@ namespace pocketbase_csharp_sdk
 
             try
             {
-                var response = await _httpClient.SendAsync(request);
+                //var response = await _httpClient.SendAsync(request);
+                var response = _httpClient.Send(request);
 
 #if DEBUG
                 var json = await response.Content.ReadAsStringAsync();
