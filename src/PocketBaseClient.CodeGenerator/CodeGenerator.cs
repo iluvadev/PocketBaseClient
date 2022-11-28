@@ -1,5 +1,7 @@
 ﻿using pocketbase_csharp_sdk.Models.Collection;
 using PocketBaseClient.CodeGenerator.Models;
+using System.Dynamic;
+using System.Text;
 using System.Text.Json;
 
 namespace PocketBaseClient.CodeGenerator
@@ -29,22 +31,6 @@ namespace PocketBaseClient.CodeGenerator
             GeneratedNamespace = generatedNamespace ?? $"{schema.Application.AppName?.ToPascalCase() ?? "PocketBaseClient"}.Models";
         }
 
-
-        public void GenerateCode()
-        {
-            ResetGenerationData();
-            foreach (var collection in Schema.Collections)
-            {
-                ProcessCollection(collection);
-            }
-
-            foreach (var generatedCode in _GeneratedCodeList)
-            {
-                Directory.CreateDirectory(Path.GetDirectoryName(generatedCode.Path) ?? OutputPath);
-                File.WriteAllText(generatedCode.Path, generatedCode.Content);
-            }
-        }
-
         private struct GeneratedCode
         {
             public string Path { get; set; }
@@ -55,6 +41,7 @@ namespace PocketBaseClient.CodeGenerator
         {
             public string CollectionClassName { get; set; }
             public string ItemsClassName { get; set; }
+            public CollectionModel CollectionModel { get; set; }
         }
         private List<CollectionInfo> _CollectionList = new List<CollectionInfo>();
 
@@ -65,6 +52,22 @@ namespace PocketBaseClient.CodeGenerator
             _CollectionList = new List<CollectionInfo>();
         }
 
+        public void GenerateCode()
+        {
+            ResetGenerationData();
+            foreach (var collection in Schema.Collections)
+                ProcessCollection(collection);
+
+            foreach (var colInfo in _CollectionList)
+                ProcessSchemaCollection(colInfo);
+
+            foreach (var generatedCode in _GeneratedCodeList)
+            {
+                Directory.CreateDirectory(Path.GetDirectoryName(generatedCode.Path) ?? OutputPath);
+                File.WriteAllText(generatedCode.Path, generatedCode.Content);
+            }
+        }
+
         private void ProcessCollection(CollectionModel collection)
         {
             if (collection.Name == null) throw new Exception("Collection name is empty");
@@ -73,7 +76,8 @@ namespace PocketBaseClient.CodeGenerator
             var colInfo = new CollectionInfo
             {
                 CollectionClassName = "Collection" + collection.Name.Pluralize().ToPascalCase(),
-                ItemsClassName = collection.Name.Singularize().ToPascalCase()
+                ItemsClassName = collection.Name.Singularize().ToPascalCase(),
+                CollectionModel = collection,
             };
             _CollectionList.Add(colInfo);
 
@@ -98,12 +102,16 @@ namespace {GeneratedNamespace}
 "
             };
             _GeneratedCodeList.Add(colCode);
+        }
 
+        private void ProcessSchemaCollection(CollectionInfo colInfo)
+        {
             var itemCode = new GeneratedCode
             {
                 Path = Path.Combine(OutputPath, $"{colInfo.ItemsClassName}.cs")
             };
-            var itemContent = $@"{CodeHeader}
+            StringBuilder sb = new StringBuilder();
+            sb.Append($@"{CodeHeader}
 using PocketBaseClient.Orm;
 using PocketBaseClient.Orm.Attributes;
 using PocketBaseClient.Orm.Json;
@@ -116,43 +124,127 @@ namespace {GeneratedNamespace}
 {{
     public partial class {colInfo.ItemsClassName} : ItemBase
     {{
-";
-            foreach (var schemaField in collection.Schema)
+");
+            foreach (var schemaField in colInfo.CollectionModel.Schema!)
             {
-                itemContent += ProcessSchemaField(schemaField);
+                ProcessSchemaField(colInfo, schemaField, "        ", sb);
             }
-            itemContent += $@"
+            sb.Append($@"
     }}
 }}
-";
-            itemCode.Content = itemContent;
+");
+            itemCode.Content = sb.ToString();
             _GeneratedCodeList.Add(itemCode);
         }
 
-        private string ProcessSchemaField(SchemaFieldModel schemaField)
+        private void ProcessSchemaField(CollectionInfo colInfo, SchemaFieldModel schemaField, string indent, StringBuilder sb)
         {
             string propertyName = schemaField.Name?.ToPascalCase() ?? throw new Exception("Field name is missing");
 
-            string indent = "        ";
-            string code = $@"{indent}[JsonPropertyName(""{schemaField.Name}"")]{Environment.NewLine}";
-            code += $@"{indent}[PocketBaseField(""{schemaField.Id}"", ""{schemaField.Name}"", {(schemaField.Required ?? false).ToString().ToLower()}, {(schemaField.System ?? false).ToString().ToLower()}, {(schemaField.Unique ?? false).ToString().ToLower()}, ""{schemaField.Type}"")]{Environment.NewLine}";
+            sb.Append(GetVarForSchemaField(colInfo, schemaField, indent, propertyName));
+            sb.Append(GetDecoratorsForSchemaField(schemaField, indent, propertyName));
+            sb.Append(GetPropertyForSchemaField(schemaField, indent, propertyName));
+            sb.AppendLine();
+        }
+
+        private string GetTypeForSchemaType(SchemaFieldModel schemaField, string propertyName)
+        {
+            string schemaType = schemaField.Type!;
+
+            if (schemaType == "text") return $"string";
+            if (schemaType == "number") return $"int";
+            if (schemaType == "bool") return $"bool";
+            if (schemaType == "email") return $"MailAddress";
+            if (schemaType == "url") return $"Uri";
+            if (schemaType == "date") return $"DateTime";
+
+            if (schemaType == "select")
+            {
+                var options = JsonSerializer.Deserialize<PocketBaseFieldOptionsSelect>(JsonSerializer.Serialize(schemaField.Options)) ?? new PocketBaseFieldOptionsSelect();
+                if (options.IsSinglSelect) return $"{propertyName}Enum";
+                if (options.MaxSelect != null) return $"LimitedList<{propertyName}Enum>";
+                return $"List<{propertyName}Enum>";
+            }
+            if (schemaType == "json") return $"dynamic";
+
+            if (schemaType == "file")
+            {
+                return $"object";
+            }
+            if (schemaType == "relation")
+            {
+                return $"object";
+            }
+
+            return $"object";
+        }
+        private StringBuilder GetVarForSchemaField(CollectionInfo colInfo, SchemaFieldModel schemaField, string indent, string propertyName)
+        {
+            var sb = new StringBuilder();
+
+            if (schemaField.Type == "select")
+                CreateEnumForField(colInfo, schemaField, propertyName);
+
+            sb.AppendLine(@$"{indent}private {GetTypeForSchemaType(schemaField, propertyName)}? _{propertyName} = null;");
+
+            return sb;
+        }
+
+        private void CreateEnumForField(CollectionInfo colInfo, SchemaFieldModel schemaField, string propertyName)
+        {
+            StringBuilder sb = new StringBuilder();
+            sb.Append($@"{CodeHeader}
+using System.ComponentModel;
+
+namespace {GeneratedNamespace}
+{{
+    public partial class {colInfo.ItemsClassName}
+    {{
+        public enum {propertyName}Enum
+        {{
+");
+            string indent = "            ";
+            var options = JsonSerializer.Deserialize<PocketBaseFieldOptionsSelect>(JsonSerializer.Serialize(schemaField.Options)) ?? new PocketBaseFieldOptionsSelect();
+            foreach(var value in options.Values??new List<string>())
+            {
+                sb.AppendLine(@$"{indent}[Description(""{value}"")]");
+                sb.AppendLine(@$"{indent}{value.Singularize().ToPascalCase()},");
+                sb.AppendLine();
+            }
+            sb.Append($@"
+        }}
+    }}
+}}
+");
+            _GeneratedCodeList.Add(new GeneratedCode
+            {
+                Path = Path.Combine(OutputPath, $"{colInfo.ItemsClassName}.{propertyName}Enum.cs"),
+                Content = sb.ToString(),
+            });
+        }
+
+
+        private StringBuilder GetDecoratorsForSchemaField(SchemaFieldModel schemaField, string indent, string propertyName)
+        {
+            var sb = new StringBuilder();
+            sb.AppendLine($@"{indent}[JsonPropertyName(""{schemaField.Name}"")]");
+            sb.AppendLine($@"{indent}[PocketBaseField(""{schemaField.Id}"", ""{schemaField.Name}"", {(schemaField.Required ?? false).ToString().ToLower()}, {(schemaField.System ?? false).ToString().ToLower()}, {(schemaField.Unique ?? false).ToString().ToLower()}, ""{schemaField.Type}"")]");
             if (schemaField.Required ?? false)
-                code += $@"{indent}[Required(ErrorMessage = @""{schemaField.Name} is required"")]{Environment.NewLine}";
+                sb.AppendLine($@"{indent}[Required(ErrorMessage = @""{schemaField.Name} is required"")]");
             if (schemaField.Type == "text")
             {
                 var options = JsonSerializer.Deserialize<PocketBaseFieldOptionsText>(JsonSerializer.Serialize(schemaField.Options)) ?? new PocketBaseFieldOptionsText();
                 if (options.Min != null) options.Max ??= int.MaxValue;
                 if (options.Max != null)
                 {
-                    code += $@"{indent}[StringLength({options.Max}";
-                    if (options.Min != null) code += $@", MinimumLength = {options.Min}";
-                    code += $@", ErrorMessage = """;
-                    if (options.Min != null) code += $@"Minimum {options.Min}, ";
-                    code += $@"Maximum {options.Max} characters"")]{Environment.NewLine}";
+                    sb.Append($@"{indent}[StringLength({options.Max}");
+                    if (options.Min != null) sb.Append($@", MinimumLength = {options.Min}");
+                    sb.Append($@", ErrorMessage = """);
+                    if (options.Min != null) sb.Append($@"Minimum {options.Min}, ");
+                    sb.AppendLine($@"Maximum {options.Max} characters"")]");
                 }
                 if (!string.IsNullOrEmpty(options.Pattern))
-                    code += $@"{indent}[RegularExpression(@""{options.Pattern}"", ErrorMessage = @""Pattern '{options.Pattern}' not match"")]{Environment.NewLine}";
-                code += $@"{indent}public string? {propertyName} {{ get; set; }}{Environment.NewLine}{Environment.NewLine}";
+                    sb.AppendLine($@"{indent}[RegularExpression(@""{options.Pattern}"", ErrorMessage = @""Pattern '{options.Pattern}' not match"")]");
             }
             else if (schemaField.Type == "number")
             {
@@ -161,68 +253,66 @@ namespace {GeneratedNamespace}
                 {
                     options.Min ??= int.MinValue;
                     options.Max ??= int.MaxValue;
-                    code += $@"{indent}[Range({options.Min}, {options.Max}, ErrorMessage = ""Minimum {options.Min}, Maximum {options.Max}"")]{Environment.NewLine}";
+                    sb.AppendLine($@"{indent}[Range({options.Min}, {options.Max}, ErrorMessage = ""Minimum {options.Min}, Maximum {options.Max}"")]");
                 }
-                code += $@"{indent}public int? {propertyName} {{ get; set; }}{Environment.NewLine}{Environment.NewLine}";
             }
             else if (schemaField.Type == "bool")
             {
-                code += $@"{indent}public bool? {propertyName} {{ get; set; }}{Environment.NewLine}{Environment.NewLine}";
             }
             else if (schemaField.Type == "email")
             {
-                code += $@"{indent}[JsonConverter(typeof(EmailConverter))]{Environment.NewLine}";
+                sb.AppendLine($@"{indent}[JsonConverter(typeof(EmailConverter))]");
                 var options = JsonSerializer.Deserialize<PocketBaseFieldOptionsEmailUrl>(JsonSerializer.Serialize(schemaField.Options)) ?? new PocketBaseFieldOptionsEmailUrl();
                 if (options.OnlyDomains != null)
-                    code += $@"{indent}[OnlyDomains(""{options.OnlyDomainsJoined}"", ErrorMessage = ""Only domains accepted: '{options.OnlyDomainsJoined}'"")]{Environment.NewLine}";
+                    sb.AppendLine($@"{indent}[OnlyDomains(""{options.OnlyDomainsJoined}"", ErrorMessage = ""Only domains accepted: '{options.OnlyDomainsJoined}'"")]");
                 else if (options.ExceptDomains != null)
-                    code += $@"{indent}[ExceptDomains(""{options.ExceptDomainsJoined}"", ErrorMessage = ""Except domains accepted: '{options.ExceptDomainsJoined}'"")]{Environment.NewLine}";
-                code += $@"{indent}public MailAddress? {propertyName} {{ get; set; }}{Environment.NewLine}{Environment.NewLine}";
+                    sb.AppendLine($@"{indent}[ExceptDomains(""{options.ExceptDomainsJoined}"", ErrorMessage = ""Except domains accepted: '{options.ExceptDomainsJoined}'"")]");
             }
             else if (schemaField.Type == "url")
             {
-                code += $@"{indent}[JsonConverter(typeof(UrlConverter))]{Environment.NewLine}";
+                sb.AppendLine($@"{indent}[JsonConverter(typeof(UrlConverter))]");
                 var options = JsonSerializer.Deserialize<PocketBaseFieldOptionsEmailUrl>(JsonSerializer.Serialize(schemaField.Options)) ?? new PocketBaseFieldOptionsEmailUrl();
                 if (options.OnlyDomains != null)
-                    code += $@"{indent}[OnlyDomains(""{options.OnlyDomainsJoined}"", ErrorMessage = ""Only domains accepted: '{options.OnlyDomainsJoined}'"")]{Environment.NewLine}";
+                    sb.AppendLine($@"{indent}[OnlyDomains(""{options.OnlyDomainsJoined}"", ErrorMessage = ""Only domains accepted: '{options.OnlyDomainsJoined}'"")]");
                 else if (options.ExceptDomains != null)
-                    code += $@"{indent}[ExceptDomains(""{options.ExceptDomainsJoined}"", ErrorMessage = ""Except domains accepted: '{options.ExceptDomainsJoined}'"")]{Environment.NewLine}";
-                code += $@"{indent}public Uri? {propertyName} {{ get; set; }}{Environment.NewLine}{Environment.NewLine}";
+                    sb.AppendLine($@"{indent}[ExceptDomains(""{options.ExceptDomainsJoined}"", ErrorMessage = ""Except domains accepted: '{options.ExceptDomainsJoined}'"")]");
             }
             else if (schemaField.Type == "date")
             {
-                code += $@"{indent}[JsonConverter(typeof(DateTimeConverter))]{Environment.NewLine}";
+                sb.AppendLine($@"{indent}[JsonConverter(typeof(DateTimeConverter))]");
                 var options = JsonSerializer.Deserialize<PocketBaseFieldOptionsDatetime>(JsonSerializer.Serialize(schemaField.Options)) ?? new PocketBaseFieldOptionsDatetime();
                 if (options.Max != null || options.Min != null)
                 {
                     options.Min ??= DateTime.MinValue.ToUniversalTime();
                     options.Max ??= DateTime.MaxValue.ToUniversalTime();
-                    code += $@"{indent}[Range(typeof(DateTime), ""{options.Min}"", ""{options.Max}"", ErrorMessage = ""Minimum '{options.Min}', Maximum '{options.Max}'"")]{Environment.NewLine}";
+                    sb.AppendLine($@"{indent}[Range(typeof(DateTime), ""{options.Min}"", ""{options.Max}"", ErrorMessage = ""Minimum '{options.Min}', Maximum '{options.Max}'"")]");
                 }
-                code += $@"{indent}public DateTime? {propertyName} {{ get; set; }}{Environment.NewLine}{Environment.NewLine}";
             }
             else if (schemaField.Type == "select")
             {
-
-                code += $@"{indent}public object? {propertyName} {{ get; set; }}{Environment.NewLine}{Environment.NewLine}";
+                var options = JsonSerializer.Deserialize<PocketBaseFieldOptionsSelect>(JsonSerializer.Serialize(schemaField.Options)) ?? new PocketBaseFieldOptionsSelect();
+                if (options.IsSinglSelect)
+                    sb.AppendLine($@"{indent}[JsonConverter(typeof(EnumConverter<{propertyName}Enum>))]");
             }
             else if (schemaField.Type == "json")
             {
-
-                code += $@"{indent}public object? {propertyName} {{ get; set; }}{Environment.NewLine}{Environment.NewLine}";
             }
             else if (schemaField.Type == "file")
             {
-
-                code += $@"{indent}public object? {propertyName} {{ get; set; }}{Environment.NewLine}{Environment.NewLine}";
             }
             else if (schemaField.Type == "relation")
             {
-
-                code += $@"{indent}public object? {propertyName} {{ get; set; }}{Environment.NewLine}{Environment.NewLine}";
             }
+            return sb;
+        }
 
-            return code;
+        private StringBuilder GetPropertyForSchemaField(SchemaFieldModel schemaField, string indent, string propertyName)
+        {
+            var sb = new StringBuilder();
+
+            sb.AppendLine($@"{indent}public {GetTypeForSchemaType(schemaField, propertyName)}? {propertyName} {{ get => Get(() => _{propertyName}); set => Set(value, ref _{propertyName}); }}");
+
+            return sb;
         }
     }
 }

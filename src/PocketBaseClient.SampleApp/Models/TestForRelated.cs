@@ -1,5 +1,5 @@
 
-// This file was generated automatically on 27/11/2022 9:33:50 from the PocketBase schema for Application orm-csharp-test (https://orm-csharp-test.pockethost.io)
+// This file was generated automatically on 28/11/2022 18:02:37 from the PocketBase schema for Application orm-csharp-test (https://orm-csharp-test.pockethost.io)
 //
 // PocketBaseClient-csharp project: https://github.com/iluvadev/PocketBaseClient-csharp
 // Issues: https://github.com/iluvadev/PocketBaseClient-csharp/issues
@@ -20,19 +20,22 @@ namespace PocketBaseClient.SampleApp.Models
 {
     public partial class TestForRelated : ItemBase
     {
+        private int? _NumberUnique = null;
         [JsonPropertyName("number_unique")]
         [PocketBaseField("s10g39sb", "number_unique", false, false, true, "number")]
-        public int? NumberUnique { get; set; }
+        public int? NumberUnique { get => Get(() => _NumberUnique); set => Set(value, ref _NumberUnique); }
 
+        private int? _NumberNonempty = null;
         [JsonPropertyName("number_nonempty")]
         [PocketBaseField("iy8rrkm2", "number_nonempty", true, false, false, "number")]
         [Required(ErrorMessage = @"number_nonempty is required")]
-        public int? NumberNonempty { get; set; }
+        public int? NumberNonempty { get => Get(() => _NumberNonempty); set => Set(value, ref _NumberNonempty); }
 
+        private int? _NumberNonemptyUnique = null;
         [JsonPropertyName("number_nonempty_unique")]
         [PocketBaseField("mmzxqln4", "number_nonempty_unique", true, false, true, "number")]
         [Required(ErrorMessage = @"number_nonempty_unique is required")]
-        public int? NumberNonemptyUnique { get; set; }
+        public int? NumberNonemptyUnique { get => Get(() => _NumberNonemptyUnique); set => Set(value, ref _NumberNonemptyUnique); }
 
 
     }
