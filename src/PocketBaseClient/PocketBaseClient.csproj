@@ -7,7 +7,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\externals\pocketbase-csharp-sdk\pocketbase-csharp-sdk\pocketbase-csharp-sdk.csproj" />
+    <ProjectReference Include="..\..\..\pocketbase-csharp-sdk\pocketbase-csharp-sdk\pocketbase-csharp-sdk.csproj" />
   </ItemGroup>
 
 </Project>
