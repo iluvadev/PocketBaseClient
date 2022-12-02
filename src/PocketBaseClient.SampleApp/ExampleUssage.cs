@@ -7,12 +7,17 @@ using System.Threading.Tasks;
 
 namespace PocketBaseClient.SampleApp
 {
-    public class ExampleUssage
+    public static class ExampleUssage
     {
-        public void Example()
+        public static void Example1()
         {
-            var t = new TestForTypes();
-            t.SelectSingle = TestForTypes.SelectSingleEnum.Option1;
+            var app = new  OrmCsharpTestApplication();
+            foreach (var item in app.Data.TestForTypesCollection.LoadItems())
+                Console.WriteLine(item);
+            //foreach (var item in app.Data.UsersCollection.LoadItems())
+            //    Console.WriteLine(item);
+            //foreach (var item in app.Data.TestForRelatedCollection.LoadItems())
+            //    Console.WriteLine(item);
         }
     }
 }

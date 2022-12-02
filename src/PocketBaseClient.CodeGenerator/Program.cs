@@ -1,6 +1,7 @@
 ﻿using pocketbase_csharp_sdk;
 using pocketbase_csharp_sdk.Models;
 using pocketbase_csharp_sdk.Models.Collection;
+using PocketBaseClient;
 using PocketBaseClient.CodeGenerator.Models;
 using System.CommandLine;
 using System.Text.Json;
@@ -71,7 +72,7 @@ namespace PocketBaseClient.CodeGenerator
 
         static async Task DownloadSchema(Uri url, string email, string pwd, FileInfo file)
         {
-            GenerateCode(file.FullName, @"C:\Dev\iluvadev\projects\PocketBaseClient-csharp\src\PocketBaseClient.SampleApp\Models", "PocketBaseClient.SampleApp.Models");
+            GenerateCode(file.FullName, @"C:\Dev\iluvadev\projects\PocketBaseClient-csharp\src\PocketBaseClient.SampleApp", "PocketBaseClient.SampleApp");
             return;
 
             var app = new PocketBaseClientApplication(url.ToString());
@@ -94,7 +95,8 @@ namespace PocketBaseClient.CodeGenerator
             int? totalItems = null;
             while (totalItems == null || schema.Collections.Count < totalItems)
             {
-                var collections = await app.Sdk.Collections.ListAsync();
+                var collections = await app.Sdk.HttpGetListAsync<CollectionModel>("/api/collections");
+                //var collections = await app.Sdk.Collections.ListAsync();
                 totalItems = collections.TotalItems;
                 schema.Collections.AddRange(collections.Items ?? Enumerable.Empty<CollectionModel>());
             }

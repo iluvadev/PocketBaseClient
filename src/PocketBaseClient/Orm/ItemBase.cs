@@ -20,12 +20,6 @@ namespace PocketBaseClient.Orm
         [JsonConverter(typeof(DateTimeConverter))]
         public DateTime? Updated { get; set; }
 
-        private string? _TextNoRestrictions2 = null;
-        public string? TextNoRestrictions2
-        {
-            get => Get(() => _TextNoRestrictions2);
-            set => Set(value, ref _TextNoRestrictions2);
-        }
         private void Load()
         {
 
@@ -35,9 +29,10 @@ namespace PocketBaseClient.Orm
             Load();
             return func();
         }
-        protected void Set<T>(T? value, ref T? valueVar) 
+        protected void Set<T>(T? value, ref T? valueVar)
         {
-            if (valueVar != null && !valueVar.Equals(value))
+            if (value == null && valueVar == null) return;
+            if (valueVar == null || !valueVar.Equals(value))
                 valueVar = value;
         }
 

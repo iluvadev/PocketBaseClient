@@ -1,5 +1,5 @@
 
-// This file was generated automatically on 28/11/2022 18:02:37 from the PocketBase schema for Application orm-csharp-test (https://orm-csharp-test.pockethost.io)
+// This file was generated automatically on 2/12/2022 22:42:28(UTC) from the PocketBase schema for Application orm-csharp-test (https://orm-csharp-test.pockethost.io)
 //
 // PocketBaseClient-csharp project: https://github.com/iluvadev/PocketBaseClient-csharp
 // Issues: https://github.com/iluvadev/PocketBaseClient-csharp/issues
@@ -14,6 +14,7 @@ using PocketBaseClient.Orm.Json;
 using PocketBaseClient.Orm.Validators;
 using System.ComponentModel.DataAnnotations;
 using System.Net.Mail;
+using System.Text.Json;
 using System.Text.Json.Serialization;
 
 namespace PocketBaseClient.SampleApp.Models
@@ -37,5 +38,10 @@ namespace PocketBaseClient.SampleApp.Models
         public Uri? Url { get => Get(() => _Url); set => Set(value, ref _Url); }
 
 
+        public override string ToString()
+        {
+            var options = new JsonSerializerOptions { WriteIndented = true };
+            return JsonSerializer.Serialize(this, options);
+        }
     }
 }

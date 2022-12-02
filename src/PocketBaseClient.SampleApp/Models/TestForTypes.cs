@@ -1,5 +1,5 @@
 
-// This file was generated automatically on 28/11/2022 18:02:37 from the PocketBase schema for Application orm-csharp-test (https://orm-csharp-test.pockethost.io)
+// This file was generated automatically on 2/12/2022 22:42:28(UTC) from the PocketBase schema for Application orm-csharp-test (https://orm-csharp-test.pockethost.io)
 //
 // PocketBaseClient-csharp project: https://github.com/iluvadev/PocketBaseClient-csharp
 // Issues: https://github.com/iluvadev/PocketBaseClient-csharp/issues
@@ -14,6 +14,7 @@ using PocketBaseClient.Orm.Json;
 using PocketBaseClient.Orm.Validators;
 using System.ComponentModel.DataAnnotations;
 using System.Net.Mail;
+using System.Text.Json;
 using System.Text.Json.Serialization;
 
 namespace PocketBaseClient.SampleApp.Models
@@ -107,10 +108,10 @@ namespace PocketBaseClient.SampleApp.Models
         [JsonConverter(typeof(EnumConverter<SelectSingleEnum>))]
         public SelectSingleEnum? SelectSingle { get => Get(() => _SelectSingle); set => Set(value, ref _SelectSingle); }
 
-        private LimitedList<SelectMultipleEnum>? _SelectMultiple = null;
+        private object? _SelectMultiple = null;
         [JsonPropertyName("select_multiple")]
         [PocketBaseField("8dks1xfy", "select_multiple", false, false, false, "select")]
-        public LimitedList<SelectMultipleEnum>? SelectMultiple { get => Get(() => _SelectMultiple); set => Set(value, ref _SelectMultiple); }
+        public object? SelectMultiple { get => Get(() => _SelectMultiple); set => Set(value, ref _SelectMultiple); }
 
         private dynamic? _Json = null;
         [JsonPropertyName("json")]
@@ -153,5 +154,10 @@ namespace PocketBaseClient.SampleApp.Models
         public object? RelationMultipleLimit { get => Get(() => _RelationMultipleLimit); set => Set(value, ref _RelationMultipleLimit); }
 
 
+        public override string ToString()
+        {
+            var options = new JsonSerializerOptions { WriteIndented = true };
+            return JsonSerializer.Serialize(this, options);
+        }
     }
 }

@@ -3,7 +3,7 @@ using pocketbase_csharp_sdk.Models;
 
 namespace PocketBaseClient
 {
-    internal static class PocketBaseExtensions
+    public static class PocketBaseExtensions
     {
         //public async Task<PagedCollectionModel<T>> ListAsync(
         //    int? page = null,
@@ -30,13 +30,12 @@ namespace PocketBaseClient
 
         //    return pagedCollection;
         //}
-
         internal static async Task<T?> HttpGetAsync<T>(this PocketBase pocketBase, string url)
         {
             return await pocketBase.SendAsync<T>(url, HttpMethod.Get);
         }
 
-        internal static async Task<PagedCollectionModel<T>?> HttpGetListAsync<T>(this PocketBase pocketBase, string url, int? page = null, int? perPage = null)
+        public static async Task<PagedCollectionModel<T>?> HttpGetListAsync<T>(this PocketBase pocketBase, string url, int? page = null, int? perPage = null)
         {
             var query = new Dictionary<string, object?>()
             {
