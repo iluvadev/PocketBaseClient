@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static PocketBaseClient.SampleApp.Models.TestForTypes;
 
 namespace PocketBaseClient.SampleApp
 {
@@ -16,7 +17,10 @@ namespace PocketBaseClient.SampleApp
             {
                 Console.WriteLine(item);
                 Console.WriteLine($"Collection: {item.Collection?.Name} -> Is loaded: {item.Collection?.Metadata.IsLoaded}");
+                foreach(var enumVal in item.SelectMultiple??Enumerable.Empty<SelectMultipleEnum>())
+                    Console.WriteLine(enumVal);
 
+                item.SelectMultiple.MaxSize
             }
             //foreach (var item in app.Data.UsersCollection.LoadItems())
             //    Console.WriteLine(item);

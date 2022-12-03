@@ -240,35 +240,39 @@ namespace {GeneratedNamespaceModels}
             sb.AppendLine();
         }
 
-        private string GetTypeForSchemaType(SchemaFieldModel schemaField, string propertyName)
+        private string GetTypeForSchemaType(SchemaFieldModel schemaField, string propertyName, out string initialValue)
         {
             string schemaType = schemaField.Type!;
+            initialValue = "null";
 
-            if (schemaType == "text") return $"string";
-            if (schemaType == "number") return $"int";
-            if (schemaType == "bool") return $"bool";
-            if (schemaType == "email") return $"MailAddress";
-            if (schemaType == "url") return $"Uri";
-            if (schemaType == "date") return $"DateTime";
+            if (schemaType == "text") return $"string?";
+            if (schemaType == "number") return $"int?";
+            if (schemaType == "bool") return $"bool?";
+            if (schemaType == "email") return $"MailAddress?";
+            if (schemaType == "url") return $"Uri?";
+            if (schemaType == "date") return $"DateTime?";
 
             if (schemaType == "select")
             {
                 var options = JsonSerializer.Deserialize<PocketBaseFieldOptionsSelect>(JsonSerializer.Serialize(schemaField.Options)) ?? new PocketBaseFieldOptionsSelect();
-                if (options.IsSinglSelect) return $"{propertyName}Enum";
-                return $"object";
-                //TODO
-                if (options.MaxSelect != null) return $"LimitedList<{propertyName}Enum>";
+                if (options.IsSinglSelect) return $"{propertyName}Enum?";
+                if (options.MaxSelect != null)
+                {
+                    initialValue = $"new {propertyName}EnumList()";
+                    return $"{propertyName}EnumList";
+                }
+                initialValue = $"new List<{propertyName}Enum>()";
                 return $"List<{propertyName}Enum>";
             }
-            if (schemaType == "json") return $"dynamic";
+            if (schemaType == "json") return $"dynamic?";
 
             if (schemaType == "file")
             {
-                return $"object";
+                return $"object?";
             }
             if (schemaType == "relation")
             {
-                return $"object";
+                return $"object?";
             }
 
             return $"object";
@@ -278,9 +282,14 @@ namespace {GeneratedNamespaceModels}
             var sb = new StringBuilder();
 
             if (schemaField.Type == "select")
+            {
                 CreateEnumForField(colInfo, schemaField, propertyName);
+                var options = JsonSerializer.Deserialize<PocketBaseFieldOptionsSelect>(JsonSerializer.Serialize(schemaField.Options)) ?? new PocketBaseFieldOptionsSelect();
+                if ((options?.MaxSelect ?? 0) > 1)
+                    CreateLimitedListForField(colInfo, schemaField, $"{propertyName}Enum", options.MaxSelect.Value);
+            }
 
-            sb.AppendLine(@$"{indent}private {GetTypeForSchemaType(schemaField, propertyName)}? _{propertyName} = null;");
+            sb.AppendLine(@$"{indent}private {GetTypeForSchemaType(schemaField, propertyName, out var initialVal)} _{propertyName} = {initialVal};");
 
             return sb;
         }
@@ -318,12 +327,35 @@ namespace {GeneratedNamespaceModels}
             });
         }
 
+        private void CreateLimitedListForField(CollectionInfo colInfo, SchemaFieldModel schemaField, string propertyType, int limit)
+        {
+            StringBuilder sb = new StringBuilder();
+            sb.Append($@"{CodeHeader}
+using PocketBaseClient.Orm;
+
+namespace {GeneratedNamespaceModels}
+{{
+    public partial class {colInfo.ItemsClassName}
+    {{
+        public class {propertyType}List : LimitedList<{propertyType}>
+        {{
+            public {propertyType}List() : base({limit}) {{ }}
+        }}
+    }}
+}}
+");
+            _GeneratedCodeList.Add(new GeneratedCode
+            {
+                Path = Path.Combine(OutputPathModels, $"{colInfo.ItemsClassName}.{propertyType}List.cs"),
+                Content = sb.ToString(),
+            });
+        }
 
         private StringBuilder GetDecoratorsForSchemaField(SchemaFieldModel schemaField, string indent, string propertyName)
         {
             var sb = new StringBuilder();
             sb.AppendLine($@"{indent}[JsonPropertyName(""{schemaField.Name}"")]");
-            sb.AppendLine($@"{indent}[PocketBaseField(""{schemaField.Id}"", ""{schemaField.Name}"", {(schemaField.Required ?? false).ToString().ToLower()}, {(schemaField.System ?? false).ToString().ToLower()}, {(schemaField.Unique ?? false).ToString().ToLower()}, ""{schemaField.Type}"")]");
+            sb.AppendLine($@"{indent}[PocketBaseField(id: ""{schemaField.Id}"", name: ""{schemaField.Name}"", required: {(schemaField.Required ?? false).ToString().ToLower()}, system: {(schemaField.System ?? false).ToString().ToLower()}, unique: {(schemaField.Unique ?? false).ToString().ToLower()}, type: ""{schemaField.Type}"")]");
             if (schemaField.Required ?? false)
                 sb.AppendLine($@"{indent}[Required(ErrorMessage = @""{schemaField.Name} is required"")]");
             if (schemaField.Type == "text")
@@ -388,6 +420,8 @@ namespace {GeneratedNamespaceModels}
                 var options = JsonSerializer.Deserialize<PocketBaseFieldOptionsSelect>(JsonSerializer.Serialize(schemaField.Options)) ?? new PocketBaseFieldOptionsSelect();
                 if (options.IsSinglSelect)
                     sb.AppendLine($@"{indent}[JsonConverter(typeof(EnumConverter<{propertyName}Enum>))]");
+                else
+                    sb.AppendLine($@"{indent}[JsonConverter(typeof(ListEnumConverter<{propertyName}EnumList, {propertyName}Enum>))]");
             }
             else if (schemaField.Type == "json")
             {
@@ -404,8 +438,11 @@ namespace {GeneratedNamespaceModels}
         private StringBuilder GetPropertyForSchemaField(SchemaFieldModel schemaField, string indent, string propertyName)
         {
             var sb = new StringBuilder();
-
-            sb.AppendLine($@"{indent}public {GetTypeForSchemaType(schemaField, propertyName)}? {propertyName} {{ get => Get(() => _{propertyName}); set => Set(value, ref _{propertyName}); }}");
+            var propertyType = GetTypeForSchemaType(schemaField, propertyName, out var initialVal);
+            if (initialVal == "null")
+                sb.AppendLine($@"{indent}public {propertyType} {propertyName} {{ get => Get(() => _{propertyName}); set => Set(value, ref _{propertyName}); }}");
+            else
+                sb.AppendLine($@"{indent}public {propertyType} {propertyName} {{ get => Get(() => _{propertyName} ??= {initialVal}); set => Set(value!, ref _{propertyName}!); }}");
 
             return sb;
         }

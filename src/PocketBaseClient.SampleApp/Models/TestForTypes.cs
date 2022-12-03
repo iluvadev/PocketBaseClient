@@ -1,5 +1,5 @@
 
-// This file was generated automatically on 3/12/2022 11:18:28(UTC) from the PocketBase schema for Application orm-csharp-test (https://orm-csharp-test.pockethost.io)
+// This file was generated automatically on 3/12/2022 22:02:26(UTC) from the PocketBase schema for Application orm-csharp-test (https://orm-csharp-test.pockethost.io)
 //
 // PocketBaseClient-csharp project: https://github.com/iluvadev/PocketBaseClient-csharp
 // Issues: https://github.com/iluvadev/PocketBaseClient-csharp/issues
@@ -24,134 +24,135 @@ namespace PocketBaseClient.SampleApp.Models
     {
         private string? _TextNoRestrictions = null;
         [JsonPropertyName("text_no_restrictions")]
-        [PocketBaseField("kkyx3zk2", "text_no_restrictions", false, false, false, "text")]
+        [PocketBaseField(id: "kkyx3zk2", name: "text_no_restrictions", required: false, system: false, unique: false, type: "text")]
         public string? TextNoRestrictions { get => Get(() => _TextNoRestrictions); set => Set(value, ref _TextNoRestrictions); }
 
         private string? _TextRestrictions = null;
         [JsonPropertyName("text_restrictions")]
-        [PocketBaseField("sgd9bm7z", "text_restrictions", false, false, false, "text")]
+        [PocketBaseField(id: "sgd9bm7z", name: "text_restrictions", required: false, system: false, unique: false, type: "text")]
         [StringLength(15, MinimumLength = 5, ErrorMessage = "Minimum 5, Maximum 15 characters")]
         [RegularExpression(@"^\w+$", ErrorMessage = @"Pattern '^\w+$' not match")]
         public string? TextRestrictions { get => Get(() => _TextRestrictions); set => Set(value, ref _TextRestrictions); }
 
         private int? _NumberNoRestrictions = null;
         [JsonPropertyName("number_no_restrictions")]
-        [PocketBaseField("zasulmy0", "number_no_restrictions", false, false, false, "number")]
+        [PocketBaseField(id: "zasulmy0", name: "number_no_restrictions", required: false, system: false, unique: false, type: "number")]
         public int? NumberNoRestrictions { get => Get(() => _NumberNoRestrictions); set => Set(value, ref _NumberNoRestrictions); }
 
         private int? _NumberRestrrictions = null;
         [JsonPropertyName("number_restrrictions")]
-        [PocketBaseField("xsz2augn", "number_restrrictions", false, false, false, "number")]
+        [PocketBaseField(id: "xsz2augn", name: "number_restrrictions", required: false, system: false, unique: false, type: "number")]
         [Range(0, 10, ErrorMessage = "Minimum 0, Maximum 10")]
         public int? NumberRestrrictions { get => Get(() => _NumberRestrrictions); set => Set(value, ref _NumberRestrrictions); }
 
         private bool? _Bool = null;
         [JsonPropertyName("bool")]
-        [PocketBaseField("vo8jeqfr", "bool", false, false, false, "bool")]
+        [PocketBaseField(id: "vo8jeqfr", name: "bool", required: false, system: false, unique: false, type: "bool")]
         public bool? Bool { get => Get(() => _Bool); set => Set(value, ref _Bool); }
 
         private MailAddress? _EmailNoRestrictions = null;
         [JsonPropertyName("email_no_restrictions")]
-        [PocketBaseField("dfc3hzbp", "email_no_restrictions", false, false, false, "email")]
+        [PocketBaseField(id: "dfc3hzbp", name: "email_no_restrictions", required: false, system: false, unique: false, type: "email")]
         [JsonConverter(typeof(EmailConverter))]
         public MailAddress? EmailNoRestrictions { get => Get(() => _EmailNoRestrictions); set => Set(value, ref _EmailNoRestrictions); }
 
         private MailAddress? _EmailRestrictionsExcept = null;
         [JsonPropertyName("email_restrictions_except")]
-        [PocketBaseField("hea5cksh", "email_restrictions_except", false, false, false, "email")]
+        [PocketBaseField(id: "hea5cksh", name: "email_restrictions_except", required: false, system: false, unique: false, type: "email")]
         [JsonConverter(typeof(EmailConverter))]
         [ExceptDomains("gmail.com,hotmail.com", ErrorMessage = "Except domains accepted: 'gmail.com,hotmail.com'")]
         public MailAddress? EmailRestrictionsExcept { get => Get(() => _EmailRestrictionsExcept); set => Set(value, ref _EmailRestrictionsExcept); }
 
         private MailAddress? _EmailRestrictionsOnly = null;
         [JsonPropertyName("email_restrictions_only")]
-        [PocketBaseField("ddvywcfc", "email_restrictions_only", false, false, false, "email")]
+        [PocketBaseField(id: "ddvywcfc", name: "email_restrictions_only", required: false, system: false, unique: false, type: "email")]
         [JsonConverter(typeof(EmailConverter))]
         [OnlyDomains("pockethost.io", ErrorMessage = "Only domains accepted: 'pockethost.io'")]
         public MailAddress? EmailRestrictionsOnly { get => Get(() => _EmailRestrictionsOnly); set => Set(value, ref _EmailRestrictionsOnly); }
 
         private Uri? _UrlNoRestrictions = null;
         [JsonPropertyName("url_no_restrictions")]
-        [PocketBaseField("n11oh0zk", "url_no_restrictions", false, false, false, "url")]
+        [PocketBaseField(id: "n11oh0zk", name: "url_no_restrictions", required: false, system: false, unique: false, type: "url")]
         [JsonConverter(typeof(UrlConverter))]
         public Uri? UrlNoRestrictions { get => Get(() => _UrlNoRestrictions); set => Set(value, ref _UrlNoRestrictions); }
 
         private Uri? _UrlRestrictionsExcept = null;
         [JsonPropertyName("url_restrictions_except")]
-        [PocketBaseField("gimszuxa", "url_restrictions_except", false, false, false, "url")]
+        [PocketBaseField(id: "gimszuxa", name: "url_restrictions_except", required: false, system: false, unique: false, type: "url")]
         [JsonConverter(typeof(UrlConverter))]
         [ExceptDomains("google.com", ErrorMessage = "Except domains accepted: 'google.com'")]
         public Uri? UrlRestrictionsExcept { get => Get(() => _UrlRestrictionsExcept); set => Set(value, ref _UrlRestrictionsExcept); }
 
         private Uri? _UrlRestrictionsOnly = null;
         [JsonPropertyName("url_restrictions_only")]
-        [PocketBaseField("pntohkfm", "url_restrictions_only", false, false, false, "url")]
+        [PocketBaseField(id: "pntohkfm", name: "url_restrictions_only", required: false, system: false, unique: false, type: "url")]
         [JsonConverter(typeof(UrlConverter))]
         [OnlyDomains("pockethost.io", ErrorMessage = "Only domains accepted: 'pockethost.io'")]
         public Uri? UrlRestrictionsOnly { get => Get(() => _UrlRestrictionsOnly); set => Set(value, ref _UrlRestrictionsOnly); }
 
         private DateTime? _DatetimeNoRestrictions = null;
         [JsonPropertyName("datetime_no_restrictions")]
-        [PocketBaseField("why1vezh", "datetime_no_restrictions", false, false, false, "date")]
+        [PocketBaseField(id: "why1vezh", name: "datetime_no_restrictions", required: false, system: false, unique: false, type: "date")]
         [JsonConverter(typeof(DateTimeConverter))]
         public DateTime? DatetimeNoRestrictions { get => Get(() => _DatetimeNoRestrictions); set => Set(value, ref _DatetimeNoRestrictions); }
 
         private DateTime? _DatetimeRestrictions = null;
         [JsonPropertyName("datetime_restrictions")]
-        [PocketBaseField("xsnujvoc", "datetime_restrictions", false, false, false, "date")]
+        [PocketBaseField(id: "xsnujvoc", name: "datetime_restrictions", required: false, system: false, unique: false, type: "date")]
         [JsonConverter(typeof(DateTimeConverter))]
         [Range(typeof(DateTime), "1/11/2022 13:00:00", "31/12/9999 22:59:59", ErrorMessage = "Minimum '1/11/2022 13:00:00', Maximum '31/12/9999 22:59:59'")]
         public DateTime? DatetimeRestrictions { get => Get(() => _DatetimeRestrictions); set => Set(value, ref _DatetimeRestrictions); }
 
         private SelectSingleEnum? _SelectSingle = null;
         [JsonPropertyName("select_single")]
-        [PocketBaseField("uiv0j5vw", "select_single", false, false, false, "select")]
+        [PocketBaseField(id: "uiv0j5vw", name: "select_single", required: false, system: false, unique: false, type: "select")]
         [JsonConverter(typeof(EnumConverter<SelectSingleEnum>))]
         public SelectSingleEnum? SelectSingle { get => Get(() => _SelectSingle); set => Set(value, ref _SelectSingle); }
 
-        private object? _SelectMultiple = null;
+        private SelectMultipleEnumList _SelectMultiple = new SelectMultipleEnumList();
         [JsonPropertyName("select_multiple")]
-        [PocketBaseField("8dks1xfy", "select_multiple", false, false, false, "select")]
-        public object? SelectMultiple { get => Get(() => _SelectMultiple); set => Set(value, ref _SelectMultiple); }
+        [PocketBaseField(id: "8dks1xfy", name: "select_multiple", required: false, system: false, unique: false, type: "select")]
+        [JsonConverter(typeof(ListEnumConverter<SelectMultipleEnumList, SelectMultipleEnum>))]
+        public SelectMultipleEnumList SelectMultiple { get => Get(() => _SelectMultiple ??= new SelectMultipleEnumList()); set => Set(value!, ref _SelectMultiple!); }
 
         private dynamic? _Json = null;
         [JsonPropertyName("json")]
-        [PocketBaseField("hmr5iih4", "json", false, false, false, "json")]
+        [PocketBaseField(id: "hmr5iih4", name: "json", required: false, system: false, unique: false, type: "json")]
         public dynamic? Json { get => Get(() => _Json); set => Set(value, ref _Json); }
 
         private object? _FileSingleNoRestriction = null;
         [JsonPropertyName("file_single_no_restriction")]
-        [PocketBaseField("mpnfu1ph", "file_single_no_restriction", false, false, false, "file")]
+        [PocketBaseField(id: "mpnfu1ph", name: "file_single_no_restriction", required: false, system: false, unique: false, type: "file")]
         public object? FileSingleNoRestriction { get => Get(() => _FileSingleNoRestriction); set => Set(value, ref _FileSingleNoRestriction); }
 
         private object? _FileSingleRestriction = null;
         [JsonPropertyName("file_single_restriction")]
-        [PocketBaseField("cn4tglcr", "file_single_restriction", false, false, false, "file")]
+        [PocketBaseField(id: "cn4tglcr", name: "file_single_restriction", required: false, system: false, unique: false, type: "file")]
         public object? FileSingleRestriction { get => Get(() => _FileSingleRestriction); set => Set(value, ref _FileSingleRestriction); }
 
         private object? _FileMultipleNoRestrictions = null;
         [JsonPropertyName("file_multiple_no_restrictions")]
-        [PocketBaseField("mqokykua", "file_multiple_no_restrictions", false, false, false, "file")]
+        [PocketBaseField(id: "mqokykua", name: "file_multiple_no_restrictions", required: false, system: false, unique: false, type: "file")]
         public object? FileMultipleNoRestrictions { get => Get(() => _FileMultipleNoRestrictions); set => Set(value, ref _FileMultipleNoRestrictions); }
 
         private object? _FileMultipleRestrictions = null;
         [JsonPropertyName("file_multiple_restrictions")]
-        [PocketBaseField("o4hs5o8n", "file_multiple_restrictions", false, false, false, "file")]
+        [PocketBaseField(id: "o4hs5o8n", name: "file_multiple_restrictions", required: false, system: false, unique: false, type: "file")]
         public object? FileMultipleRestrictions { get => Get(() => _FileMultipleRestrictions); set => Set(value, ref _FileMultipleRestrictions); }
 
         private object? _ReationSingle = null;
         [JsonPropertyName("reation_single")]
-        [PocketBaseField("7q0qviac", "reation_single", false, false, false, "relation")]
+        [PocketBaseField(id: "7q0qviac", name: "reation_single", required: false, system: false, unique: false, type: "relation")]
         public object? ReationSingle { get => Get(() => _ReationSingle); set => Set(value, ref _ReationSingle); }
 
         private object? _RelationMultipleNoLimit = null;
         [JsonPropertyName("relation_multiple_no_limit")]
-        [PocketBaseField("a4chtr6c", "relation_multiple_no_limit", false, false, false, "relation")]
+        [PocketBaseField(id: "a4chtr6c", name: "relation_multiple_no_limit", required: false, system: false, unique: false, type: "relation")]
         public object? RelationMultipleNoLimit { get => Get(() => _RelationMultipleNoLimit); set => Set(value, ref _RelationMultipleNoLimit); }
 
         private object? _RelationMultipleLimit = null;
         [JsonPropertyName("relation_multiple_limit")]
-        [PocketBaseField("otxwaoam", "relation_multiple_limit", false, false, false, "relation")]
+        [PocketBaseField(id: "otxwaoam", name: "relation_multiple_limit", required: false, system: false, unique: false, type: "relation")]
         public object? RelationMultipleLimit { get => Get(() => _RelationMultipleLimit); set => Set(value, ref _RelationMultipleLimit); }
 
 

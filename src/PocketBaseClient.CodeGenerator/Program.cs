@@ -72,6 +72,7 @@ namespace PocketBaseClient.CodeGenerator
 
         static async Task DownloadSchema(Uri url, string email, string pwd, FileInfo file)
         {
+            //TODO: Do it in own option, not Hardcoded!!
             GenerateCode(file.FullName, @"C:\Dev\iluvadev\projects\PocketBaseClient-csharp\src\PocketBaseClient.SampleApp", "PocketBaseClient.SampleApp");
             return;
 
@@ -97,7 +98,7 @@ namespace PocketBaseClient.CodeGenerator
             {
                 var collections = await app.Sdk.HttpGetListAsync<CollectionModel>("/api/collections");
                 //var collections = await app.Sdk.Collections.ListAsync();
-                totalItems = collections.TotalItems;
+                totalItems = collections!.TotalItems;
                 schema.Collections.AddRange(collections.Items ?? Enumerable.Empty<CollectionModel>());
             }
 

@@ -20,7 +20,8 @@ namespace PocketBaseClient.CodeGenerator.Models
         }
         public void SaveToFile(string path)
         {
-            var jsonString = JsonSerializer.Serialize(this);
+            var options = new JsonSerializerOptions { WriteIndented = true };
+            var jsonString = JsonSerializer.Serialize(this, options);
             File.WriteAllText(path, jsonString);
         }
 

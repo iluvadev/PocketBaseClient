@@ -9,16 +9,14 @@
 // pocketbase project: https://github.com/pocketbase/pocketbase
 
 using PocketBaseClient.Orm;
-using PocketBaseClient.Services;
 
 namespace PocketBaseClient.SampleApp.Models
 {
-    public partial class CollectionUsers : CollectionBase<User>
+    public partial class TestForTypes
     {
-        public override string Id => "_pb_users_auth_";
-        public override string Name => "users";
-        public override bool System => false;
-
-        public CollectionUsers(DataServiceBase context) : base(context) { }
+        public class SelectMultipleEnumList : LimitedList<SelectMultipleEnum>
+        {
+            public SelectMultipleEnumList() : base(10) { }
+        }
     }
 }
