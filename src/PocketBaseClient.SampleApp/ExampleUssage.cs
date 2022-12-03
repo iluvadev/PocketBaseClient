@@ -13,7 +13,11 @@ namespace PocketBaseClient.SampleApp
         {
             var app = new  OrmCsharpTestApplication();
             foreach (var item in app.Data.TestForTypesCollection.LoadItems())
+            {
                 Console.WriteLine(item);
+                Console.WriteLine($"Collection: {item.Collection?.Name} -> Is loaded: {item.Collection?.Metadata.IsLoaded}");
+
+            }
             //foreach (var item in app.Data.UsersCollection.LoadItems())
             //    Console.WriteLine(item);
             //foreach (var item in app.Data.TestForRelatedCollection.LoadItems())

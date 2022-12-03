@@ -198,6 +198,7 @@ namespace {GeneratedNamespaceModels}
             };
             StringBuilder sb = new StringBuilder();
             sb.Append($@"{CodeHeader}
+using pocketbase_csharp_sdk.Json;
 using PocketBaseClient.Orm;
 using PocketBaseClient.Orm.Attributes;
 using PocketBaseClient.Orm.Json;

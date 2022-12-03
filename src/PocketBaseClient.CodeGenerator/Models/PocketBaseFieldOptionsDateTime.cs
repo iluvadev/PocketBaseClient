@@ -1,4 +1,5 @@
-﻿using PocketBaseClient.Orm.Json;
+﻿using pocketbase_csharp_sdk.Json;
+using PocketBaseClient.Orm.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;

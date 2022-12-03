@@ -1,5 +1,5 @@
 
-// This file was generated automatically on 2/12/2022 23:04:23(UTC) from the PocketBase schema for Application orm-csharp-test (https://orm-csharp-test.pockethost.io)
+// This file was generated automatically on 3/12/2022 11:18:28(UTC) from the PocketBase schema for Application orm-csharp-test (https://orm-csharp-test.pockethost.io)
 //
 // PocketBaseClient-csharp project: https://github.com/iluvadev/PocketBaseClient-csharp
 // Issues: https://github.com/iluvadev/PocketBaseClient-csharp/issues
@@ -8,6 +8,7 @@
 // pocketbase-csharp-sdk project: https://github.com/PRCV1/pocketbase-csharp-sdk 
 // pocketbase project: https://github.com/pocketbase/pocketbase
 
+using pocketbase_csharp_sdk.Json;
 using PocketBaseClient.Orm;
 using PocketBaseClient.Orm.Attributes;
 using PocketBaseClient.Orm.Json;

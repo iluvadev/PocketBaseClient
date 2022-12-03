@@ -1,24 +1,38 @@
-﻿using PocketBaseClient.Orm.Json;
+﻿using pocketbase_csharp_sdk.Models;
+using PocketBaseClient.Services;
 using System.Text.Json.Serialization;
 
 namespace PocketBaseClient.Orm
 {
-    public abstract class ItemBase
+    public abstract class ItemBase : BaseModel
     {
+        private string? _CollectionId = null;
         [JsonPropertyName("collectionId")]
-        [JsonConverter(typeof(CollectionIdConverter))]
-        public CollectionBase? Collection { get; internal set; }
+        public override string? CollectionId
+        {
+            get => _CollectionId ?? _Collection?.Id;
+            set
+            {
+                _CollectionId = value;
+                _Collection = null;
+            }
+        }
 
-        [JsonPropertyName("id")]
-        public string? Id { get; init; }
+        private string? _CollectionName = null;
+        [JsonPropertyName("collectionName")]
+        public override string? CollectionName
+        {
+            get => _CollectionName ?? _Collection?.Name;
+            set => _CollectionName = value;
+        }
 
-        [JsonPropertyName("created")]
-        [JsonConverter(typeof(DateTimeConverter))]
-        public DateTime? Created { get; set; }
-
-        [JsonPropertyName("updated")]
-        [JsonConverter(typeof(DateTimeConverter))]
-        public DateTime? Updated { get; set; }
+        private CollectionBase? _Collection = null;
+        [JsonIgnore]
+        public CollectionBase? Collection
+        {
+            get => _Collection ??= DataServiceBase.GetCollectionById(CollectionId);
+            internal set => _Collection = value;
+        }
 
         private void Load()
         {
