@@ -1,5 +1,6 @@
 ﻿using pocketbase_csharp_sdk.Models;
 using PocketBaseClient.Services;
+using System.ComponentModel.DataAnnotations;
 using System.Text.Json.Serialization;
 
 namespace PocketBaseClient.Orm
@@ -53,7 +54,14 @@ namespace PocketBaseClient.Orm
         private ItemMetadata? _Metadata = null;
         public ItemMetadata Metadata() => _Metadata ??= new ItemMetadata(this);
 
-        public bool IsValid()
+        public bool IsLoaded()
             => Metadata().IsLoaded && !Metadata().IsTrash;
+
+        public bool Validate(out List<ValidationResult> validationResults)
+        {
+            validationResults = new List<ValidationResult>();
+            var vc = new ValidationContext(this);
+            return Validator.TryValidateObject(this, vc, validationResults, true);
+        }
     }
 }

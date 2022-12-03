@@ -19,11 +19,11 @@
         private List<CachedItem> CachedItems { get; } = new List<CachedItem>();
         private Dictionary<string, T> Items { get; } = new Dictionary<string, T>();
 
-        public int Count => Items.Values.Where(i => i.IsValid()).Count();
+        public int Count => Items.Values.Where(i => i.IsLoaded()).Count();
 
         public T Set(T item)
         {
-            if (item.Id == null || !item.IsValid()) throw new ArgumentException("Can not cache a non valid item");
+            if (item.Id == null || !item.IsLoaded()) throw new ArgumentException("Can not cache a non valid item");
 
             if (!Items.ContainsKey(item.Id))
                 CachedItems.Add(new CachedItem(item));
@@ -38,7 +38,7 @@
             if (!Items.ContainsKey(id)) return null;
 
             var item = Items[id];
-            if (!item.IsValid()) return null;
+            if (!item.IsLoaded()) return null;
 
             return item;
         }

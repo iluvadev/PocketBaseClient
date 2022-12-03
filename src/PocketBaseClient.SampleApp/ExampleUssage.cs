@@ -19,8 +19,15 @@ namespace PocketBaseClient.SampleApp
                 Console.WriteLine($"Collection: {item.Collection?.Name} -> Is loaded: {item.Collection?.Metadata.IsLoaded}");
                 foreach(var enumVal in item.SelectMultiple??Enumerable.Empty<SelectMultipleEnum>())
                     Console.WriteLine(enumVal);
+            }
 
-                item.SelectMultiple.MaxSize
+            var elem = new TestForRelated();
+            elem.NumberUnique = 1;
+            var isValid = elem.Validate(out var valResult);
+            Console.WriteLine($"elem is Valid: {isValid}");
+            foreach(var valRes in valResult)
+            {
+                Console.WriteLine(valRes);
             }
             //foreach (var item in app.Data.UsersCollection.LoadItems())
             //    Console.WriteLine(item);
