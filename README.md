@@ -1,8 +1,37 @@
 # PocketBaseClient-csharp
-(WARNING: At the moment this is only a concept. In active development) Basic client in C# for interacting with PocketBase, with a simple ORM to manage Collections and Registries
+**Warning**: This project is in active development, and some parts are only a proof of concept. Things described bellow could change. There is no available release yet.
 
-There is no available release yet. Is only a concept
 
+Client in C# for interacting with a particular PocketBase application, with a simple ORM to manage  Collections and Registries.
+
+## Description
+* **PocketBaseClient** includes a set of libraries to interact with PocketBase, and has all the logic needed for the ORM.
+* **PocketBaseClient.CodeGenerator** connects with your PocketBase application in order to parse your schema and generates a c# client for your application
+
+### Steps to make your client
+- **Download your schema**: use PocketBaseClient.CodeGenerator with *Admin credentials* to connect with your PocketBase application and download your schema definition in a json file
+- **Generate the code**: use PocketBaseClient.CodeGenerator again to create the C# code for your client from your downloaded schema definition.
+- **Create your client library**: Create an empty C# project (library) for your client:
+  - Add a reference to PocketBaseClient
+  - Add the generated C# files
+
+### Generated code
+PocketBaseClient.CodeGenerator generates all the code needed to map all your **Collections**, **Registries** and **Fields** (including the validation rules):
+
+For each **Collection**:
+- Generate a class for the collection (for example _PostsCollection_)
+- Generate a class for its Registries (for example _Post_)
+
+**Fields** of **Registries**:
+- Each field is a property of the Registry class (for example _Post.Title_)
+- If there are restrictions in the PocketBase field, these are translated to Validation Attributes.
+- The "**select**" type fields maps to enums
+- If the field accept multiple values is mapped to:
+  - A specific LimitedList if there are a limit of values
+  - A List if there are no limits
+- If the field is a "**relation**", is integrated with the ORM to link with the object that represents the related registry
+
+# Old readme.md (to review)
 ## Concept
 Simple client access to a defined PocketBase application, with simple ORM with cached objects
 
