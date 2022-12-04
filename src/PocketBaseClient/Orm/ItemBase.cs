@@ -44,7 +44,7 @@ namespace PocketBaseClient.Orm
             Load();
             return func();
         }
-        protected void Set<T>(T? value, ref T? valueVar)
+        protected void Set<T>(T value, ref T valueVar)
         {
             if (value == null && valueVar == null) return;
             if (valueVar == null || !valueVar.Equals(value))
