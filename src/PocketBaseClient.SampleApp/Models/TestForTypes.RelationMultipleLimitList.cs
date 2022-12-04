@@ -1,5 +1,5 @@
 
-// This file was generated automatically on 3/12/2022 22:02:26(UTC) from the PocketBase schema for Application orm-csharp-test (https://orm-csharp-test.pockethost.io)
+// This file was generated automatically on 4/12/2022 0:34:34(UTC) from the PocketBase schema for Application orm-csharp-test (https://orm-csharp-test.pockethost.io)
 //
 // PocketBaseClient-csharp project: https://github.com/iluvadev/PocketBaseClient-csharp
 // Issues: https://github.com/iluvadev/PocketBaseClient-csharp/issues
@@ -14,9 +14,9 @@ namespace PocketBaseClient.SampleApp.Models
 {
     public partial class TestForTypes
     {
-        public class SelectMultipleEnumList : LimitedList<SelectMultipleEnum>
+        public class RelationMultipleLimitList : LimitedList<TestForTypes>
         {
-            public SelectMultipleEnumList() : base(10) { }
+            public RelationMultipleLimitList() : base(5) { }
         }
     }
 }

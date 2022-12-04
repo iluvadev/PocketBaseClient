@@ -44,6 +44,7 @@ namespace PocketBaseClient.CodeGenerator
         private struct CollectionInfo
         {
             public string CollectionName { get; set; }
+            public string CollectionId { get; set; }
             public string CollectionClassName { get; set; }
             public string ItemsClassName { get; set; }
             public CollectionModel CollectionModel { get; set; }
@@ -157,10 +158,12 @@ namespace {GeneratedNamespaceServices}
         {
             if (collection.Name == null) throw new Exception("Collection name is empty");
             if (collection.Schema == null) throw new Exception($"Schema is empty for collection {collection.Name}");
+            if (collection.Id == null) throw new Exception($"Collection Id is empty for collection {collection.Name}");
 
             var colInfo = new CollectionInfo
             {
                 CollectionName = collection.Name.Pluralize().ToPascalCase() + "Collection",
+                CollectionId = collection.Id,
                 CollectionClassName = "Collection" + collection.Name.Pluralize().ToPascalCase(),
                 ItemsClassName = collection.Name.Singularize().ToPascalCase(),
                 CollectionModel = collection,
@@ -258,8 +261,8 @@ namespace {GeneratedNamespaceModels}
                 if (options.IsSinglSelect) return $"{propertyName}Enum?";
                 if (options.MaxSelect != null)
                 {
-                    initialValue = $"new {propertyName}EnumList()";
-                    return $"{propertyName}EnumList";
+                    initialValue = $"new {propertyName}List()";
+                    return $"{propertyName}List";
                 }
                 initialValue = $"new List<{propertyName}Enum>()";
                 return $"List<{propertyName}Enum>";
@@ -272,7 +275,16 @@ namespace {GeneratedNamespaceModels}
             }
             if (schemaType == "relation")
             {
-                return $"object?";
+                var options = JsonSerializer.Deserialize<PocketBaseFieldOptionsRelation>(JsonSerializer.Serialize(schemaField.Options)) ?? new PocketBaseFieldOptionsRelation();
+                var colInfo = _CollectionList.First(c => c.CollectionId == options.CollectionId);
+                if (options.IsSinglSelect) return $"{colInfo.ItemsClassName}?";
+                if (options.MaxSelect != null)
+                {
+                    initialValue = $"new {propertyName}List()";
+                    return $"{propertyName}List";
+                }
+                initialValue = $"new List<{colInfo.ItemsClassName}>()";
+                return $"List<{colInfo.ItemsClassName}>";
             }
 
             return $"object";
@@ -286,7 +298,13 @@ namespace {GeneratedNamespaceModels}
                 CreateEnumForField(colInfo, schemaField, propertyName);
                 var options = JsonSerializer.Deserialize<PocketBaseFieldOptionsSelect>(JsonSerializer.Serialize(schemaField.Options)) ?? new PocketBaseFieldOptionsSelect();
                 if ((options?.MaxSelect ?? 0) > 1)
-                    CreateLimitedListForField(colInfo, schemaField, $"{propertyName}Enum", options.MaxSelect.Value);
+                    CreateLimitedListForField(colInfo, propertyName, $"{propertyName}Enum", options!.MaxSelect!.Value);
+            }
+            if (schemaField.Type == "relation")
+            {
+                var options = JsonSerializer.Deserialize<PocketBaseFieldOptionsRelation>(JsonSerializer.Serialize(schemaField.Options)) ?? new PocketBaseFieldOptionsRelation();
+                if ((options?.MaxSelect ?? 0) > 1)
+                    CreateLimitedListForField(colInfo, propertyName, colInfo.ItemsClassName, options!.MaxSelect!.Value);
             }
 
             sb.AppendLine(@$"{indent}private {GetTypeForSchemaType(schemaField, propertyName, out var initialVal)} _{propertyName} = {initialVal};");
@@ -327,7 +345,7 @@ namespace {GeneratedNamespaceModels}
             });
         }
 
-        private void CreateLimitedListForField(CollectionInfo colInfo, SchemaFieldModel schemaField, string propertyType, int limit)
+        private void CreateLimitedListForField(CollectionInfo colInfo, string propertyName, string propertyType, int limit)
         {
             StringBuilder sb = new StringBuilder();
             sb.Append($@"{CodeHeader}
@@ -337,16 +355,16 @@ namespace {GeneratedNamespaceModels}
 {{
     public partial class {colInfo.ItemsClassName}
     {{
-        public class {propertyType}List : LimitedList<{propertyType}>
+        public class {propertyName}List : LimitedList<{propertyType}>
         {{
-            public {propertyType}List() : base({limit}) {{ }}
+            public {propertyName}List() : base({limit}) {{ }}
         }}
     }}
 }}
 ");
             _GeneratedCodeList.Add(new GeneratedCode
             {
-                Path = Path.Combine(OutputPathModels, $"{colInfo.ItemsClassName}.{propertyType}List.cs"),
+                Path = Path.Combine(OutputPathModels, $"{colInfo.ItemsClassName}.{propertyName}List.cs"),
                 Content = sb.ToString(),
             });
         }
@@ -421,7 +439,7 @@ namespace {GeneratedNamespaceModels}
                 if (options.IsSinglSelect)
                     sb.AppendLine($@"{indent}[JsonConverter(typeof(EnumConverter<{propertyName}Enum>))]");
                 else
-                    sb.AppendLine($@"{indent}[JsonConverter(typeof(ListEnumConverter<{propertyName}EnumList, {propertyName}Enum>))]");
+                    sb.AppendLine($@"{indent}[JsonConverter(typeof(ListEnumConverter<{propertyName}List, {propertyName}Enum>))]");
             }
             else if (schemaField.Type == "json")
             {
@@ -431,6 +449,14 @@ namespace {GeneratedNamespaceModels}
             }
             else if (schemaField.Type == "relation")
             {
+                //var options = JsonSerializer.Deserialize<PocketBaseFieldOptionsRelation>(JsonSerializer.Serialize(schemaField.Options)) ?? new PocketBaseFieldOptionsRelation();
+                //var colInfo = _CollectionList.First(c => c.CollectionId == options.CollectionId);
+                //if (options.IsSinglSelect)
+                //    sb.AppendLine($@"{indent}[JsonConverter(typeof(RelationConverter<{colInfo.ItemsClassName}>))]");
+                //else if(options.MaxSelect!=null)
+                //    sb.AppendLine($@"{indent}[JsonConverter(typeof(ListEnumConverter<{propertyName}List, {colInfo.ItemsClassName}>))]");
+                //else //List
+                //    sb.AppendLine($@"{indent}[JsonConverter(typeof(ListEnumConverter<{propertyName}List, {colInfo.ItemsClassName}>))]");
             }
             return sb;
         }
@@ -439,10 +465,13 @@ namespace {GeneratedNamespaceModels}
         {
             var sb = new StringBuilder();
             var propertyType = GetTypeForSchemaType(schemaField, propertyName, out var initialVal);
-            if (initialVal == "null")
-                sb.AppendLine($@"{indent}public {propertyType} {propertyName} {{ get => Get(() => _{propertyName}); set => Set(value, ref _{propertyName}); }}");
-            else
-                sb.AppendLine($@"{indent}public {propertyType} {propertyName} {{ get => Get(() => _{propertyName} ??= {initialVal}); set => Set(value!, ref _{propertyName}!); }}");
+            sb.AppendLine($@"{indent}public {propertyType} {propertyName}");
+            sb.AppendLine($@"{indent}{{");
+            sb.AppendLine((initialVal == "null") ? 
+                          $@"{indent}   get => Get(() => _{propertyName});" : 
+                          $@"{indent}   get => Get(() => _{propertyName} ??= {initialVal});");
+            sb.AppendLine($@"{indent}   set => Set(value, ref _{propertyName});");
+            sb.AppendLine($@"{indent}}}");
 
             return sb;
         }

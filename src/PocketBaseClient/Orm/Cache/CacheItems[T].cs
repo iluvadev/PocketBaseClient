@@ -21,7 +21,7 @@
 
         public int Count => Items.Values.Where(i => i.IsLoaded()).Count();
 
-        public T Set(T item)
+        public T Add(T item)
         {
             if (item.Id == null || !item.IsLoaded()) throw new ArgumentException("Can not cache a non valid item");
 

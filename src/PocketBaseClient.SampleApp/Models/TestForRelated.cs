@@ -1,5 +1,5 @@
 
-// This file was generated automatically on 3/12/2022 22:02:26(UTC) from the PocketBase schema for Application orm-csharp-test (https://orm-csharp-test.pockethost.io)
+// This file was generated automatically on 4/12/2022 0:34:34(UTC) from the PocketBase schema for Application orm-csharp-test (https://orm-csharp-test.pockethost.io)
 //
 // PocketBaseClient-csharp project: https://github.com/iluvadev/PocketBaseClient-csharp
 // Issues: https://github.com/iluvadev/PocketBaseClient-csharp/issues
@@ -25,19 +25,31 @@ namespace PocketBaseClient.SampleApp.Models
         private int? _NumberUnique = null;
         [JsonPropertyName("number_unique")]
         [PocketBaseField(id: "s10g39sb", name: "number_unique", required: false, system: false, unique: true, type: "number")]
-        public int? NumberUnique { get => Get(() => _NumberUnique); set => Set(value, ref _NumberUnique); }
+        public int? NumberUnique
+        {
+           get => Get(() => _NumberUnique);
+           set => Set(value, ref _NumberUnique);
+        }
 
         private int? _NumberNonempty = null;
         [JsonPropertyName("number_nonempty")]
         [PocketBaseField(id: "iy8rrkm2", name: "number_nonempty", required: true, system: false, unique: false, type: "number")]
         [Required(ErrorMessage = @"number_nonempty is required")]
-        public int? NumberNonempty { get => Get(() => _NumberNonempty); set => Set(value, ref _NumberNonempty); }
+        public int? NumberNonempty
+        {
+           get => Get(() => _NumberNonempty);
+           set => Set(value, ref _NumberNonempty);
+        }
 
         private int? _NumberNonemptyUnique = null;
         [JsonPropertyName("number_nonempty_unique")]
         [PocketBaseField(id: "mmzxqln4", name: "number_nonempty_unique", required: true, system: false, unique: true, type: "number")]
         [Required(ErrorMessage = @"number_nonempty_unique is required")]
-        public int? NumberNonemptyUnique { get => Get(() => _NumberNonemptyUnique); set => Set(value, ref _NumberNonemptyUnique); }
+        public int? NumberNonemptyUnique
+        {
+           get => Get(() => _NumberNonemptyUnique);
+           set => Set(value, ref _NumberNonemptyUnique);
+        }
 
 
         public override string ToString()

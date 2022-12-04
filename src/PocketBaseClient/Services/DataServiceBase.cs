@@ -14,7 +14,7 @@ namespace PocketBaseClient.Services
         protected abstract void RegisterCollections();
 
         public static CollectionBase<T>? GetCollection<T>()
-            where T : ItemBase
+            where T : ItemBase, new()
         {
             var type = typeof(T);
             if (!RegisteredCollections.ContainsKey(type))

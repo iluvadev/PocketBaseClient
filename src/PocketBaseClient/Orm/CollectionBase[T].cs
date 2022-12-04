@@ -7,7 +7,7 @@ using System.Web;
 namespace PocketBaseClient.Orm
 {
     public abstract class CollectionBase<T> : CollectionBase
-        where T : ItemBase
+        where T : ItemBase, new()
     {
         internal CacheItems<T> Cache { get; } = new CacheItems<T>();
         internal override int CachedItemsCount => Cache.Count;
@@ -16,7 +16,7 @@ namespace PocketBaseClient.Orm
 
         private T Add(T item)
         {
-            Cache.Set(item);
+            Cache.Add(item);
             item.Collection = this;
 
             return item;
@@ -34,6 +34,8 @@ namespace PocketBaseClient.Orm
             return Add(item);
         }
 
+        internal T? AddOrGetById(string id) => Cache.Get(id)?? Cache.Add(new T() { Id= id });
+        public T? GetById(string id) => Cache.Get(id) ?? GetByIdAsync(id).Result;
 
         public async Task<T?> GetByIdAsync(string id, bool forceLoad = false)
         {

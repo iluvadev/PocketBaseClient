@@ -6,12 +6,12 @@ namespace PocketBaseClient.CodeGenerator.Models
     {
         [JsonPropertyName("maxSelect")]
         public int? MaxSelect { get; set; }
-        public bool IsSinglSelect => (MaxSelect ?? 1) == 1;
+        public bool IsSinglSelect => (MaxSelect ?? 0) == 1;
 
         [JsonPropertyName("cascadeDelete")]
         public bool? CascadeDelete { get; set; }
 
         [JsonPropertyName("collectionId")]
-        public bool? CollectionId { get; set; }
+        public string? CollectionId { get; set; }
     }
 }
