@@ -55,7 +55,7 @@ namespace PocketBaseClient.SampleApp
             post1.Content = "Lorem Ipsum.... ";
             post1.Status = Post.StatusEnum.ToPublish;
             post1.Author = author;
-            post1.Tags;
+            post1.Tags.Add(tag);
         }
     }
 }

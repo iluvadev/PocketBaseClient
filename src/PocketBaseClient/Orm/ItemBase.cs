@@ -9,6 +9,10 @@ namespace PocketBaseClient.Orm
     {
         private bool _IsUpdating = false;
 
+        [JsonPropertyName("id")]
+        [JsonInclude]
+        public new string? Id { get; internal set; }
+
         private string? _CollectionId = null;
         [JsonPropertyName("collectionId")]
         public override string? CollectionId
