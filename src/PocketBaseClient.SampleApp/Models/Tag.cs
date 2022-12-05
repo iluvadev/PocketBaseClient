@@ -20,34 +20,17 @@ using System.Text.Json.Serialization;
 
 namespace PocketBaseClient.SampleApp.Models
 {
-    public partial class User : ItemBase
+    public partial class Tag : ItemBase
     {
         private string? _Name = null;
         [JsonPropertyName("name")]
-        [PocketBaseField(id: "users_name", name: "name", required: false, system: false, unique: false, type: "text")]
+        [PocketBaseField(id: "jdukbual", name: "name", required: true, system: false, unique: true, type: "text")]
+        [Required(ErrorMessage = @"name is required")]
+        [StringLength(10, MinimumLength = 2, ErrorMessage = "Minimum 2, Maximum 10 characters")]
         public string? Name
         {
            get => Get(() => _Name);
            set => Set(value, ref _Name);
-        }
-
-        private object? _Avatar = null;
-        [JsonPropertyName("avatar")]
-        [PocketBaseField(id: "users_avatar", name: "avatar", required: false, system: false, unique: false, type: "file")]
-        public object? Avatar
-        {
-           get => Get(() => _Avatar);
-           set => Set(value, ref _Avatar);
-        }
-
-        private Uri? _Url = null;
-        [JsonPropertyName("url")]
-        [PocketBaseField(id: "3wsfdiz3", name: "url", required: false, system: false, unique: false, type: "url")]
-        [JsonConverter(typeof(UrlConverter))]
-        public Uri? Url
-        {
-           get => Get(() => _Url);
-           set => Set(value, ref _Url);
         }
 
 
@@ -55,11 +38,9 @@ namespace PocketBaseClient.SampleApp.Models
         {
             StartUpdate(itemBase);
 
-            if (itemBase is User item)
+            if (itemBase is Tag item)
             {
                 Name = item.Name;
-                Avatar = item.Avatar;
-                Url = item.Url;
 
             }
 

@@ -23,12 +23,19 @@
 
         public T Add(T item)
         {
-            if (item.Id == null || !item.IsLoaded()) throw new ArgumentException("Can not cache a non valid item");
+            if (item.Id == null) throw new ArgumentException("Can not cache a non valid item");
 
             if (!Items.ContainsKey(item.Id))
+            {
                 CachedItems.Add(new CachedItem(item));
-
-            Items[item.Id] = item;
+                Items.Add(item.Id, item);
+            }
+            else
+            {
+                // Update Item cached properties
+                if (item.IsLoaded())
+                    Items[item.Id].UpdateWith(item);
+            }
 
             return item;
         }

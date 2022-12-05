@@ -34,7 +34,7 @@ namespace PocketBaseClient.Orm
             return Add(item);
         }
 
-        internal T? AddOrGetById(string id) => Cache.Get(id)?? Cache.Add(new T() { Id= id });
+        internal T? AddOrGetById(string id) => Cache.Get(id) ?? Cache.Add(new T() { Id = id });
         public T? GetById(string id) => Cache.Get(id) ?? GetByIdAsync(id).Result;
 
         public async Task<T?> GetByIdAsync(string id, bool forceLoad = false)

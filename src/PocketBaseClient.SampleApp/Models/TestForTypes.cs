@@ -1,5 +1,5 @@
 
-// This file was generated automatically on 4/12/2022 0:34:34(UTC) from the PocketBase schema for Application orm-csharp-test (https://orm-csharp-test.pockethost.io)
+// This file was generated automatically on 5/12/2022 21:47:57(UTC) from the PocketBase schema for Application orm-csharp-test (https://orm-csharp-test.pockethost.io)
 //
 // PocketBaseClient-csharp project: https://github.com/iluvadev/PocketBaseClient-csharp
 // Issues: https://github.com/iluvadev/PocketBaseClient-csharp/issues
@@ -168,11 +168,11 @@ namespace PocketBaseClient.SampleApp.Models
         private SelectMultipleList _SelectMultiple = new SelectMultipleList();
         [JsonPropertyName("select_multiple")]
         [PocketBaseField(id: "8dks1xfy", name: "select_multiple", required: false, system: false, unique: false, type: "select")]
-        [JsonConverter(typeof(ListEnumConverter<SelectMultipleList, SelectMultipleEnum>))]
+        [JsonConverter(typeof(EnumListConverter<SelectMultipleList, SelectMultipleEnum>))]
         public SelectMultipleList SelectMultiple
         {
            get => Get(() => _SelectMultiple ??= new SelectMultipleList());
-           set => Set(value, ref _SelectMultiple);
+           private set => Set(value, ref _SelectMultiple);
         }
 
         private dynamic? _Json = null;
@@ -223,6 +223,7 @@ namespace PocketBaseClient.SampleApp.Models
         private TestForRelated? _ReationSingle = null;
         [JsonPropertyName("reation_single")]
         [PocketBaseField(id: "7q0qviac", name: "reation_single", required: false, system: false, unique: false, type: "relation")]
+        [JsonConverter(typeof(RelationConverter<TestForRelated>))]
         public TestForRelated? ReationSingle
         {
            get => Get(() => _ReationSingle);
@@ -232,21 +233,58 @@ namespace PocketBaseClient.SampleApp.Models
         private List<TestForRelated> _RelationMultipleNoLimit = new List<TestForRelated>();
         [JsonPropertyName("relation_multiple_no_limit")]
         [PocketBaseField(id: "a4chtr6c", name: "relation_multiple_no_limit", required: false, system: false, unique: false, type: "relation")]
+        [JsonConverter(typeof(RelationListConverter<List<TestForRelated>, TestForRelated>))]
         public List<TestForRelated> RelationMultipleNoLimit
         {
            get => Get(() => _RelationMultipleNoLimit ??= new List<TestForRelated>());
-           set => Set(value, ref _RelationMultipleNoLimit);
+           private set => Set(value, ref _RelationMultipleNoLimit);
         }
 
         private RelationMultipleLimitList _RelationMultipleLimit = new RelationMultipleLimitList();
         [JsonPropertyName("relation_multiple_limit")]
         [PocketBaseField(id: "otxwaoam", name: "relation_multiple_limit", required: false, system: false, unique: false, type: "relation")]
+        [JsonConverter(typeof(RelationListConverter<RelationMultipleLimitList, TestForRelated>))]
         public RelationMultipleLimitList RelationMultipleLimit
         {
            get => Get(() => _RelationMultipleLimit ??= new RelationMultipleLimitList());
-           set => Set(value, ref _RelationMultipleLimit);
+           private set => Set(value, ref _RelationMultipleLimit);
         }
 
+
+        public override void UpdateWith(ItemBase itemBase)
+        {
+            StartUpdate(itemBase);
+
+            if (itemBase is TestForTypes item)
+            {
+                TextNoRestrictions = item.TextNoRestrictions;
+                TextRestrictions = item.TextRestrictions;
+                NumberNoRestrictions = item.NumberNoRestrictions;
+                NumberRestrrictions = item.NumberRestrrictions;
+                Bool = item.Bool;
+                EmailNoRestrictions = item.EmailNoRestrictions;
+                EmailRestrictionsExcept = item.EmailRestrictionsExcept;
+                EmailRestrictionsOnly = item.EmailRestrictionsOnly;
+                UrlNoRestrictions = item.UrlNoRestrictions;
+                UrlRestrictionsExcept = item.UrlRestrictionsExcept;
+                UrlRestrictionsOnly = item.UrlRestrictionsOnly;
+                DatetimeNoRestrictions = item.DatetimeNoRestrictions;
+                DatetimeRestrictions = item.DatetimeRestrictions;
+                SelectSingle = item.SelectSingle;
+                SelectMultiple = item.SelectMultiple;
+                Json = item.Json;
+                FileSingleNoRestriction = item.FileSingleNoRestriction;
+                FileSingleRestriction = item.FileSingleRestriction;
+                FileMultipleNoRestrictions = item.FileMultipleNoRestrictions;
+                FileMultipleRestrictions = item.FileMultipleRestrictions;
+                ReationSingle = item.ReationSingle;
+                RelationMultipleNoLimit = item.RelationMultipleNoLimit;
+                RelationMultipleLimit = item.RelationMultipleLimit;
+
+            }
+
+            EndUpdate();
+        }
 
         public override string ToString()
         {

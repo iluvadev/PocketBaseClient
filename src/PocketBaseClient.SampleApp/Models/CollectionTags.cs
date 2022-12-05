@@ -13,12 +13,12 @@ using PocketBaseClient.Services;
 
 namespace PocketBaseClient.SampleApp.Models
 {
-    public partial class CollectionTestForRelated : CollectionBase<TestForRelated>
+    public partial class CollectionTags : CollectionBase<Tag>
     {
-        public override string Id => "v2ge3yxdn90bhss";
-        public override string Name => "test_for_related";
+        public override string Id => "8zo94eumxnj7ghx";
+        public override string Name => "tags";
         public override bool System => false;
 
-        public CollectionTestForRelated(DataServiceBase context) : base(context) { }
+        public CollectionTags(DataServiceBase context) : base(context) { }
     }
 }

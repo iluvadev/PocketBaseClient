@@ -20,34 +20,15 @@ using System.Text.Json.Serialization;
 
 namespace PocketBaseClient.SampleApp.Models
 {
-    public partial class User : ItemBase
+    public partial class Category : ItemBase
     {
         private string? _Name = null;
         [JsonPropertyName("name")]
-        [PocketBaseField(id: "users_name", name: "name", required: false, system: false, unique: false, type: "text")]
+        [PocketBaseField(id: "p221scv1", name: "name", required: false, system: false, unique: false, type: "text")]
         public string? Name
         {
            get => Get(() => _Name);
            set => Set(value, ref _Name);
-        }
-
-        private object? _Avatar = null;
-        [JsonPropertyName("avatar")]
-        [PocketBaseField(id: "users_avatar", name: "avatar", required: false, system: false, unique: false, type: "file")]
-        public object? Avatar
-        {
-           get => Get(() => _Avatar);
-           set => Set(value, ref _Avatar);
-        }
-
-        private Uri? _Url = null;
-        [JsonPropertyName("url")]
-        [PocketBaseField(id: "3wsfdiz3", name: "url", required: false, system: false, unique: false, type: "url")]
-        [JsonConverter(typeof(UrlConverter))]
-        public Uri? Url
-        {
-           get => Get(() => _Url);
-           set => Set(value, ref _Url);
         }
 
 
@@ -55,11 +36,9 @@ namespace PocketBaseClient.SampleApp.Models
         {
             StartUpdate(itemBase);
 
-            if (itemBase is User item)
+            if (itemBase is Category item)
             {
                 Name = item.Name;
-                Avatar = item.Avatar;
-                Url = item.Url;
 
             }
 

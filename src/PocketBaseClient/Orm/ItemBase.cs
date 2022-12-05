@@ -7,6 +7,8 @@ namespace PocketBaseClient.Orm
 {
     public abstract class ItemBase : BaseModel
     {
+        private bool _IsUpdating = false;
+
         private string? _CollectionId = null;
         [JsonPropertyName("collectionId")]
         public override string? CollectionId
@@ -51,6 +53,12 @@ namespace PocketBaseClient.Orm
                 valueVar = value;
         }
 
+        protected void AddIn<L, T>(T value, ref L list) where L : IList<T>
+        {
+            if (value == null || list.Contains(value) || list.Any(i => i?.Equals(value) ?? false)) return;
+            list.Add(value);
+        }
+
         private ItemMetadata? _Metadata = null;
         public ItemMetadata Metadata() => _Metadata ??= new ItemMetadata(this);
 
@@ -62,6 +70,22 @@ namespace PocketBaseClient.Orm
             validationResults = new List<ValidationResult>();
             var vc = new ValidationContext(this);
             return Validator.TryValidateObject(this, vc, validationResults, true);
+        }
+
+        public bool IsValid() => Validate(out _);
+
+        public abstract void UpdateWith(ItemBase itemBase);
+
+
+        protected void StartUpdate(ItemBase itemBase)
+        {
+            _IsUpdating = true;
+            Created = itemBase.Created;
+            Updated = itemBase.Updated;
+        }
+        protected void EndUpdate()
+        {
+            _IsUpdating = false;
         }
     }
 }

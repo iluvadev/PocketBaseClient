@@ -28,7 +28,19 @@ namespace PocketBaseClient.Services
         }
         #endregion Collections
 
-        //Mètodes simples per Get?
+
+        public T? GetById<T>(string id) where T : ItemBase, new()
+            => GetCollection<T>()?.GetById(id);
+
+        public async Task<T?> GetByIdAsync<T>(string id) where T : ItemBase, new()
+        {
+            var collection = GetCollection<T>();
+            if(collection == null) return null;
+
+            return await collection.GetByIdAsync(id);
+        }
+            
+
 
     }
 }

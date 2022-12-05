@@ -8,17 +8,30 @@
 // pocketbase-csharp-sdk project: https://github.com/PRCV1/pocketbase-csharp-sdk 
 // pocketbase project: https://github.com/pocketbase/pocketbase
 
-using PocketBaseClient.Orm;
-using PocketBaseClient.Services;
+using System.ComponentModel;
 
 namespace PocketBaseClient.SampleApp.Models
 {
-    public partial class CollectionTestForRelated : CollectionBase<TestForRelated>
+    public partial class Post
     {
-        public override string Id => "v2ge3yxdn90bhss";
-        public override string Name => "test_for_related";
-        public override bool System => false;
+        public enum StatusEnum
+        {
+            [Description("draft")]
+            Draft,
 
-        public CollectionTestForRelated(DataServiceBase context) : base(context) { }
+            [Description("to review")]
+            ToReview,
+
+            [Description("reviewed")]
+            Reviewed,
+
+            [Description("to publish")]
+            ToPublish,
+
+            [Description("published")]
+            Published,
+
+
+        }
     }
 }

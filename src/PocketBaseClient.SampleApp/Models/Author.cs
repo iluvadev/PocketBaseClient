@@ -20,29 +20,31 @@ using System.Text.Json.Serialization;
 
 namespace PocketBaseClient.SampleApp.Models
 {
-    public partial class User : ItemBase
+    public partial class Author : ItemBase
     {
         private string? _Name = null;
         [JsonPropertyName("name")]
-        [PocketBaseField(id: "users_name", name: "name", required: false, system: false, unique: false, type: "text")]
+        [PocketBaseField(id: "vxfcwb67", name: "name", required: true, system: false, unique: false, type: "text")]
+        [Required(ErrorMessage = @"name is required")]
         public string? Name
         {
            get => Get(() => _Name);
            set => Set(value, ref _Name);
         }
 
-        private object? _Avatar = null;
-        [JsonPropertyName("avatar")]
-        [PocketBaseField(id: "users_avatar", name: "avatar", required: false, system: false, unique: false, type: "file")]
-        public object? Avatar
+        private MailAddress? _Email = null;
+        [JsonPropertyName("email")]
+        [PocketBaseField(id: "47aw4yhp", name: "email", required: false, system: false, unique: false, type: "email")]
+        [JsonConverter(typeof(EmailConverter))]
+        public MailAddress? Email
         {
-           get => Get(() => _Avatar);
-           set => Set(value, ref _Avatar);
+           get => Get(() => _Email);
+           set => Set(value, ref _Email);
         }
 
         private Uri? _Url = null;
         [JsonPropertyName("url")]
-        [PocketBaseField(id: "3wsfdiz3", name: "url", required: false, system: false, unique: false, type: "url")]
+        [PocketBaseField(id: "pm9srne2", name: "url", required: false, system: false, unique: false, type: "url")]
         [JsonConverter(typeof(UrlConverter))]
         public Uri? Url
         {
@@ -50,16 +52,26 @@ namespace PocketBaseClient.SampleApp.Models
            set => Set(value, ref _Url);
         }
 
+        private string? _Profile = null;
+        [JsonPropertyName("profile")]
+        [PocketBaseField(id: "oiphi3xd", name: "profile", required: false, system: false, unique: false, type: "text")]
+        public string? Profile
+        {
+           get => Get(() => _Profile);
+           set => Set(value, ref _Profile);
+        }
+
 
         public override void UpdateWith(ItemBase itemBase)
         {
             StartUpdate(itemBase);
 
-            if (itemBase is User item)
+            if (itemBase is Author item)
             {
                 Name = item.Name;
-                Avatar = item.Avatar;
+                Email = item.Email;
                 Url = item.Url;
+                Profile = item.Profile;
 
             }
 

@@ -1,5 +1,5 @@
 
-// This file was generated automatically on 4/12/2022 0:34:34(UTC) from the PocketBase schema for Application orm-csharp-test (https://orm-csharp-test.pockethost.io)
+// This file was generated automatically on 5/12/2022 21:47:57(UTC) from the PocketBase schema for Application orm-csharp-test (https://orm-csharp-test.pockethost.io)
 //
 // PocketBaseClient-csharp project: https://github.com/iluvadev/PocketBaseClient-csharp
 // Issues: https://github.com/iluvadev/PocketBaseClient-csharp/issues
@@ -51,6 +51,21 @@ namespace PocketBaseClient.SampleApp.Models
            set => Set(value, ref _NumberNonemptyUnique);
         }
 
+
+        public override void UpdateWith(ItemBase itemBase)
+        {
+            StartUpdate(itemBase);
+
+            if (itemBase is TestForRelated item)
+            {
+                NumberUnique = item.NumberUnique;
+                NumberNonempty = item.NumberNonempty;
+                NumberNonemptyUnique = item.NumberNonemptyUnique;
+
+            }
+
+            EndUpdate();
+        }
 
         public override string ToString()
         {

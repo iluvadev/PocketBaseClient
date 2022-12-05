@@ -8,7 +8,7 @@ namespace PocketBaseClient.Services
 {
     public abstract class ServiceBase
     {
-        public PocketBaseClientApplication App { get; }
+        internal PocketBaseClientApplication App { get; }
 
         public ServiceBase(PocketBaseClientApplication app)
         {

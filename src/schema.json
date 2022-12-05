@@ -452,6 +452,246 @@
           }
         }
       ]
+    },
+    {
+      "Id": "ev0tqm560oseykn",
+      "Created": "5/12/2022 13:22:41",
+      "Updated": "5/12/2022 13:52:49",
+      "Name": "posts",
+      "System": false,
+      "ListRule": "",
+      "ViewRule": "",
+      "CreateRule": "",
+      "UpdateRule": "",
+      "DeleteRule": "",
+      "Schema": [
+        {
+          "Id": "eqr6uyuh",
+          "Name": "title",
+          "Type": "text",
+          "System": false,
+          "Required": true,
+          "Unique": true,
+          "Options": {
+            "min": 5,
+            "max": null,
+            "pattern": ""
+          }
+        },
+        {
+          "Id": "cetvvrdy",
+          "Name": "author",
+          "Type": "relation",
+          "System": false,
+          "Required": false,
+          "Unique": false,
+          "Options": {
+            "maxSelect": 1,
+            "collectionId": "juwfyaf8ba9i3yx",
+            "cascadeDelete": false
+          }
+        },
+        {
+          "Id": "s9fvv8uu",
+          "Name": "summary",
+          "Type": "text",
+          "System": false,
+          "Required": false,
+          "Unique": false,
+          "Options": {
+            "min": null,
+            "max": 256,
+            "pattern": ""
+          }
+        },
+        {
+          "Id": "irhofrtf",
+          "Name": "content",
+          "Type": "text",
+          "System": false,
+          "Required": false,
+          "Unique": false,
+          "Options": {
+            "min": null,
+            "max": null,
+            "pattern": ""
+          }
+        },
+        {
+          "Id": "3zouwrab",
+          "Name": "published",
+          "Type": "date",
+          "System": false,
+          "Required": false,
+          "Unique": false,
+          "Options": {
+            "min": "",
+            "max": ""
+          }
+        },
+        {
+          "Id": "eusjau7x",
+          "Name": "status",
+          "Type": "select",
+          "System": false,
+          "Required": false,
+          "Unique": false,
+          "Options": {
+            "maxSelect": 1,
+            "values": [
+              "draft",
+              "to review",
+              "reviewed",
+              "to publish",
+              "published"
+            ]
+          }
+        },
+        {
+          "Id": "2ftkqyzs",
+          "Name": "categories",
+          "Type": "relation",
+          "System": false,
+          "Required": false,
+          "Unique": false,
+          "Options": {
+            "maxSelect": 3,
+            "collectionId": "fgj34p0gy01o41e",
+            "cascadeDelete": false
+          }
+        },
+        {
+          "Id": "vqnnjaiq",
+          "Name": "tags",
+          "Type": "relation",
+          "System": false,
+          "Required": false,
+          "Unique": false,
+          "Options": {
+            "maxSelect": null,
+            "collectionId": "8zo94eumxnj7ghx",
+            "cascadeDelete": false
+          }
+        }
+      ]
+    },
+    {
+      "Id": "juwfyaf8ba9i3yx",
+      "Created": "5/12/2022 13:24:06",
+      "Updated": "5/12/2022 13:53:04",
+      "Name": "authors",
+      "System": false,
+      "ListRule": "",
+      "ViewRule": "",
+      "CreateRule": "",
+      "UpdateRule": "",
+      "DeleteRule": "",
+      "Schema": [
+        {
+          "Id": "vxfcwb67",
+          "Name": "name",
+          "Type": "text",
+          "System": false,
+          "Required": true,
+          "Unique": false,
+          "Options": {
+            "min": null,
+            "max": null,
+            "pattern": ""
+          }
+        },
+        {
+          "Id": "47aw4yhp",
+          "Name": "email",
+          "Type": "email",
+          "System": false,
+          "Required": false,
+          "Unique": false,
+          "Options": {
+            "exceptDomains": null,
+            "onlyDomains": null
+          }
+        },
+        {
+          "Id": "pm9srne2",
+          "Name": "url",
+          "Type": "url",
+          "System": false,
+          "Required": false,
+          "Unique": false,
+          "Options": {
+            "exceptDomains": null,
+            "onlyDomains": null
+          }
+        },
+        {
+          "Id": "oiphi3xd",
+          "Name": "profile",
+          "Type": "text",
+          "System": false,
+          "Required": false,
+          "Unique": false,
+          "Options": {
+            "min": null,
+            "max": null,
+            "pattern": ""
+          }
+        }
+      ]
+    },
+    {
+      "Id": "fgj34p0gy01o41e",
+      "Created": "5/12/2022 13:28:59",
+      "Updated": "5/12/2022 13:53:19",
+      "Name": "categories",
+      "System": false,
+      "ListRule": "",
+      "ViewRule": "",
+      "CreateRule": "",
+      "UpdateRule": "",
+      "DeleteRule": "",
+      "Schema": [
+        {
+          "Id": "p221scv1",
+          "Name": "name",
+          "Type": "text",
+          "System": false,
+          "Required": false,
+          "Unique": false,
+          "Options": {
+            "min": null,
+            "max": null,
+            "pattern": ""
+          }
+        }
+      ]
+    },
+    {
+      "Id": "8zo94eumxnj7ghx",
+      "Created": "5/12/2022 13:46:05",
+      "Updated": "5/12/2022 13:53:35",
+      "Name": "tags",
+      "System": false,
+      "ListRule": "",
+      "ViewRule": "",
+      "CreateRule": "",
+      "UpdateRule": "",
+      "DeleteRule": "",
+      "Schema": [
+        {
+          "Id": "jdukbual",
+          "Name": "name",
+          "Type": "text",
+          "System": false,
+          "Required": true,
+          "Unique": true,
+          "Options": {
+            "min": 2,
+            "max": 10,
+            "pattern": ""
+          }
+        }
+      ]
     }
   ],
   "Application": {

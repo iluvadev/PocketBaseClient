@@ -1,5 +1,5 @@
 
-// This file was generated automatically on 4/12/2022 0:34:34(UTC) from the PocketBase schema for Application orm-csharp-test (https://orm-csharp-test.pockethost.io)
+// This file was generated automatically on 5/12/2022 21:47:57(UTC) from the PocketBase schema for Application orm-csharp-test (https://orm-csharp-test.pockethost.io)
 //
 // PocketBaseClient-csharp project: https://github.com/iluvadev/PocketBaseClient-csharp
 // Issues: https://github.com/iluvadev/PocketBaseClient-csharp/issues
@@ -19,12 +19,20 @@ namespace PocketBaseClient.SampleApp.Services
         public CollectionUsers UsersCollection { get; }
         public CollectionTestForTypes TestForTypesCollection { get; }
         public CollectionTestForRelated TestForRelatedCollection { get; }
+        public CollectionPosts PostsCollection { get; }
+        public CollectionAuthors AuthorsCollection { get; }
+        public CollectionCategories CategoriesCollection { get; }
+        public CollectionTags TagsCollection { get; }
 
         protected override void RegisterCollections()
         {
             RegisterCollection(typeof(User), UsersCollection);
             RegisterCollection(typeof(TestForTypes), TestForTypesCollection);
             RegisterCollection(typeof(TestForRelated), TestForRelatedCollection);
+            RegisterCollection(typeof(Post), PostsCollection);
+            RegisterCollection(typeof(Author), AuthorsCollection);
+            RegisterCollection(typeof(Category), CategoriesCollection);
+            RegisterCollection(typeof(Tag), TagsCollection);
         }
         #endregion Collections
 
@@ -35,6 +43,12 @@ namespace PocketBaseClient.SampleApp.Services
             UsersCollection = new CollectionUsers(this);
             TestForTypesCollection = new CollectionTestForTypes(this);
             TestForRelatedCollection = new CollectionTestForRelated(this);
+            PostsCollection = new CollectionPosts(this);
+            AuthorsCollection = new CollectionAuthors(this);
+            CategoriesCollection = new CollectionCategories(this);
+            TagsCollection = new CollectionTags(this);
+
+            RegisterCollections();
         }
         #endregion Constructor
     }
