@@ -21,23 +21,28 @@
 
         public int Count => Items.Values.Where(i => i.IsLoaded()).Count();
 
-        public T Add(T item)
+        public T AddOrUpdate(T item)
         {
+            //IEPA!! Com afegim elements nous a una col·lecció???
             if (item.Id == null) throw new ArgumentException("Can not cache a non valid item");
 
+            T cachedItem;
             if (!Items.ContainsKey(item.Id))
             {
                 CachedItems.Add(new CachedItem(item));
                 Items.Add(item.Id, item);
+                cachedItem = item;
             }
             else
             {
-                // Update Item cached properties
-                if (item.IsLoaded())
+                cachedItem = Items[item.Id];
+                //IEPA!!
+                // Update Item cached properties if item has more recent data and cached item is not modified
+                if (item.IsLoaded() && (!cachedItem.IsLoaded() || (cachedItem.Metadata.LastLoad ?? DateTime.MinValue) < (item.Metadata.LastLoad ?? DateTime.MinValue)))
                     Items[item.Id].UpdateWith(item);
             }
 
-            return item;
+            return cachedItem;
         }
 
         public T? Get(string id)
@@ -50,6 +55,7 @@
             return item;
         }
 
+        public IEnumerable<T> AllItems => Items.Values;
 
     }
 }

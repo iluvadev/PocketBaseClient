@@ -1,5 +1,5 @@
 
-// This file was generated automatically on 5/12/2022 21:47:57(UTC) from the PocketBase schema for Application orm-csharp-test (https://orm-csharp-test.pockethost.io)
+// This file was generated automatically on 6/12/2022 15:10:24(UTC) from the PocketBase schema for Application orm-csharp-test (https://orm-csharp-test.pockethost.io)
 //
 // PocketBaseClient-csharp project: https://github.com/iluvadev/PocketBaseClient-csharp
 // Issues: https://github.com/iluvadev/PocketBaseClient-csharp/issues
@@ -13,6 +13,7 @@ using PocketBaseClient.Orm;
 using PocketBaseClient.Orm.Attributes;
 using PocketBaseClient.Orm.Json;
 using PocketBaseClient.Orm.Validators;
+using PocketBaseClient.Services;
 using System.ComponentModel.DataAnnotations;
 using System.Net.Mail;
 using System.Text.Json;
@@ -22,6 +23,10 @@ namespace PocketBaseClient.SampleApp.Models
 {
     public partial class User : ItemBase
     {
+        private static CollectionBase? _Collection = null;
+        [JsonIgnore]
+        public override CollectionBase Collection => _Collection ??= DataServiceBase.GetCollection<User>()!;
+
         private string? _Name = null;
         [JsonPropertyName("name")]
         [PocketBaseField(id: "users_name", name: "name", required: false, system: false, unique: false, type: "text")]
@@ -53,7 +58,7 @@ namespace PocketBaseClient.SampleApp.Models
 
         public override void UpdateWith(ItemBase itemBase)
         {
-            StartUpdate(itemBase);
+            base.UpdateWith(itemBase);
 
             if (itemBase is User item)
             {
@@ -62,8 +67,6 @@ namespace PocketBaseClient.SampleApp.Models
                 Url = item.Url;
 
             }
-
-            EndUpdate();
         }
 
         public override string ToString()

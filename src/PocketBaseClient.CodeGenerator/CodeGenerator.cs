@@ -208,6 +208,7 @@ using PocketBaseClient.Orm;
 using PocketBaseClient.Orm.Attributes;
 using PocketBaseClient.Orm.Json;
 using PocketBaseClient.Orm.Validators;
+using PocketBaseClient.Services;
 using System.ComponentModel.DataAnnotations;
 using System.Net.Mail;
 using System.Text.Json;
@@ -216,14 +217,18 @@ using System.Text.Json.Serialization;
 namespace {GeneratedNamespaceModels}
 {{
     public partial class {colInfo.ItemsClassName} : ItemBase
-    {{");
+    {{
+        private static CollectionBase? _Collection = null;
+        [JsonIgnore]
+        public override CollectionBase Collection => _Collection ??= DataServiceBase.GetCollection<{colInfo.ItemsClassName}>()!;
+");
             foreach (var schemaField in colInfo.CollectionModel.Schema!)
                 ProcessSchemaField(colInfo, schemaField, "        ", sb);
 
             sb.AppendLine($@"
         public override void UpdateWith(ItemBase itemBase)
         {{
-            StartUpdate(itemBase);
+            base.UpdateWith(itemBase);
 
             if (itemBase is {colInfo.ItemsClassName} item)
             {{");
@@ -231,8 +236,6 @@ namespace {GeneratedNamespaceModels}
                 sb.AppendLine($@"                {propertyName} = item.{propertyName};");
             sb.AppendLine($@"
             }}
-
-            EndUpdate();
         }}
 
         public override string ToString()

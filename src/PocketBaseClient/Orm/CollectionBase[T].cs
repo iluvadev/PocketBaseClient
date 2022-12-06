@@ -14,28 +14,28 @@ namespace PocketBaseClient.Orm
 
         public CollectionBase(DataServiceBase context) : base(context) { }
 
-        private T Add(T item)
+        private T AddLoaded(T item)
         {
-            Cache.Add(item);
-            item.Collection = this;
+            item.Metadata.LastLoad = DateTime.UtcNow;
+            var cachedItem = Cache.AddOrUpdate(item);
+            cachedItem.Metadata.SetLoaded();
 
-            return item;
+            return cachedItem;
         }
-        private IEnumerable<T> AddRange(IEnumerable<T> items)
+        private IEnumerable<T> AddLoadedRange(IEnumerable<T> items)
         {
             foreach (var item in items)
-                Add(item);
-            return items;
+                yield return AddLoaded(item);
         }
 
-        private T? AddIfNotNull(T? item)
+        private T? AddLoadedIfNotNull(T? item)
         {
             if (item == null) return null;
-            return Add(item);
+            return AddLoaded(item);
         }
 
-        internal T? AddOrGetById(string id) => Cache.Get(id) ?? Cache.Add(new T() { Id = id });
-        public T? GetById(string id) => Cache.Get(id) ?? GetByIdAsync(id).Result;
+        internal T? AddOrGetById(string id) => Cache.Get(id) ?? Cache.AddOrUpdate(new T() { Id = id });
+        public T? GetById(string id, bool forceLoad = false) => GetByIdAsync(id, forceLoad).Result;
 
         public async Task<T?> GetByIdAsync(string id, bool forceLoad = false)
         {
@@ -45,7 +45,7 @@ namespace PocketBaseClient.Orm
             // /api/collections/collectionIdOrName/records/recordId
             string url = $"/api/collections/{HttpUtility.UrlEncode(Name)}/records/{HttpUtility.UrlEncode(id)}";
 
-            return AddIfNotNull(await PocketBase.HttpGetAsync<T>(url));
+            return AddLoadedIfNotNull(await PocketBase.HttpGetAsync<T>(url));
         }
 
 
@@ -54,7 +54,7 @@ namespace PocketBaseClient.Orm
             if (page == null) return Enumerable.Empty<T>();
             if (updateCount)
                 Metadata.Count = page.TotalItems;
-            return AddRange(page.Items ?? Enumerable.Empty<T>());
+            return AddLoadedRange(page.Items ?? Enumerable.Empty<T>());
         }
 
         public int LoadCount()
@@ -65,6 +65,8 @@ namespace PocketBaseClient.Orm
 
             return Metadata.Count ?? 0;
         }
+
+        public IEnumerable<T> CachedItems => Cache.AllItems;
 
         public IEnumerable<T> LoadItems()
         {
@@ -82,10 +84,25 @@ namespace PocketBaseClient.Orm
                 foreach (var item in GetItemsPage(page, true))
                 {
                     loadedItems++;
-                    yield return Add(item);
+                    yield return AddLoaded(item);
                 }
             }
         }
 
+        internal T UpdateCached(T item)
+        {
+            //IEPA!!
+            if (!item.Metadata.IsCreated)
+                return Cache.AddOrUpdate(item);
+
+            return item;
+        }
+
+        internal override bool CacheContains<E>(E elem)
+        {
+            if (elem is T item && item.Id != null)
+                return Cache.Get(item.Id)?.GetHashCode() == item.GetHashCode();
+            return false;
+        }
     }
 }

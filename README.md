@@ -189,7 +189,7 @@ var authAdminModel = await app.Auth.Admin.AuthenticateWithPassword("MyAdmin@emai
 or as user
 
 ```csharp
-var authUserModel = await app.Auth.User.AuthenticateViaEmail("myUser@email.com", "myUserPwd");
+var authUserModel = await app.Auth.User.AuthenticateWithPassword("myUser@email.com", "myUserPwd");
 ```
 
 (of course, login is not mandatory)

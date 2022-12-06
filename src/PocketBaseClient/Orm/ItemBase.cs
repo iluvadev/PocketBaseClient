@@ -1,5 +1,4 @@
 ﻿using pocketbase_csharp_sdk.Models;
-using PocketBaseClient.Services;
 using System.ComponentModel.DataAnnotations;
 using System.Text.Json.Serialization;
 
@@ -7,44 +6,33 @@ namespace PocketBaseClient.Orm
 {
     public abstract class ItemBase : BaseModel
     {
-        private bool _IsUpdating = false;
-
         [JsonPropertyName("id")]
         [JsonInclude]
         public new string? Id { get; internal set; }
 
-        private string? _CollectionId = null;
         [JsonPropertyName("collectionId")]
-        public override string? CollectionId
-        {
-            get => _CollectionId ?? _Collection?.Id;
-            set
-            {
-                _CollectionId = value;
-                _Collection = null;
-            }
-        }
+        [JsonInclude]
+        public new string? CollectionId => Collection.Id;
 
-        private string? _CollectionName = null;
         [JsonPropertyName("collectionName")]
-        public override string? CollectionName
-        {
-            get => _CollectionName ?? _Collection?.Name;
-            set => _CollectionName = value;
-        }
+        [JsonInclude]
+        public new string? CollectionName => Collection.Name;
 
-        private CollectionBase? _Collection = null;
         [JsonIgnore]
-        public CollectionBase? Collection
-        {
-            get => _Collection ??= DataServiceBase.GetCollectionById(CollectionId);
-            internal set => _Collection = value;
-        }
+        public abstract CollectionBase Collection { get; }
 
-        private void Load()
-        {
 
+        private async Task LoadAsync(bool forceLoad = false)
+        {
+            if (Collection == null) return;
+            if (!Metadata.IsCreated) return;
+            if (IsLoaded() && !forceLoad) return;
+
+            await Collection.FillFromPbAsync(this);
         }
+        private void Load(bool forceLoad = false)
+            => LoadAsync(forceLoad).Wait();
+
         protected T Get<T>(Func<T> func)
         {
             Load();
@@ -54,20 +42,20 @@ namespace PocketBaseClient.Orm
         {
             if (value == null && valueVar == null) return;
             if (valueVar == null || !valueVar.Equals(value))
+            {
                 valueVar = value;
-        }
-
-        protected void AddIn<L, T>(T value, ref L list) where L : IList<T>
-        {
-            if (value == null || list.Contains(value) || list.Any(i => i?.Equals(value) ?? false)) return;
-            list.Add(value);
+                Metadata.HasLocalChanges = true;
+            }
         }
 
         private ItemMetadata? _Metadata = null;
-        public ItemMetadata Metadata() => _Metadata ??= new ItemMetadata(this);
+        public ItemMetadata Metadata => _Metadata ??= new ItemMetadata(this);
 
         public bool IsLoaded()
-            => Metadata().IsLoaded && !Metadata().IsTrash;
+            => Metadata.IsLoaded && !Metadata.IsTrash;
+
+        public bool HasLocalChanges()
+            => Metadata.HasLocalChanges;
 
         public bool Validate(out List<ValidationResult> validationResults)
         {
@@ -78,18 +66,10 @@ namespace PocketBaseClient.Orm
 
         public bool IsValid() => Validate(out _);
 
-        public abstract void UpdateWith(ItemBase itemBase);
-
-
-        protected void StartUpdate(ItemBase itemBase)
+        public virtual void UpdateWith(ItemBase itemBase)
         {
-            _IsUpdating = true;
             Created = itemBase.Created;
             Updated = itemBase.Updated;
-        }
-        protected void EndUpdate()
-        {
-            _IsUpdating = false;
         }
     }
 }

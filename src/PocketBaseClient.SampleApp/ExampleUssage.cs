@@ -14,6 +14,9 @@ namespace PocketBaseClient.SampleApp
                 Console.WriteLine($"Collection: {item.Collection?.Name} -> Is loaded: {item.Collection?.Metadata.IsLoaded}");
                 foreach (var enumVal in item.SelectMultiple ?? Enumerable.Empty<SelectMultipleEnum>())
                     Console.WriteLine(enumVal);
+                
+                item.TextNoRestrictions += "bla";
+                Console.WriteLine(item);
             }
 
             var elem = new TestForRelated();
@@ -38,24 +41,34 @@ namespace PocketBaseClient.SampleApp
             // Our Collection "posts"
             var posts = app.Data.PostsCollection;
 
-            // Accessing a post
-            var post1 = app.Data.GetById<Post>("myPostId_1");
-
-            var post2 = posts.GetById("myPostId_2");
-
-            if (!post1.Validate(out var valResult))
+            foreach(var category in app.Data.CategoriesCollection.LoadItems())
             {
-                foreach (var validationError in valResult)
-                    Console.WriteLine(validationError);
+                Console.WriteLine(category);
+                category.Name += " modif";
             }
-            var author = app.Data.GetById<Author>("MyAuthorId");
-            var tag = app.Data.GetById<Tag>("MyTagId");
+            
+            foreach (var category in app.Data.CategoriesCollection.CachedItems)
+            {
+                Console.WriteLine(category);
+            }
+            //// Accessing a post
+            //var post1 = app.Data.GetById<Post>("myPostId_1");
 
-            post1.Title = "The title";
-            post1.Content = "Lorem Ipsum.... ";
-            post1.Status = Post.StatusEnum.ToPublish;
-            post1.Author = author;
-            post1.Tags.Add(tag);
+            //var post2 = posts.GetById("myPostId_2");
+
+            //if (!post1.Validate(out var valResult))
+            //{
+            //    foreach (var validationError in valResult)
+            //        Console.WriteLine(validationError);
+            //}
+            //var author = app.Data.GetById<Author>("MyAuthorId");
+            //var tag = app.Data.GetById<Tag>("MyTagId");
+
+            //post1.Title = "The title";
+            //post1.Content = "Lorem Ipsum.... ";
+            //post1.Status = Post.StatusEnum.ToPublish;
+            //post1.Author = author;
+            //post1.Tags.Add(tag);
         }
     }
 }

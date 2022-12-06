@@ -1,5 +1,5 @@
 
-// This file was generated automatically on 5/12/2022 21:47:57(UTC) from the PocketBase schema for Application orm-csharp-test (https://orm-csharp-test.pockethost.io)
+// This file was generated automatically on 6/12/2022 15:10:24(UTC) from the PocketBase schema for Application orm-csharp-test (https://orm-csharp-test.pockethost.io)
 //
 // PocketBaseClient-csharp project: https://github.com/iluvadev/PocketBaseClient-csharp
 // Issues: https://github.com/iluvadev/PocketBaseClient-csharp/issues
@@ -13,6 +13,7 @@ using PocketBaseClient.Orm;
 using PocketBaseClient.Orm.Attributes;
 using PocketBaseClient.Orm.Json;
 using PocketBaseClient.Orm.Validators;
+using PocketBaseClient.Services;
 using System.ComponentModel.DataAnnotations;
 using System.Net.Mail;
 using System.Text.Json;
@@ -22,6 +23,10 @@ namespace PocketBaseClient.SampleApp.Models
 {
     public partial class TestForRelated : ItemBase
     {
+        private static CollectionBase? _Collection = null;
+        [JsonIgnore]
+        public override CollectionBase Collection => _Collection ??= DataServiceBase.GetCollection<TestForRelated>()!;
+
         private int? _NumberUnique = null;
         [JsonPropertyName("number_unique")]
         [PocketBaseField(id: "s10g39sb", name: "number_unique", required: false, system: false, unique: true, type: "number")]
@@ -54,7 +59,7 @@ namespace PocketBaseClient.SampleApp.Models
 
         public override void UpdateWith(ItemBase itemBase)
         {
-            StartUpdate(itemBase);
+            base.UpdateWith(itemBase);
 
             if (itemBase is TestForRelated item)
             {
@@ -63,8 +68,6 @@ namespace PocketBaseClient.SampleApp.Models
                 NumberNonemptyUnique = item.NumberNonemptyUnique;
 
             }
-
-            EndUpdate();
         }
 
         public override string ToString()

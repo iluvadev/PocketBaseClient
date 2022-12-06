@@ -1,5 +1,6 @@
 ﻿using pocketbase_csharp_sdk;
 using PocketBaseClient.Services;
+using System.Web;
 
 namespace PocketBaseClient.Orm
 {
@@ -31,5 +32,22 @@ namespace PocketBaseClient.Orm
             Context = context;
         }
 
+        internal async Task<bool> FillFromPbAsync<T>(T item)
+            where T : ItemBase
+        {
+            if (item.Id == null) throw new Exception("Id must be informed to fill the object from PocketBase");
+
+            // /api/collections/collectionIdOrName/records/recordId
+            string url = $"/api/collections/{HttpUtility.UrlEncode(Name)}/records/{HttpUtility.UrlEncode(item.Id)}";
+
+            var loadedItem = await PocketBase.HttpGetAsync<T>(url);
+            if (loadedItem == null) return false;
+
+            item.UpdateWith(loadedItem);
+            item.Metadata.SetLoaded();
+            return true;
+        }
+
+        internal abstract bool CacheContains<T>(T elem) where T : ItemBase;
     }
 }
