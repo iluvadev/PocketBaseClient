@@ -218,14 +218,19 @@ namespace {GeneratedNamespaceModels}
 {{
     public partial class {colInfo.ItemsClassName} : ItemBase
     {{
+        #region Collection
         private static CollectionBase? _Collection = null;
         [JsonIgnore]
         public override CollectionBase Collection => _Collection ??= DataServiceBase.GetCollection<{colInfo.ItemsClassName}>()!;
-");
+        #endregion Collection
+
+        #region Field Properties");
             foreach (var schemaField in colInfo.CollectionModel.Schema!)
                 ProcessSchemaField(colInfo, schemaField, "        ", sb);
 
             sb.AppendLine($@"
+        #endregion Field Properties
+
         public override void UpdateWith(ItemBase itemBase)
         {{
             base.UpdateWith(itemBase);
@@ -244,8 +249,13 @@ namespace {GeneratedNamespaceModels}
             return JsonSerializer.Serialize(this, options);
         }}
 
+        #region GetById
         public static {colInfo.ItemsClassName}? GetById(string id, bool forceLoad = false) 
             => DataServiceBase.GetCollection<{colInfo.ItemsClassName}>()!.GetById(id, forceLoad);
+
+        public static async Task<{colInfo.ItemsClassName}?> GetByIdAsync(string id, bool forceLoad = false)
+            => await DataServiceBase.GetCollection<{colInfo.ItemsClassName}>()!.GetByIdAsync(id, forceLoad);
+        #endregion GetById
     }}
 }}");
             itemCode.Content = sb.ToString();

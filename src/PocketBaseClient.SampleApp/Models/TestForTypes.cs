@@ -1,5 +1,5 @@
 
-// This file was generated automatically on 6/12/2022 16:12:34(UTC) from the PocketBase schema for Application orm-csharp-test (https://orm-csharp-test.pockethost.io)
+// This file was generated automatically on 6/12/2022 17:21:47(UTC) from the PocketBase schema for Application orm-csharp-test (https://orm-csharp-test.pockethost.io)
 //
 // PocketBaseClient-csharp project: https://github.com/iluvadev/PocketBaseClient-csharp
 // Issues: https://github.com/iluvadev/PocketBaseClient-csharp/issues
@@ -23,10 +23,13 @@ namespace PocketBaseClient.SampleApp.Models
 {
     public partial class TestForTypes : ItemBase
     {
+        #region Collection
         private static CollectionBase? _Collection = null;
         [JsonIgnore]
         public override CollectionBase Collection => _Collection ??= DataServiceBase.GetCollection<TestForTypes>()!;
+        #endregion Collection
 
+        #region Field Properties
         private string? _TextNoRestrictions = null;
         [JsonPropertyName("text_no_restrictions")]
         [PocketBaseField(id: "kkyx3zk2", name: "text_no_restrictions", required: false, system: false, unique: false, type: "text")]
@@ -256,6 +259,8 @@ namespace PocketBaseClient.SampleApp.Models
         }
 
 
+        #endregion Field Properties
+
         public override void UpdateWith(ItemBase itemBase)
         {
             base.UpdateWith(itemBase);
@@ -295,7 +300,12 @@ namespace PocketBaseClient.SampleApp.Models
             return JsonSerializer.Serialize(this, options);
         }
 
+        #region GetById
         public static TestForTypes? GetById(string id, bool forceLoad = false) 
             => DataServiceBase.GetCollection<TestForTypes>()!.GetById(id, forceLoad);
+
+        public static async Task<TestForTypes?> GetByIdAsync(string id, bool forceLoad = false)
+            => await DataServiceBase.GetCollection<TestForTypes>()!.GetByIdAsync(id, forceLoad);
+        #endregion GetById
     }
 }
