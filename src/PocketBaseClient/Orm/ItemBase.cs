@@ -1,4 +1,5 @@
-﻿using pocketbase_csharp_sdk.Models;
+﻿using pocketbase_csharp_sdk.Json;
+using pocketbase_csharp_sdk.Models;
 using System.ComponentModel.DataAnnotations;
 using System.Text.Json.Serialization;
 
@@ -21,11 +22,20 @@ namespace PocketBaseClient.Orm
         [JsonIgnore]
         public abstract CollectionBase Collection { get; }
 
+        [JsonPropertyName("created")]
+        [JsonConverter(typeof(DateTimeConverter))]
+        [JsonInclude]
+        public new DateTime? Created { get; private set; }
+
+        [JsonPropertyName("updated")]
+        [JsonConverter(typeof(DateTimeConverter))]
+        [JsonInclude]
+        public new DateTime? Updated { get; private set; }
 
         private async Task LoadAsync(bool forceLoad = false)
         {
             if (Collection == null) return;
-            if (!Metadata.IsCreated) return;
+            if (Metadata.IsNew) return;
             if (IsLoaded() && !forceLoad) return;
 
             await Collection.FillFromPbAsync(this);
@@ -70,6 +80,11 @@ namespace PocketBaseClient.Orm
         {
             Created = itemBase.Created;
             Updated = itemBase.Updated;
+        }
+
+        public ItemBase()
+        {
+            Id = $"__NEW__{Guid.NewGuid()}";
         }
     }
 }

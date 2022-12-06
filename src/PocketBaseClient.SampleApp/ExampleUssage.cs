@@ -46,11 +46,22 @@ namespace PocketBaseClient.SampleApp
                 Console.WriteLine(category);
                 category.Name += " modif";
             }
-            
-            foreach (var category in app.Data.CategoriesCollection.CachedItems)
-            {
-                Console.WriteLine(category);
-            }
+
+            //foreach (var category in app.Data.CategoriesCollection.CachedItems)
+            //{
+            //    Console.WriteLine(category);
+            //}
+            var cat1 = Category.GetById("sywd90gz2ifd7pf")!;
+            cat1.Name += "das";
+            Console.WriteLine(Category.GetById("sywd90gz2ifd7pf"));
+
+            var test = new TestForTypes();
+            test.TextNoRestrictions = "My text";
+            test.SelectMultiple.Add(SelectMultipleEnum.Option3);
+            test.SelectMultiple.Add(SelectMultipleEnum.Option4);
+            //cat.UpdateWith(cat1);
+            Console.WriteLine(test);
+
             //// Accessing a post
             //var post1 = app.Data.GetById<Post>("myPostId_1");
 

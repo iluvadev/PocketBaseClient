@@ -1,5 +1,5 @@
 
-// This file was generated automatically on 6/12/2022 15:10:24(UTC) from the PocketBase schema for Application orm-csharp-test (https://orm-csharp-test.pockethost.io)
+// This file was generated automatically on 6/12/2022 16:12:34(UTC) from the PocketBase schema for Application orm-csharp-test (https://orm-csharp-test.pockethost.io)
 //
 // PocketBaseClient-csharp project: https://github.com/iluvadev/PocketBaseClient-csharp
 // Issues: https://github.com/iluvadev/PocketBaseClient-csharp/issues
@@ -292,7 +292,10 @@ namespace PocketBaseClient.SampleApp.Models
         public override string ToString()
         {
             var options = new JsonSerializerOptions { WriteIndented = true };
-            return JsonSerializer.Serialize(this, options); 
+            return JsonSerializer.Serialize(this, options);
         }
+
+        public static TestForTypes? GetById(string id, bool forceLoad = false) 
+            => DataServiceBase.GetCollection<TestForTypes>()!.GetById(id, forceLoad);
     }
 }

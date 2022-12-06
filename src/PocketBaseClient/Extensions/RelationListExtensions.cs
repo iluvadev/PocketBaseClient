@@ -22,7 +22,7 @@ namespace PocketBaseClient
                 updatedIds.Add(itemWithChanges.Id!);
             }
 
-            var elemsToRemove = list.Where(i => i.Metadata.IsCreated && !updatedIds.Contains(i.Id!)).ToList();
+            var elemsToRemove = list.Where(i => !i.Metadata.IsNew && !updatedIds.Contains(i.Id!)).ToList();
             foreach(var elemToRemove in elemsToRemove)
                 list.Remove(elemToRemove);
         }

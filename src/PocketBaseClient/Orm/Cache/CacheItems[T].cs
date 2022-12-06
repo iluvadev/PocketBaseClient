@@ -23,7 +23,6 @@
 
         public T AddOrUpdate(T item)
         {
-            //IEPA!! Com afegim elements nous a una col·lecció???
             if (item.Id == null) throw new ArgumentException("Can not cache a non valid item");
 
             T cachedItem;
@@ -39,7 +38,10 @@
                 //IEPA!!
                 // Update Item cached properties if item has more recent data and cached item is not modified
                 if (item.IsLoaded() && (!cachedItem.IsLoaded() || (cachedItem.Metadata.LastLoad ?? DateTime.MinValue) < (item.Metadata.LastLoad ?? DateTime.MinValue)))
-                    Items[item.Id].UpdateWith(item);
+                    cachedItem.UpdateWith(item);
+
+                //if (!item.Metadata.IsNew)
+                //    cachedItem.Metadata.MarkAsNotNew();
             }
 
             return cachedItem;

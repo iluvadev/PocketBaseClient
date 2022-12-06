@@ -243,6 +243,9 @@ namespace {GeneratedNamespaceModels}
             var options = new JsonSerializerOptions {{ WriteIndented = true }};
             return JsonSerializer.Serialize(this, options);
         }}
+
+        public static {colInfo.ItemsClassName}? GetById(string id, bool forceLoad = false) 
+            => DataServiceBase.GetCollection<{colInfo.ItemsClassName}>()!.GetById(id, forceLoad);
     }}
 }}");
             itemCode.Content = sb.ToString();

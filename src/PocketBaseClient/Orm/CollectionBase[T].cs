@@ -16,7 +16,6 @@ namespace PocketBaseClient.Orm
 
         private T AddLoaded(T item)
         {
-            item.Metadata.LastLoad = DateTime.UtcNow;
             var cachedItem = Cache.AddOrUpdate(item);
             cachedItem.Metadata.SetLoaded();
 
@@ -91,11 +90,7 @@ namespace PocketBaseClient.Orm
 
         internal T UpdateCached(T item)
         {
-            //IEPA!!
-            if (!item.Metadata.IsCreated)
-                return Cache.AddOrUpdate(item);
-
-            return item;
+            return Cache.AddOrUpdate(item);
         }
 
         internal override bool CacheContains<E>(E elem)
