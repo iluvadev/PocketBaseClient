@@ -61,7 +61,7 @@ Where:
 
 - **title**: Has a "*MIN LENGTH = 5*", is "*Nonempty*" and "*Unique*"
 
-- **author**: relation to "COLLECTION = authors" with "*MAX SELECT* = 1"
+- **author**: relation to "*COLLECTION = authors*" with "*MAX SELECT = 1*"
 
 - **summary**: Has a "*MAX LENGTH = 100*" 
 
