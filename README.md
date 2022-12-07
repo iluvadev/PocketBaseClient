@@ -136,14 +136,18 @@ var post = Post.GetById("myPostId");
 
 Every post maps a registry in posts Collection, with all fields.
 
-Every field type in PocketBase is converted as a c# equivalent, depending of the restrictions defined in the model:
+Every field type in PocketBase is converted as a c# equivalent, depending of the restrictions defined in the model.
+
+Note that relations are mapped to *objects* and selects to *enums*, and they can be inside *Lists* (or *LimitedLists*) if the schema says that can store multiple elements:
+
+*(LimitedList is a custom List with defined maximum elements)*
 
 ```csharp
-post.Title = "The title";
-post.Content = "Lorem Ipsum.... ";
-post.Status = Post.StatusEnum.ToPublish;
-post.Author = Author.GetById("MyAuthorId");
-post.Tags.Add(Tag.GetById("MyTagId"));
+post.Title = "The title";  //Text
+post.Content = "Lorem Ipsum.... "; //Text
+post.Status = Post.StatusEnum.ToPublish; //Select "MAX SELECT = 1"
+post.Author = Author.GetById("MyAuthorId"); //Relation "MAX SELECT = 1"
+post.Tags.Add(Tag.GetById("MyTagId")); //Relation "MAX SELECT null"
 ```
 
 The defined restrictions in PocketBase are automatically translated as Validations:
