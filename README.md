@@ -190,7 +190,7 @@ posts.Save(post);
 app.Data.Save(post);
 ```
 
-Or discard local (in memory) changes:
+Or discard local (in memory) changes for an element:
 
 ```csharp
 post.DiscardChanges();
@@ -198,6 +198,18 @@ post.DiscardChanges();
 posts.DiscardChanges(post);
 // Or
 app.Data.DiscardChanges(post);
+```
+
+Or for all elements with changes:
+
+```csharp
+// Discard changes in a collection
+posts.DiscardChanges();
+// Or
+app.Data.DiscardChanges(posts);
+
+// Discard all changes in all Data
+app.Data.DiscardChanges();
 ```
 
 And also, you can delete an element:
@@ -209,5 +221,3 @@ posts.Delete(post);
 // Or
 app.Data.Delete(post);
 ```
-
-# 
