@@ -15,7 +15,7 @@ namespace PocketBaseClient.Orm.Json
 
             foreach (var str in strArray)
             {
-                var value = DataServiceBase.GetCollection<T>()!.AddOrGetById(str);
+                var value = DataServiceBase.GetCollection<T>()!.AddIdFromPb(str);
                 if (value != null)
                     valueList.Add(value);
             }

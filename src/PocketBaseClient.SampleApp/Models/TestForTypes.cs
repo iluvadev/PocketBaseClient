@@ -1,5 +1,5 @@
 
-// This file was generated automatically on 6/12/2022 17:21:47(UTC) from the PocketBase schema for Application orm-csharp-test (https://orm-csharp-test.pockethost.io)
+// This file was generated automatically on 7/12/2022 21:54:22(UTC) from the PocketBase schema for Application orm-csharp-test (https://orm-csharp-test.pockethost.io)
 //
 // PocketBaseClient-csharp project: https://github.com/iluvadev/PocketBaseClient-csharp
 // Issues: https://github.com/iluvadev/PocketBaseClient-csharp/issues
@@ -300,12 +300,18 @@ namespace PocketBaseClient.SampleApp.Models
             return JsonSerializer.Serialize(this, options);
         }
 
-        #region GetById
-        public static TestForTypes? GetById(string id, bool forceLoad = false) 
-            => DataServiceBase.GetCollection<TestForTypes>()!.GetById(id, forceLoad);
+        #region Collection
+        public static CollectionTestForTypes GetCollection() 
+            => (CollectionTestForTypes)DataServiceBase.GetCollection<TestForTypes>()!;
+        #endregion Collection
 
-        public static async Task<TestForTypes?> GetByIdAsync(string id, bool forceLoad = false)
-            => await DataServiceBase.GetCollection<TestForTypes>()!.GetByIdAsync(id, forceLoad);
+
+        #region GetById
+        public static TestForTypes? GetById(string id, bool reload = false) 
+            => GetByIdAsync(id, reload).Result;
+
+        public static async Task<TestForTypes?> GetByIdAsync(string id, bool reload = false)
+            => await DataServiceBase.GetCollection<TestForTypes>()!.GetByIdAsync(id, reload);
         #endregion GetById
     }
 }

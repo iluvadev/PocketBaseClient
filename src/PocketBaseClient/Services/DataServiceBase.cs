@@ -33,16 +33,49 @@ namespace PocketBaseClient.Services
         public static IEnumerable<CollectionBase> Collections => RegisteredCollections.Values;
         #endregion Collections
 
-
-        public T? GetById<T>(string id, bool forceLoad = false) where T : ItemBase, new()
+        #region Get Item
+        public static T? GetById<T>(string id, bool forceLoad = false) where T : ItemBase, new()
             => GetCollection<T>()?.GetById(id, forceLoad);
 
-        public async Task<T?> GetByIdAsync<T>(string id, bool forceLoad = false) where T : ItemBase, new()
+        public static async Task<T?> GetByIdAsync<T>(string id, bool forceLoad = false) where T : ItemBase, new()
         {
             var collection = GetCollection<T>();
-            if(collection == null) return null;
+            if (collection == null) return null;
 
             return await collection.GetByIdAsync(id, forceLoad);
         }
+
+        #endregion Get Item
+
+        #region DiscardChanges
+        public void DiscardChanges()
+        {
+            foreach (var collection in Collections)
+                collection.DiscardChanges();
+        }
+        public void DiscardChanges(ItemBase item)
+            => item.DiscardChanges();
+
+        public void DiscardChanges(CollectionBase collection)  
+            => collection.DiscardChanges();
+
+        #endregion DiscardChanges
+
+        #region Save Item
+        public bool Save(ItemBase item) 
+            => item.Save();
+
+        public async Task<bool> SaveAsync(ItemBase item)
+            => await item.SaveAsync();
+        #endregion Save Item
+
+        #region Delete Item
+        public bool Delete(ItemBase item)
+            => item.Delete();
+
+        public async Task<bool> DeleteAsync(ItemBase item)
+            => await item.DeleteAsync();
+        #endregion Delete Item
+
     }
 }

@@ -249,12 +249,18 @@ namespace {GeneratedNamespaceModels}
             return JsonSerializer.Serialize(this, options);
         }}
 
-        #region GetById
-        public static {colInfo.ItemsClassName}? GetById(string id, bool forceLoad = false) 
-            => DataServiceBase.GetCollection<{colInfo.ItemsClassName}>()!.GetById(id, forceLoad);
+        #region Collection
+        public static {colInfo.CollectionClassName} GetCollection() 
+            => ({colInfo.CollectionClassName})DataServiceBase.GetCollection<{colInfo.ItemsClassName}>()!;
+        #endregion Collection
 
-        public static async Task<{colInfo.ItemsClassName}?> GetByIdAsync(string id, bool forceLoad = false)
-            => await DataServiceBase.GetCollection<{colInfo.ItemsClassName}>()!.GetByIdAsync(id, forceLoad);
+
+        #region GetById
+        public static {colInfo.ItemsClassName}? GetById(string id, bool reload = false) 
+            => GetByIdAsync(id, reload).Result;
+
+        public static async Task<{colInfo.ItemsClassName}?> GetByIdAsync(string id, bool reload = false)
+            => await DataServiceBase.GetCollection<{colInfo.ItemsClassName}>()!.GetByIdAsync(id, reload);
         #endregion GetById
     }}
 }}");

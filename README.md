@@ -119,15 +119,19 @@ This property is the main entry for our data: our collections and registries. Wi
 ```csharp
 // Our Collection "posts"
 var posts = app.Data.PostsCollection;
+// Or
+var posts = Post.GetCollection();
 ```
 
 And we have several ways to access our data:
 
 ```csharp
 // Accessing a post
-var post1 = app.Data.GetById<Post>("myPostId_1");
-
-var post2 = posts.GetById("myPostId_2");
+var post = app.Data.GetById<Post>("myPostId");
+// Or
+var post = posts.GetById("myPostId");
+// Or
+var post = Post.GetById("myPostId");
 ```
 
 Every post maps a registry in posts Collection, with all fields.
@@ -135,27 +139,76 @@ Every post maps a registry in posts Collection, with all fields.
 Every field type in PocketBase is converted as a c# equivalent, depending of the restrictions defined in the model:
 
 ```csharp
-var author = app.Data.GetById<Author>("MyAuthorId");
-var tag = app.Data.GetById<Tag>("MyTagId");
-
-post1.Title = "The title";
-post1.Content = "Lorem Ipsum.... ";
-post1.Status = Post.StatusEnum.ToPublish;
-post1.Author = author;
-post1.Tags.Add(tag);
+post.Title = "The title";
+post.Content = "Lorem Ipsum.... ";
+post.Status = Post.StatusEnum.ToPublish;
+post.Author = Author.GetById("MyAuthorId");
+post.Tags.Add(Tag.GetById("MyTagId"));
 ```
 
 The defined restrictions in PocketBase are automatically translated as Validations:
 
 ```csharp
-if (!post1.Validate(out var valResult))
+if (!post.Validate(out var valResult))
 {
     foreach (var validationError in valResult)
         Console.WriteLine(validationError);
 }
+// Or
+if (!post.Metadata.IsValid)
+{
+    foreach (var validationError in post1.Metadata.ValidationErrors)
+        Console.WriteLine(validationError);
+}
 ```
 
+You can create new registries as objects, in memory:
 
+```csharp
+var post = new Post
+{
+    Title = "The title",
+    Content = "Lorem Ipsum.... ",
+    Status = Post.StatusEnum.ToPublish,
+    Author = Author.GetById("MyAuthorId")
+};
+```
+
+And you can modify objects in memory:
+
+```csharp
+post.Status = Post.StatusEnum.Reviewed;
+```
+
+And Save changes to PocketBase (it does not matter if the record is to be created or updated):
+
+```csharp
+post.Save();
+// Or
+posts.Save(post);
+// Or
+app.Data.Save(post);
+```
+
+Or discard local (in memory) changes:
+
+```csharp
+post.DiscardChanges();
+// Or
+posts.DiscardChanges(post);
+// Or
+app.Data.DiscardChanges(post);
+```
+
+And also, you can delete an element:
+
+```csharp
+post.Delete();
+// Or
+posts.Delete(post);
+// Or
+app.Data.Delete(post);
+```
 
 # Old readme.md (to review)
 

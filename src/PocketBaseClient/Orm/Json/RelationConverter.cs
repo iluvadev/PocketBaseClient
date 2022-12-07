@@ -13,7 +13,7 @@ namespace PocketBaseClient.Orm.Json
             var value = reader.GetString();
             if (value == null)
                 return null;
-            return DataServiceBase.GetCollection<T>()!.AddOrGetById(value);
+            return DataServiceBase.GetCollection<T>()!.AddIdFromPb(value);
         }
 
         public override void Write(Utf8JsonWriter writer, T? value, JsonSerializerOptions options)

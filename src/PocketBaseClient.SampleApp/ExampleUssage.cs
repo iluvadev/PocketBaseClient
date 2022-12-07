@@ -40,27 +40,71 @@ namespace PocketBaseClient.SampleApp
 
             // Our Collection "posts"
             var posts = app.Data.PostsCollection;
-
-            foreach(var category in app.Data.CategoriesCollection.LoadItems())
-            {
-                Console.WriteLine(category);
-                category.Name += " modif";
-            }
+            app.Data.CategoriesCollection.LoadItems();
+            //foreach (var category in app.Data.CategoriesCollection.LoadItems())
+            //{
+            //    Console.WriteLine(category);
+            //    category.Name += " modif";
+            //}
 
             //foreach (var category in app.Data.CategoriesCollection.CachedItems)
             //{
             //    Console.WriteLine(category);
             //}
+
+            posts = Post.GetCollection();
+
             var cat1 = Category.GetById("sywd90gz2ifd7pf")!;
             cat1.Name += "das";
-            Console.WriteLine(Category.GetById("sywd90gz2ifd7pf"));
+            Console.WriteLine(cat1);
+            Console.WriteLine(Category.GetById("sywd90gz2ifd7pf", true));
+            cat1.Name = "Music";
+            cat1.Save();
+            Console.WriteLine(cat1);
+            cat1.DiscardChanges();
+            Console.WriteLine(cat1);
+            var post1 = cat1;
 
-            var test = new TestForTypes();
-            test.TextNoRestrictions = "My text";
-            test.SelectMultiple.Add(SelectMultipleEnum.Option3);
-            test.SelectMultiple.Add(SelectMultipleEnum.Option4);
-            //cat.UpdateWith(cat1);
-            Console.WriteLine(test);
+var post = new Post
+{
+    Title = "The title",
+    Content = "Lorem Ipsum.... ",
+    Status = Post.StatusEnum.ToPublish,
+    Author = Author.GetById("MyAuthorId")
+};
+            post.Title = "My new title";
+            post.Status = Post.StatusEnum.Reviewed;
+
+post.Save();
+posts.Save(post);
+app.Data.Save(post);
+
+post.DiscardChanges();
+posts.DiscardChanges(post);
+app.Data.DiscardChanges(post);
+
+post.Delete();
+posts.Delete(post);
+app.Data.Delete(post);
+
+            if (!post1.Metadata.IsValid)
+{
+    foreach (var validationError in post1.Metadata.ValidationErrors)
+        Console.WriteLine(validationError);
+}
+
+            //var test = new TestForTypes();
+            //test.TextNoRestrictions = "My text";
+            //test.SelectMultiple.Add(SelectMultipleEnum.Option3);
+            //test.SelectMultiple.Add(SelectMultipleEnum.Option4);
+            ////cat.UpdateWith(cat1);
+            //Console.WriteLine(test);
+
+            //cat1.DiscardChanges();
+            //app.Data.DiscardChanges(cat1);
+            //app.Data.DiscardChanges(app.Data.CategoriesCollection);
+            //app.Data.CategoriesCollection.DiscardChanges(cat1);
+
 
             //// Accessing a post
             //var post1 = app.Data.GetById<Post>("myPostId_1");

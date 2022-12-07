@@ -1,35 +1,11 @@
 ﻿using pocketbase_csharp_sdk;
 using pocketbase_csharp_sdk.Models;
+using System.Text.Json;
 
 namespace PocketBaseClient
 {
     public static class PocketBaseExtensions
     {
-        //public async Task<PagedCollectionModel<T>> ListAsync(
-        //    int? page = null,
-        //    int? perPage = null,
-        //    string? sort = null,
-        //    string? filter = null,
-        //    string? expand = null,
-        //    IDictionary<string, string>? headers = null)
-        //{
-        //    var query = new Dictionary<string, object?>()
-        //    {
-        //        { "filter", filter },
-        //        { "page", page },
-        //        { "perPage", perPage },
-        //        { "sort", sort },
-        //        { "expand", expand },
-        //    };
-        //    var pagedCollection = await client.SendAsync<PagedCollectionModel<T>>(
-        //        BasePath(),
-        //        HttpMethod.Get,
-        //        headers: headers,
-        //        query: query);
-        //    if (pagedCollection is null) throw new ClientException(BasePath());
-
-        //    return pagedCollection;
-        //}
         internal static async Task<T?> HttpGetAsync<T>(this PocketBase pocketBase, string url)
         {
             return await pocketBase.SendAsync<T>(url, HttpMethod.Get);
@@ -49,6 +25,29 @@ namespace PocketBaseClient
             if (pagedCollection is null) throw new ClientException(url);
 
             return pagedCollection;
+        }
+
+        internal static async Task<bool> HttpDeleteAsync(this PocketBase pocketBase, string url)
+        {
+            try { await pocketBase.SendAsync(url, HttpMethod.Delete); }
+            catch { return false; }
+            return true;
+        }
+
+        internal static async Task<T?> HttpPostAsync<T>(this PocketBase pocketBase, string url, T element)
+        {
+            // Convert Serialized element to Dictionary<string, object>
+            var body = JsonSerializer.Deserialize<Dictionary<string, object>>(JsonSerializer.Serialize(element));
+
+            return await pocketBase.SendAsync<T>(url, HttpMethod.Post, body: body);
+        }
+
+        internal static async Task<T?> HttpPatchAsync<T>(this PocketBase pocketBase, string url, T element)
+        {
+            // Convert Serialized element to Dictionary<string, object>
+            var body = JsonSerializer.Deserialize<Dictionary<string, object>>(JsonSerializer.Serialize(element));
+
+            return await pocketBase.SendAsync<T>(url, HttpMethod.Patch, body: body);
         }
 
     }

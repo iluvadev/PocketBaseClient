@@ -19,7 +19,7 @@
         private List<CachedItem> CachedItems { get; } = new List<CachedItem>();
         private Dictionary<string, T> Items { get; } = new Dictionary<string, T>();
 
-        public int Count => Items.Values.Where(i => i.IsLoaded()).Count();
+        public int Count => Items.Values.Where(i => !i.Metadata.IsTrash && i.Metadata.IsLoaded).Count();
 
         public T AddOrUpdate(T item)
         {
@@ -35,9 +35,14 @@
             else
             {
                 cachedItem = Items[item.Id];
+
                 //IEPA!!
                 // Update Item cached properties if item has more recent data and cached item is not modified
-                if (item.IsLoaded() && (!cachedItem.IsLoaded() || (cachedItem.Metadata.LastLoad ?? DateTime.MinValue) < (item.Metadata.LastLoad ?? DateTime.MinValue)))
+                bool needToUpdate = cachedItem.Metadata.IsTrash;
+                if (!item.Metadata.IsTrash && item.Metadata.IsLoaded)
+                    needToUpdate |= !cachedItem.Metadata.IsLoaded ||
+                                    cachedItem.Metadata.LastLoad! < item.Metadata.LastLoad!;
+                if (needToUpdate)
                     cachedItem.UpdateWith(item);
 
                 //if (!item.Metadata.IsNew)
@@ -52,8 +57,17 @@
             if (!Items.ContainsKey(id)) return null;
 
             var item = Items[id];
-            if (!item.IsLoaded()) return null;
+            if (item.Metadata.IsTrash) return null;
 
+            return item;
+        }
+
+        public T? Remove(string id)
+        {
+            if (!Items.ContainsKey(id)) return null;
+
+            var item = Items[id];
+            Items.Remove(id);
             return item;
         }
 

@@ -9,7 +9,12 @@ namespace PocketBaseClient.Orm
         [JsonIgnore]
         public ItemBase Item { get; private init; }
 
-        public bool IsNew => Item.Created == null || Item.Updated == null;
+        private bool? _IsNew = null;
+        public bool IsNew
+        {
+            get => _IsNew ?? Item.Created == null || Item.Updated == null;
+            set => _IsNew = value;
+        }
         public bool IsLoaded => !IsNew && LastLoad != null;
 
         public bool IsTrash { get; internal set; } = false;
@@ -28,7 +33,7 @@ namespace PocketBaseClient.Orm
         private bool _HasLocalChanges = false;
         public bool HasLocalChanges
         {
-            get => _HasLocalChanges;
+            get => _HasLocalChanges || IsNew;
             internal set
             {
                 if (value)
@@ -62,6 +67,12 @@ namespace PocketBaseClient.Orm
         {
             LastLoad = DateTime.UtcNow;
             HasLocalChanges = false;
+        }
+
+        internal void SetNeedBeLoaded()
+        {
+            LastLoad = null;
+            HasLocalChanges = IsNew;
         }
     }
 }
