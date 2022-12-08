@@ -8,15 +8,18 @@
 // pocketbase-csharp-sdk project: https://github.com/PRCV1/pocketbase-csharp-sdk 
 // pocketbase project: https://github.com/pocketbase/pocketbase
 
-using PocketBaseClient.Orm;
+using PocketBaseClient.Orm.Filters;
+using System.Net.Mail;
 
 namespace PocketBaseClient.SampleApp.Models
 {
-    public partial class TestForTypes
+    public partial class Tag 
     {
-        public class RelationMultipleLimitList : LimitedList<TestForRelated>
+        public class Filters : ItemBaseFilters
         {
-            public RelationMultipleLimitList() : base(5) { }
+
+            public FilterQuery Name(OperatorText op, string value) => FilterQuery.Create("name", op, value);
+
         }
     }
 }

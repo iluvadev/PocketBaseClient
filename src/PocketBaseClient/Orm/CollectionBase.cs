@@ -6,11 +6,6 @@ namespace PocketBaseClient.Orm
 {
     public abstract class CollectionBase
     {
-        private CollectionMetadata? _Metadata = null;
-        public CollectionMetadata Metadata => _Metadata ??= new CollectionMetadata(this);
-
-        internal abstract int CachedItemsCount { get; }
-
         public abstract string Id { get; }
         public abstract string Name { get; }
         public abstract bool System { get; }
@@ -24,7 +19,7 @@ namespace PocketBaseClient.Orm
         //public string? DeleteRule { get; set; }
         //public IEnumerable<SchemaFieldModel>? Schema { get; set; }
 
-        protected internal DataServiceBase Context { get; }
+        protected DataServiceBase Context { get; }
         protected PocketBase PocketBase => Context.App.Sdk;
 
         public CollectionBase(DataServiceBase context)
@@ -35,6 +30,9 @@ namespace PocketBaseClient.Orm
         internal abstract Task<bool> FillFromPbAsync<T>(T elem) where T : ItemBase;
 
         internal abstract bool CacheContains<T>(T elem) where T : ItemBase;
+
+        internal abstract bool AddToCache<T>(T elem) where T: ItemBase;
+
 
         #region DiscardChanges
         public abstract void DiscardChanges();

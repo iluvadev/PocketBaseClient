@@ -60,6 +60,9 @@ namespace PocketBaseClient.Orm
 
         #region Metadata
         private ItemMetadata? _Metadata = null;
+#if !DEBUG 
+        [JsonIgnore]
+#endif
         public ItemMetadata Metadata => _Metadata ??= new ItemMetadata(this);
         #endregion Metadata
 
@@ -109,6 +112,9 @@ namespace PocketBaseClient.Orm
         {
             if (Metadata.HasLocalChanges)
                 Metadata.SetNeedBeLoaded();
+
+            if (Metadata.IsNew)
+                Metadata.IsTrash = true;
         }
         #endregion DiscardChanges
 
@@ -131,6 +137,7 @@ namespace PocketBaseClient.Orm
         public ItemBase()
         {
             Id = Random.Shared.PseudorandomString(15).ToLowerInvariant();
+            Collection.AddToCache(this);
         }
     }
 }

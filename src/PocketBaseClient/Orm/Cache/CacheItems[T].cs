@@ -36,17 +36,13 @@
             {
                 cachedItem = Items[item.Id];
 
-                //IEPA!!
-                // Update Item cached properties if item has more recent data and cached item is not modified
+                // Update Item cached if item has more recent data and cached item is not modified
                 bool needToUpdate = cachedItem.Metadata.IsTrash;
                 if (!item.Metadata.IsTrash && item.Metadata.IsLoaded)
                     needToUpdate |= !cachedItem.Metadata.IsLoaded ||
                                     cachedItem.Metadata.LastLoad! < item.Metadata.LastLoad!;
                 if (needToUpdate)
                     cachedItem.UpdateWith(item);
-
-                //if (!item.Metadata.IsNew)
-                //    cachedItem.Metadata.MarkAsNotNew();
             }
 
             return cachedItem;
@@ -71,7 +67,18 @@
             return item;
         }
 
+        public void RemoveTrash()
+        {
+            var trashIds = Items.Values.Where(i => i.Metadata.IsTrash).Select(i => i.Id!).ToList();
+            foreach (var id in trashIds)
+                Remove(id);
+        }
+
         public IEnumerable<T> AllItems => Items.Values;
+
+        public IEnumerable<T> NewItems => Items.Values.Where(i => !i.Metadata.IsTrash && i.Metadata.IsNew);
+
+        public IEnumerable<T> NotNewItems => Items.Values.Where(i => !i.Metadata.IsTrash && !i.Metadata.IsNew);
 
     }
 }

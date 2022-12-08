@@ -94,12 +94,14 @@ namespace PocketBaseClient.CodeGenerator
 
             Console.WriteLine($"Getting PocketBase Application Collections...");
             int? totalItems = null;
+            int currentPage = 1;
             while (totalItems == null || schema.Collections.Count < totalItems)
             {
-                var collections = await app.Sdk.HttpGetListAsync<CollectionModel>("/api/collections");
+                var collections = await app.Sdk.HttpGetListAsync<CollectionModel>("/api/collections", page: currentPage);
                 //var collections = await app.Sdk.Collections.ListAsync();
                 totalItems = collections!.TotalItems;
                 schema.Collections.AddRange(collections.Items ?? Enumerable.Empty<CollectionModel>());
+                currentPage++;
             }
 
             Console.WriteLine($"Saving to file {file.FullName}...");

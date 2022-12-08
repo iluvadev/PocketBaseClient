@@ -10,7 +10,7 @@ namespace PocketBaseClient.SampleApp
     {
         static void Main()
         {
-            ExampleUssage.Example2();
+            ExampleUssage.Example3().Wait();
         }
     }
 }

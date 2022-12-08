@@ -6,20 +6,22 @@ using System.Web;
 
 namespace PocketBaseClient.Orm
 {
-    public abstract class CollectionBase<T> : CollectionBase
+    public abstract partial class CollectionBase<T> : CollectionBase
         where T : ItemBase, new()
     {
         #region Cache
         internal CacheItems<T> Cache { get; } = new CacheItems<T>();
-        internal override int CachedItemsCount => Cache.Count;
-
-        public IEnumerable<T> CachedItems => Cache.AllItems;
-
         internal T UpdateCached(T item)
         {
             return Cache.AddOrUpdate(item);
         }
 
+        internal override bool AddToCache<E>(E elem)
+        {
+            if (elem is T item && item.Id != null)
+                return Cache.AddOrUpdate(item) != null;
+            return false;
+        }
         internal override bool CacheContains<E>(E elem)
         {
             if (elem is T item && item.Id != null)
@@ -37,19 +39,6 @@ namespace PocketBaseClient.Orm
         public CollectionBase(DataServiceBase context) : base(context) { }
 
         #region Support functions
-        private T AddLoaded(T item)
-        {
-            var cachedItem = Cache.AddOrUpdate(item);
-            cachedItem.Metadata.SetLoaded();
-
-            return cachedItem;
-        }
-        private IEnumerable<T> AddLoadedRange(IEnumerable<T> items)
-        {
-            foreach (var item in items)
-                yield return AddLoaded(item);
-        }
-
         internal T? AddIdFromPb(string id)
         {
             var item = Cache.Get(id) ?? Cache.AddOrUpdate(new T() { Id = id });
@@ -57,17 +46,63 @@ namespace PocketBaseClient.Orm
             return item;
 
         }
-        #endregion Support functions
-
-        #region Count
-        public int LoadCount()
+        internal async Task<PagedCollectionModel<T>?> GetPageFromPbAsync(int? pageNumber = null, int? perPage = null, string? filter = null, string? sort = null)
         {
-            var page = PocketBase.HttpGetListAsync<T>(UrlRecords, 1, 1).Result;
-            GetItemsPage(page, true);
-
-            return Metadata.Count ?? 0;
+            var page = await PocketBase.HttpGetListAsync<T>(UrlRecords, pageNumber, perPage, filter, sort);
+            // Cache all items in the page
+            foreach (var itemFromPb in page?.Items ?? Enumerable.Empty<T>())
+            {
+                var item = Cache.AddOrUpdate(itemFromPb);
+                item.Metadata.SetLoaded();
+            }
+            return page;
         }
-        #endregion Count
+        internal async IAsyncEnumerable<T> GetItemsFromPbAsync(string? filter = null, string? sort = null)
+        {
+            int loadedItems = 0;
+            int? totalItems = null;
+            int currentPage = 1;
+            while (totalItems == null || loadedItems < totalItems)
+            {
+                var page = await GetPageFromPbAsync(pageNumber: currentPage, filter: filter, sort: sort);
+                if (page != null)
+                {
+                    currentPage++;
+
+                    totalItems = page.TotalItems;
+                    var pageItems = page.Items ?? Enumerable.Empty<T>();
+                    loadedItems += pageItems.Count();
+
+                    // Return downloaded cached items
+                    foreach (var item in pageItems)
+                        yield return Cache.Get(item.Id!) ?? item;
+                }
+            }
+        }
+        internal IEnumerable<T> GetItemsFromPb(string? filter = null, string? sort = null)
+        {
+            int loadedItems = 0;
+            int? totalItems = null;
+            int currentPage = 1;
+            while (totalItems == null || loadedItems < totalItems)
+            {
+                var page = GetPageFromPbAsync(pageNumber: currentPage, filter: filter, sort: sort).Result;
+                if (page != null)
+                {
+                    currentPage++;
+
+                    totalItems = page.TotalItems;
+                    var pageItems = page.Items ?? Enumerable.Empty<T>();
+                    loadedItems += pageItems.Count();
+
+                    // Return downloaded cached items
+                    foreach (var item in pageItems)
+                        yield return Cache.Get(item.Id!) ?? item;
+                }
+            }
+        }
+
+        #endregion Support functions
 
         #region Fill Item from PocketBase
         private async Task<bool> FillFromPbAsync(T item)
@@ -110,39 +145,78 @@ namespace PocketBaseClient.Orm
         }
         #endregion Get Item
 
-        #region Get Multiple Items
-        private IEnumerable<T> GetItemsPage(PagedCollectionModel<T>? page, bool updateCount = false)
-        {
-            if (page == null) return Enumerable.Empty<T>();
-            if (updateCount)
-                Metadata.Count = page.TotalItems;
-            return AddLoadedRange(page.Items ?? Enumerable.Empty<T>());
-        }
+        #region Get All Items
+        private int? _PocketBaseCount = null;
 
-        public IEnumerable<T> LoadItems()
-        {
-            int loadedItems = 0;
-            int? totalItems = null;
+        public IEnumerable<T> Items => GetItems();
 
-            while (totalItems == null || loadedItems < totalItems)
+        public IEnumerable<T> GetItems(bool reload = false)
+        {
+            // First: return new items
+            foreach (var item in Cache.NewItems)
+                yield return item;
+
+            // Count not new Items to compare with _PocketBaseCount
+            if (!reload && Cache.NotNewItems.Count() == _PocketBaseCount)
             {
-                var page = PocketBase.HttpGetListAsync<T>(UrlRecords).Result;
-                totalItems ??= page?.TotalItems;
+                // Return cached items
+                foreach (var item in Cache.NotNewItems)
+                    yield return item;
+            }
+            else
+            {
+                // Clean cached items and return items from PocketBase
 
-                foreach (var item in GetItemsPage(page, true))
+                // Set all cached as NeedToBeLoaded
+                var idsToTrash = new List<string>();
+                foreach (var notNewItem in Cache.NotNewItems)
                 {
-                    loadedItems++;
-                    yield return AddLoaded(item);
+                    notNewItem.Metadata.SetNeedBeLoaded();
+                    idsToTrash.Add(notNewItem.Id!);
                 }
+
+                // Get Items from PocketBase
+                int loadedItems = 0;
+                int currentPage = 1;
+                while (_PocketBaseCount == null || loadedItems < _PocketBaseCount)
+                {
+                    var page = GetPageFromPbAsync(currentPage).Result;
+                    if (page != null)
+                    {
+                        currentPage++;
+
+                        _PocketBaseCount = page.TotalItems;
+                        var pageItems = page.Items ?? Enumerable.Empty<T>();
+                        loadedItems += pageItems.Count();
+
+                        foreach (var item in pageItems)
+                            idsToTrash.Remove(item.Id!);
+
+                        // Return downloaded cached items
+                        foreach (var item in pageItems)
+                            yield return Cache.Get(item.Id!) ?? item;
+                    }
+                }
+
+                // Mark as Trash all not downloaded
+                foreach (var idToTrash in idsToTrash)
+                {
+                    var itemToTrash = Cache.Get(idToTrash);
+                    if (itemToTrash != null)
+                        itemToTrash.Metadata.IsTrash = true;
+                }
+                Cache.RemoveTrash();
             }
         }
-        #endregion Get Multiple Items
+        #endregion Get All Items
 
         #region DiscardChanges
         public override void DiscardChanges()
         {
             foreach (var item in Cache.AllItems)
                 item.DiscardChanges();
+
+            Cache.RemoveTrash();
         }
         public void DiscardChanges(T item)
             => item.DiscardChanges();

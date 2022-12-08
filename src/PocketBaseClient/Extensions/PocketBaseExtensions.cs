@@ -11,14 +11,14 @@ namespace PocketBaseClient
             return await pocketBase.SendAsync<T>(url, HttpMethod.Get);
         }
 
-        public static async Task<PagedCollectionModel<T>?> HttpGetListAsync<T>(this PocketBase pocketBase, string url, int? page = null, int? perPage = null)
+        public static async Task<PagedCollectionModel<T>?> HttpGetListAsync<T>(this PocketBase pocketBase, string url, int? page = null, int? perPage = null, string? filter = null, string? sort = null)
         {
             var query = new Dictionary<string, object?>()
             {
-                { "filter", null },
+                { "filter", filter },
                 { "page", page },
                 { "perPage", perPage },
-                { "sort", null },
+                { "sort", sort },
                 { "expand", null },
             };
             var pagedCollection = await pocketBase.SendAsync<PagedCollectionModel<T>>(url, HttpMethod.Get, query: query);

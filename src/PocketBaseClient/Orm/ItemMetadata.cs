@@ -19,7 +19,7 @@ namespace PocketBaseClient.Orm
 
         public bool IsTrash { get; internal set; } = false;
 
-        public bool IsFromCache => Item.Collection.CacheContains(Item);
+        public bool IsCached => Item.Collection.CacheContains(Item);
 
         [JsonConverter(typeof(DateTimeConverter))]
         public DateTime? LastLoad { get; private set; } = null;
@@ -67,6 +67,7 @@ namespace PocketBaseClient.Orm
         {
             LastLoad = DateTime.UtcNow;
             HasLocalChanges = false;
+            IsTrash = false;
         }
 
         internal void SetNeedBeLoaded()

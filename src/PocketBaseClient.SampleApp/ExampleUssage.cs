@@ -1,4 +1,5 @@
-﻿using PocketBaseClient.SampleApp.Models;
+﻿using PocketBaseClient.Orm.Filters;
+using PocketBaseClient.SampleApp.Models;
 using static PocketBaseClient.SampleApp.Models.TestForTypes;
 
 namespace PocketBaseClient.SampleApp
@@ -8,13 +9,13 @@ namespace PocketBaseClient.SampleApp
         public static void Example1()
         {
             var app = new OrmCsharpTestApplication();
-            foreach (var item in app.Data.TestForTypesCollection.LoadItems())
+            foreach (var item in app.Data.TestForTypesCollection.Items)
             {
                 Console.WriteLine(item);
-                Console.WriteLine($"Collection: {item.Collection?.Name} -> Is loaded: {item.Collection?.Metadata.IsLoaded}");
+                //Console.WriteLine($"Collection: {item.Collection?.Name} -> Is loaded: {item.Collection?.Metadata.IsLoaded}");
                 foreach (var enumVal in item.SelectMultiple ?? Enumerable.Empty<SelectMultipleEnum>())
                     Console.WriteLine(enumVal);
-                
+
                 item.TextNoRestrictions += "bla";
                 Console.WriteLine(item);
             }
@@ -33,24 +34,26 @@ namespace PocketBaseClient.SampleApp
             //    Console.WriteLine(item);
         }
 
-        public static async void Example2()
+        public static void Example2()
         {
             // Our application with defined url and name inside
             var app = new OrmCsharpTestApplication();
 
             // Our Collection "posts"
             var posts = app.Data.PostsCollection;
-            app.Data.CategoriesCollection.LoadItems();
-            //foreach (var category in app.Data.CategoriesCollection.LoadItems())
-            //{
-            //    Console.WriteLine(category);
-            //    category.Name += " modif";
-            //}
+            //var items = app.Data.CategoriesCollection.Items;
 
-            //foreach (var category in app.Data.CategoriesCollection.CachedItems)
-            //{
-            //    Console.WriteLine(category);
-            //}
+            foreach (var category in app.Data.CategoriesCollection.Items)
+            {
+                Console.WriteLine(category);
+                category.Name += " modif";
+            }
+            var newCat = new Category();
+
+            foreach (var category in app.Data.CategoriesCollection.Items)
+            {
+                Console.WriteLine(category);
+            }
 
             posts = Post.GetCollection();
 
@@ -64,36 +67,14 @@ namespace PocketBaseClient.SampleApp
             cat1.DiscardChanges();
             Console.WriteLine(cat1);
 
-
             var post1 = cat1;
 
-var post = new Post
-{
-    Title = "The title",
-    Content = "Lorem Ipsum.... ",
-    Status = Post.StatusEnum.ToPublish,
-    Author = Author.GetById("MyAuthorId")
-};
-            post.Title = "My new title";
-            post.Status = Post.StatusEnum.Reviewed;
-
-post.Save();
-posts.Save(post);
-app.Data.Save(post);
-
-post.DiscardChanges();
-posts.DiscardChanges(post);
-app.Data.DiscardChanges(post);
-
-post.Delete();
-posts.Delete(post);
-app.Data.Delete(post);
 
             if (!post1.Metadata.IsValid)
-{
-    foreach (var validationError in post1.Metadata.ValidationErrors)
-        Console.WriteLine(validationError);
-}
+            {
+                foreach (var validationError in post1.Metadata.ValidationErrors)
+                    Console.WriteLine(validationError);
+            }
 
             //var test = new TestForTypes();
             //test.TextNoRestrictions = "My text";
@@ -126,6 +107,24 @@ app.Data.Delete(post);
             //post1.Status = Post.StatusEnum.ToPublish;
             //post1.Author = author;
             //post1.Tags.Add(tag);
+        }
+
+        public static async Task Example3()
+        {
+            // Our application with defined url and name inside
+            var app = new OrmCsharpTestApplication();
+
+            // Our Collection "posts"
+            var cats = app.Data.CategoriesCollection;
+
+            await foreach (var cat in cats.Filter(p => p.Name(OperatorText.Equal, "Music")).GetItemsAsync())
+                Console.WriteLine(cat);
+
+            foreach(var cat in cats.Filter("name~'music'").GetItems())
+                Console.WriteLine(cat);
+
+            //foreach (var cat in cats.Items)
+            //    Console.WriteLine(cat);
         }
     }
 }

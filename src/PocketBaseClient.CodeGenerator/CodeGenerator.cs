@@ -1,5 +1,6 @@
 ﻿using pocketbase_csharp_sdk.Models.Collection;
 using PocketBaseClient.CodeGenerator.Models;
+using PocketBaseClient.Orm.Filters;
 using System.Text;
 using System.Text.Json;
 
@@ -155,7 +156,6 @@ namespace {GeneratedNamespaceServices}
 
         }
 
-
         private void ProcessCollection(CollectionModel collection)
         {
             if (collection.Name == null) throw new Exception("Collection name is empty");
@@ -177,6 +177,7 @@ namespace {GeneratedNamespaceServices}
                 Path = Path.Combine(OutputPathModels, $"{colInfo.CollectionClassName}.cs"),
                 Content = $@"{CodeHeader}
 using PocketBaseClient.Orm;
+using PocketBaseClient.Orm.Filters;
 using PocketBaseClient.Services;
 
 namespace {GeneratedNamespaceModels}
@@ -188,6 +189,14 @@ namespace {GeneratedNamespaceModels}
         public override bool System => {(collection.System ?? false).ToString().ToLower()};
 
         public {colInfo.CollectionClassName}(DataServiceBase context) : base(context) {{ }}
+
+
+        public CollectionQuery<{colInfo.CollectionClassName}, {colInfo.ItemsClassName}> Filter(string filterString)
+             => new CollectionQuery<{colInfo.CollectionClassName}, {colInfo.ItemsClassName}>(this, FilterQuery.Create(filterString));
+
+        public CollectionQuery<{colInfo.CollectionClassName}, {colInfo.ItemsClassName}> Filter(Func<{colInfo.ItemsClassName}.Filters, FilterQuery> filter)
+            => new CollectionQuery<{colInfo.CollectionClassName}, {colInfo.ItemsClassName}>(this, filter(new {colInfo.ItemsClassName}.Filters()));
+
     }}
 }}
 "
@@ -196,6 +205,11 @@ namespace {GeneratedNamespaceModels}
         }
 
         private void ProcessSchemaCollection(CollectionInfo colInfo)
+        {
+            ProcessSchemaItemCollection(colInfo);
+            ProcessSchemaItemFilterCollection(colInfo);
+        }
+        private void ProcessSchemaItemCollection(CollectionInfo colInfo)
         {
             var itemCode = new GeneratedCode
             {
@@ -537,6 +551,92 @@ namespace {GeneratedNamespaceModels}
             sb.AppendLine($@"{indent}}}");
 
             return sb;
+        }
+
+        private void ProcessSchemaItemFilterCollection(CollectionInfo colInfo)
+        {
+            var itemFilterCode = new GeneratedCode
+            {
+                Path = Path.Combine(OutputPathModels, $"{colInfo.ItemsClassName}.Filters.cs")
+            };
+            List<string> relatedItems = new List<string>();
+            StringBuilder sb = new StringBuilder();
+            sb.AppendLine($@"{CodeHeader}
+using PocketBaseClient.Orm.Filters;
+using System.Net.Mail;
+
+namespace {GeneratedNamespaceModels}
+{{
+    public partial class {colInfo.ItemsClassName} 
+    {{
+        public class Filters : ItemBaseFilters
+        {{
+");
+            foreach (var schemaField in colInfo.CollectionModel.Schema!.Where(s => s?.Name != null))
+                GetPropertyFilterForSchemaField(schemaField, "            ", schemaField.Name!.ToPascalCase(), sb);
+            sb.AppendLine($@"
+        }}
+    }}
+}}");
+            itemFilterCode.Content = sb.ToString();
+            _GeneratedCodeList.Add(itemFilterCode);
+        }
+
+        private void GetPropertyFilterForSchemaField(SchemaFieldModel schemaField, string indent, string propertyName, StringBuilder sb)
+        {
+            if (schemaField.Type == "text")
+            {
+                sb.AppendLine($@"{indent}public FilterQuery {propertyName}(OperatorText op, string value) => FilterQuery.Create(""{schemaField.Name}"", op, value);");
+            }
+            else if (schemaField.Type == "number")
+            {
+                sb.AppendLine($@"{indent}public FilterQuery {propertyName}(OperatorNumeric op, int value) => FilterQuery.Create(""{schemaField.Name}"", op, value);");
+            }
+            else if (schemaField.Type == "bool")
+            {
+                sb.AppendLine($@"{indent}public FilterQuery {propertyName}(bool value) => FilterQuery.Create(""{schemaField.Name}"", value);");
+            }
+            else if (schemaField.Type == "email")
+            {
+                sb.AppendLine($@"{indent}public FilterQuery {propertyName}(OperatorText op, MailAddress value) => FilterQuery.Create(""{schemaField.Name}"", op, value);");
+                sb.AppendLine($@"{indent}public FilterQuery {propertyName}(OperatorText op, string value) => FilterQuery.Create(""{schemaField.Name}"", op, value);");
+            }
+            else if (schemaField.Type == "url")
+            {
+                sb.AppendLine($@"{indent}public FilterQuery {propertyName}(OperatorText op, Uri value) => FilterQuery.Create(""{schemaField.Name}"", op, value);");
+                sb.AppendLine($@"{indent}public FilterQuery {propertyName}(OperatorText op, string value) => FilterQuery.Create(""{schemaField.Name}"", op, value);");
+            }
+            else if (schemaField.Type == "date")
+            {
+                sb.AppendLine($@"{indent}public FilterQuery {propertyName}(OperatorNumeric op, DateTime value) => FilterQuery.Create(""{schemaField.Name}"", op, value);");
+            }
+            else if (schemaField.Type == "select")
+            {
+                //var options = JsonSerializer.Deserialize<PocketBaseFieldOptionsSelect>(JsonSerializer.Serialize(schemaField.Options)) ?? new PocketBaseFieldOptionsSelect();
+                //if (options.IsSinglSelect)
+                //    sb.AppendLine($@"{indent}[JsonConverter(typeof(EnumConverter<{propertyName}Enum>))]");
+                //else if (options.MaxSelect != null)
+                //    sb.AppendLine($@"{indent}[JsonConverter(typeof(EnumListConverter<{propertyName}List, {propertyName}Enum>))]");
+                //else //List
+                //    sb.AppendLine($@"{indent}[JsonConverter(typeof(EnumListConverter<List<{propertyName}Enum>, {propertyName}Enum>))]");
+            }
+            else if (schemaField.Type == "json")
+            {
+            }
+            else if (schemaField.Type == "file")
+            {
+            }
+            else if (schemaField.Type == "relation")
+            {
+                //var options = JsonSerializer.Deserialize<PocketBaseFieldOptionsRelation>(JsonSerializer.Serialize(schemaField.Options)) ?? new PocketBaseFieldOptionsRelation();
+                //var colInfo = _CollectionList.First(c => c.CollectionId == options.CollectionId);
+                //if (options.IsSinglSelect)
+                //    sb.AppendLine($@"{indent}[JsonConverter(typeof(RelationConverter<{colInfo.ItemsClassName}>))]");
+                //else if (options.MaxSelect != null)
+                //    sb.AppendLine($@"{indent}[JsonConverter(typeof(RelationListConverter<{propertyName}List, {colInfo.ItemsClassName}>))]");
+                //else //List
+                //    sb.AppendLine($@"{indent}[JsonConverter(typeof(RelationListConverter<List<{colInfo.ItemsClassName}>, {colInfo.ItemsClassName}>))]");
+            }
         }
     }
 }
