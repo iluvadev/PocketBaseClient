@@ -161,7 +161,7 @@ if (!post.Validate(out var valResult))
 // Or
 if (!post.Metadata.IsValid)
 {
-    foreach (var validationError in post1.Metadata.ValidationErrors)
+    foreach (var validationError in post.Metadata.ValidationErrors)
         Console.WriteLine(validationError);
 }
 ```
