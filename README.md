@@ -153,15 +153,15 @@ post.Tags.Add(Tag.GetById("MyTagId")); //Relation "MAX SELECT null"
 The defined restrictions in PocketBase are automatically translated as Validations:
 
 ```csharp
-if (!post.Validate(out var valResult))
+if (!post.Validate(out var validationErrors))
 {
-    foreach (var validationError in valResult)
+    foreach (var validationError in validationErrors)
         Console.WriteLine(validationError);
 }
 // Or
 if (!post.Metadata.IsValid)
 {
-    foreach (var validationError in post1.Metadata.ValidationErrors)
+    foreach (var validationError in post.Metadata.ValidationErrors)
         Console.WriteLine(validationError);
 }
 ```
