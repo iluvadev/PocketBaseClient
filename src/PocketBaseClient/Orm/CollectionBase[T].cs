@@ -49,7 +49,7 @@ namespace PocketBaseClient.Orm
             foreach (var item in items)
                 yield return AddLoaded(item);
         }
-        
+
         internal T? AddIdFromPb(string id)
         {
             var item = Cache.Get(id) ?? Cache.AddOrUpdate(new T() { Id = id });
@@ -90,7 +90,7 @@ namespace PocketBaseClient.Orm
             return false;
         }
         #endregion Fill Item from PocketBase
-        
+
         #region Get Item
         public T? GetById(string id, bool reload = false) => GetByIdAsync(id, reload).Result;
 
@@ -149,22 +149,39 @@ namespace PocketBaseClient.Orm
         #endregion DiscardChanges
 
         #region Save Item
-        public bool Save(T item) => SaveAsync(item).Result;
-        public async Task<bool> SaveAsync(T item)
+        public bool Save(T item, bool onlyIfChanges = false) => SaveAsync(item, onlyIfChanges).Result;
+        public async Task<bool> SaveAsync(T item, bool onlyIfChanges = false)
         {
             if (item.Id == null) return false;
             if (!item.Metadata.IsValid) return false;
 
+            // WARNING: There is no check for circular references!!
+
+            var newItems = item.RelatedItems.Where(i => i != null && !i.IsSame(item) && i.Metadata.IsNew).Distinct().ToList();
+            var cachedItems = item.RelatedItems.Where(i => i != null && !i.IsSame(item) && !i.Metadata.IsNew).Distinct().ToList();
+
+            // Save related new items
+            foreach (var relatedNew in newItems)
+                if (relatedNew?.Metadata.IsNew ?? false)
+                    await relatedNew.SaveAsync(true);
+
+            // Save related changed items
+            foreach (var relatedCached in cachedItems)
+                if (relatedCached != null)
+                    await relatedCached.SaveAsync(true);
+
+            // WARNING: There is no wait for Cascade saving!!
+
             if (item.Metadata.IsNew)
                 return await CreateAsync(item);
             else
-                return await UpdateAsync(item);
+                return await UpdateAsync(item, onlyIfChanges);
         }
 
-        internal override async Task<bool> SaveAsync<E>(E elem)
+        internal override async Task<bool> SaveAsync<E>(E elem, bool onlyIfChanges = false)
         {
             if (elem is T item)
-                return await SaveAsync(item);
+                return await SaveAsync(item, onlyIfChanges);
             return false;
         }
 
@@ -178,9 +195,10 @@ namespace PocketBaseClient.Orm
             return true;
         }
 
-        private async Task<bool> UpdateAsync(T item)
+        private async Task<bool> UpdateAsync(T item, bool onlyIfChanges = false)
         {
             if (item.Id == null) return false;
+            if (onlyIfChanges && !item.Metadata.HasLocalChanges) return true;
 
             var savedItem = await PocketBase.HttpPatchAsync(UrlRecord(item), item);
             if (savedItem == null) return false;

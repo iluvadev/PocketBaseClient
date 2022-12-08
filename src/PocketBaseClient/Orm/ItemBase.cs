@@ -82,7 +82,7 @@ namespace PocketBaseClient.Orm
             if (Metadata.IsTrash) return;
             if (Metadata.IsLoaded && !forceLoad) return;
 
-            if(!await Collection.FillFromPbAsync(this))
+            if (!await Collection.FillFromPbAsync(this))
             {
                 //IEPA!!
                 // The registry does not exists in PocketBase
@@ -113,9 +113,14 @@ namespace PocketBaseClient.Orm
         #endregion DiscardChanges
 
         #region Save
-        public bool Save() => SaveAsync().Result;
-        public async Task<bool> SaveAsync() => await Collection.SaveAsync(this);
+        public bool Save(bool onlyIfChanges = false) => SaveAsync(onlyIfChanges).Result;
+        public async Task<bool> SaveAsync(bool onlyIfChanges = false) => await Collection.SaveAsync(this, onlyIfChanges);
         #endregion Save
+
+        public bool IsSame(ItemBase item)
+            => item.CollectionId == CollectionId && item.Id == Id;
+
+        protected internal virtual IEnumerable<ItemBase?> RelatedItems => Enumerable.Empty<ItemBase>();
 
         public virtual void UpdateWith(ItemBase itemBase)
         {

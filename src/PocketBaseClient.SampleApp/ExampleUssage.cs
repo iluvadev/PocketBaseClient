@@ -63,6 +63,8 @@ namespace PocketBaseClient.SampleApp
             Console.WriteLine(cat1);
             cat1.DiscardChanges();
             Console.WriteLine(cat1);
+
+
             var post1 = cat1;
 
 var post = new Post

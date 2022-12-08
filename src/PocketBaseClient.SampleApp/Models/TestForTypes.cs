@@ -1,5 +1,5 @@
 
-// This file was generated automatically on 7/12/2022 21:54:22(UTC) from the PocketBase schema for Application orm-csharp-test (https://orm-csharp-test.pockethost.io)
+// This file was generated automatically on 8/12/2022 0:36:23(UTC) from the PocketBase schema for Application orm-csharp-test (https://orm-csharp-test.pockethost.io)
 //
 // PocketBaseClient-csharp project: https://github.com/iluvadev/PocketBaseClient-csharp
 // Issues: https://github.com/iluvadev/PocketBaseClient-csharp/issues
@@ -299,6 +299,9 @@ namespace PocketBaseClient.SampleApp.Models
             var options = new JsonSerializerOptions { WriteIndented = true };
             return JsonSerializer.Serialize(this, options);
         }
+
+        protected override IEnumerable<ItemBase?> RelatedItems 
+            => base.RelatedItems.Union(new List<ItemBase?>() { ReationSingle }).Union(RelationMultipleNoLimit).Union(RelationMultipleLimit);
 
         #region Collection
         public static CollectionTestForTypes GetCollection() 

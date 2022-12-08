@@ -41,7 +41,7 @@ namespace PocketBaseClient.Orm
         #endregion DiscardChanges
 
         #region  Save Item
-        internal abstract Task<bool> SaveAsync<T>(T elem) where T : ItemBase;
+        internal abstract Task<bool> SaveAsync<T>(T elem, bool onlyIfChanges = false) where T : ItemBase;
         #endregion  Save Item
 
         #region Delete Item

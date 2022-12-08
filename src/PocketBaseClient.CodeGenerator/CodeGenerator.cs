@@ -201,6 +201,7 @@ namespace {GeneratedNamespaceModels}
             {
                 Path = Path.Combine(OutputPathModels, $"{colInfo.ItemsClassName}.cs")
             };
+            List<string> relatedItems = new List<string>();
             StringBuilder sb = new StringBuilder();
             sb.AppendLine($@"{CodeHeader}
 using pocketbase_csharp_sdk.Json;
@@ -226,7 +227,7 @@ namespace {GeneratedNamespaceModels}
 
         #region Field Properties");
             foreach (var schemaField in colInfo.CollectionModel.Schema!)
-                ProcessSchemaField(colInfo, schemaField, "        ", sb);
+                ProcessSchemaField(colInfo, schemaField, "        ", sb, relatedItems);
 
             sb.AppendLine($@"
         #endregion Field Properties
@@ -247,8 +248,18 @@ namespace {GeneratedNamespaceModels}
         {{
             var options = new JsonSerializerOptions {{ WriteIndented = true }};
             return JsonSerializer.Serialize(this, options);
-        }}
+        }}");
 
+            if (relatedItems.Any())
+            {
+                sb.Append($@"
+        protected override IEnumerable<ItemBase?> RelatedItems 
+            => base.RelatedItems");
+                foreach (var relatedItem in relatedItems)
+                    sb.Append($@"{relatedItem}");
+                sb.AppendLine(";");
+            }
+            sb.AppendLine($@"
         #region Collection
         public static {colInfo.CollectionClassName} GetCollection() 
             => ({colInfo.CollectionClassName})DataServiceBase.GetCollection<{colInfo.ItemsClassName}>()!;
@@ -268,11 +279,11 @@ namespace {GeneratedNamespaceModels}
             _GeneratedCodeList.Add(itemCode);
         }
 
-        private void ProcessSchemaField(CollectionInfo colInfo, SchemaFieldModel schemaField, string indent, StringBuilder sb)
+        private void ProcessSchemaField(CollectionInfo colInfo, SchemaFieldModel schemaField, string indent, StringBuilder sb, List<string> relatedItems)
         {
             string propertyName = schemaField.Name?.ToPascalCase() ?? throw new Exception("Field name is missing");
 
-            sb.Append(GetVarForSchemaField(colInfo, schemaField, indent, propertyName));
+            sb.Append(GetVarForSchemaField(colInfo, schemaField, indent, propertyName, relatedItems));
             sb.Append(GetDecoratorsForSchemaField(schemaField, indent, propertyName));
             sb.Append(GetPropertyForSchemaField(schemaField, indent, propertyName));
             sb.AppendLine();
@@ -324,7 +335,7 @@ namespace {GeneratedNamespaceModels}
 
             return $"object";
         }
-        private StringBuilder GetVarForSchemaField(CollectionInfo colInfo, SchemaFieldModel schemaField, string indent, string propertyName)
+        private StringBuilder GetVarForSchemaField(CollectionInfo colInfo, SchemaFieldModel schemaField, string indent, string propertyName, List<string> relatedItems)
         {
             var sb = new StringBuilder();
 
@@ -338,10 +349,19 @@ namespace {GeneratedNamespaceModels}
             if (schemaField.Type == "relation")
             {
                 var options = JsonSerializer.Deserialize<PocketBaseFieldOptionsRelation>(JsonSerializer.Serialize(schemaField.Options)) ?? new PocketBaseFieldOptionsRelation();
-                if (options != null && options.MaxSelect > 1)
+                if (options != null)
                 {
-                    var colRelatedInfo = _CollectionList.First(c => c.CollectionId == options.CollectionId);
-                    CreateLimitedListForField(colInfo, propertyName, colRelatedInfo.ItemsClassName, options!.MaxSelect!.Value);
+                    if (options.MaxSelect == 1)
+                        relatedItems.Add(@$".Union(new List<ItemBase?>() {{ {propertyName} }})");
+                    else
+                    {
+                        relatedItems.Add(@$".Union({propertyName})");
+                        if (options.MaxSelect > 1)
+                        {
+                            var colRelatedInfo = _CollectionList.First(c => c.CollectionId == options.CollectionId);
+                            CreateLimitedListForField(colInfo, propertyName, colRelatedInfo.ItemsClassName, options!.MaxSelect!.Value);
+                        }
+                    }
                 }
             }
 
@@ -511,7 +531,7 @@ namespace {GeneratedNamespaceModels}
                           $@"{indent}   get => Get(() => _{propertyName});" :
                           $@"{indent}   get => Get(() => _{propertyName} ??= {initialVal});");
             sb.Append($@"{indent}   ");
-            if(initialVal.StartsWith("new List<")|| initialVal.EndsWith("List()"))
+            if (initialVal.StartsWith("new List<") || initialVal.EndsWith("List()"))
                 sb.Append($@"private ");
             sb.AppendLine($@"set => Set(value, ref _{propertyName});");
             sb.AppendLine($@"{indent}}}");
