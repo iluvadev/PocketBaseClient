@@ -1,4 +1,14 @@
-﻿using PocketBaseClient.Orm;
+﻿// Project site: https://github.com/iluvadev/PocketBaseClient-csharp
+//
+// Issues: https://github.com/iluvadev/PocketBaseClient-csharp/issues
+// License (MIT): https://github.com/iluvadev/PocketBaseClient-csharp/blob/main/LICENSE
+//
+// Copyright (c) 2022, iluvadev, and released under MIT License.
+//
+// pocketbase-csharp-sdk project: https://github.com/PRCV1/pocketbase-csharp-sdk 
+// pocketbase project: https://github.com/pocketbase/pocketbase
+
+using PocketBaseClient.Orm;
 using PocketBaseClient.Services;
 
 namespace PocketBaseClient
@@ -23,7 +33,7 @@ namespace PocketBaseClient
             }
 
             var elemsToRemove = list.Where(i => !i.Metadata.IsNew && !updatedIds.Contains(i.Id!)).ToList();
-            foreach(var elemToRemove in elemsToRemove)
+            foreach (var elemToRemove in elemsToRemove)
                 list.Remove(elemToRemove);
         }
     }

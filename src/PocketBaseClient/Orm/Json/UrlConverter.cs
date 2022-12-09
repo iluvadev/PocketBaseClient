@@ -1,12 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Text.Json.Serialization;
+﻿// Project site: https://github.com/iluvadev/PocketBaseClient-csharp
+//
+// Issues: https://github.com/iluvadev/PocketBaseClient-csharp/issues
+// License (MIT): https://github.com/iluvadev/PocketBaseClient-csharp/blob/main/LICENSE
+//
+// Copyright (c) 2022, iluvadev, and released under MIT License.
+//
+// pocketbase-csharp-sdk project: https://github.com/PRCV1/pocketbase-csharp-sdk 
+// pocketbase project: https://github.com/pocketbase/pocketbase
+
 using System.Text.Json;
-using System.Threading.Tasks;
-using PocketBaseClient.Services;
-using System.Net.Mail;
+using System.Text.Json.Serialization;
 
 namespace PocketBaseClient.Orm.Json
 {
@@ -15,7 +18,7 @@ namespace PocketBaseClient.Orm.Json
         public override Uri? Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
         {
             var value = reader.GetString();
-            if (value == null) 
+            if (value == null)
                 return null;
             return new Uri(value);
         }

@@ -123,6 +123,10 @@ namespace PocketBaseClient.SampleApp
             foreach(var cat in cats.Filter("name~'music'").GetItems())
                 Console.WriteLine(cat);
 
+            var post = app.Data.PostsCollection.Items.First();
+
+            post.
+
             //foreach (var cat in cats.Items)
             //    Console.WriteLine(cat);
         }

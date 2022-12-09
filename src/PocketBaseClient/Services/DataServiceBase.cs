@@ -1,4 +1,14 @@
-﻿using PocketBaseClient.Orm;
+﻿// Project site: https://github.com/iluvadev/PocketBaseClient-csharp
+//
+// Issues: https://github.com/iluvadev/PocketBaseClient-csharp/issues
+// License (MIT): https://github.com/iluvadev/PocketBaseClient-csharp/blob/main/LICENSE
+//
+// Copyright (c) 2022, iluvadev, and released under MIT License.
+//
+// pocketbase-csharp-sdk project: https://github.com/PRCV1/pocketbase-csharp-sdk 
+// pocketbase project: https://github.com/pocketbase/pocketbase
+
+using PocketBaseClient.Orm;
 
 namespace PocketBaseClient.Services
 {
@@ -56,13 +66,13 @@ namespace PocketBaseClient.Services
         public void DiscardChanges(ItemBase item)
             => item.DiscardChanges();
 
-        public void DiscardChanges(CollectionBase collection)  
+        public void DiscardChanges(CollectionBase collection)
             => collection.DiscardChanges();
 
         #endregion DiscardChanges
 
         #region Save Item
-        public bool Save(ItemBase item) 
+        public bool Save(ItemBase item)
             => item.Save();
 
         public async Task<bool> SaveAsync(ItemBase item)

@@ -1,4 +1,14 @@
-﻿using PocketBaseClient.Orm.Filters;
+﻿// Project site: https://github.com/iluvadev/PocketBaseClient-csharp
+//
+// Issues: https://github.com/iluvadev/PocketBaseClient-csharp/issues
+// License (MIT): https://github.com/iluvadev/PocketBaseClient-csharp/blob/main/LICENSE
+//
+// Copyright (c) 2022, iluvadev, and released under MIT License.
+//
+// pocketbase-csharp-sdk project: https://github.com/PRCV1/pocketbase-csharp-sdk 
+// pocketbase project: https://github.com/pocketbase/pocketbase
+
+using PocketBaseClient.Orm.Filters;
 
 namespace PocketBaseClient.Orm
 {
@@ -17,7 +27,7 @@ namespace PocketBaseClient.Orm
 
         public async IAsyncEnumerable<T> GetItemsAsync()
         {
-            await foreach (var item in Collection.GetItemsFromPbAsync(Filter.FilterString)) 
+            await foreach (var item in Collection.GetItemsFromPbAsync(Filter.FilterString))
                 yield return item;
         }
         public IEnumerable<T> GetItems()
