@@ -1,227 +1,145 @@
 # PocketBaseClient-csharp
 
-**Warning**: This project is in active development, and some parts are only a proof of concept. Things described bellow could change. There is no available release yet.
+PocketBaseClient-csharp is a Client library in C# for interacting with a particular PocketBase application: It maps all the PocketBase Collections and Registries to Objects and structures to work in c#
 
-Client in C# for interacting with a particular PocketBase application, with a simple ORM to manage  Collections and Registries.
+* [PocketBaseClient-csharp](#pocketbaseclient-csharp)
+* [Overview](#overview)
+  * [Code Generator](#code-generator)
+  * [What PocketBaseClient can do](#what-pocketbaseclient-can-do)
+  * [How it works](#how-it-works)
+    * [Collections and Model Registries](#collections-and-model-registries)
+    * [Cache](#cache)
+    * [Methods and Properties of any Collection](#methods-and-properties-of-any-collection)
+    * [Methods and Properties of any Model](#methods-and-properties-of-any-model)
+* [Installation](#installation)
+* [Usage](#usage)
+  * [Create your client](#create-your-client)
+  * [Using your client](#using-your-client)
 
-## Description
+# Overview
 
-* **PocketBaseClient** includes a set of libraries to interact with PocketBase, and has all the logic needed for the ORM.
-* **PocketBaseClient.CodeGenerator** connects with your PocketBase application in order to parse your schema and generates a c# client for your application
+## Code Generator
 
-### Steps to make your client
+Fitrst, you need to use **PocketBaseClient.CodeGenerator**: It connects to PocketBase (with admin rights) and generates all custom classes and structures needed to work in your c# projects.
 
-- **Download your schema**: use PocketBaseClient.CodeGenerator with *Admin credentials* to connect with your PocketBase application and download your schema definition in a json file
-- **Generate the code**: use PocketBaseClient.CodeGenerator again to create the C# code for your client from your downloaded schema definition.
-- **Create your client library**: Create an empty C# project (library) for your client:
-  - Add a reference to PocketBaseClient
-  - Add the generated C# files
+## What PocketBaseClient can do
 
-### Generated code
+PocketBaseClient uses the classes generated to map data and operate with a particular PocketBase application: 
 
-PocketBaseClient.CodeGenerator generates all the code needed to map all your **Collections**, **Registries** and **Fields** (including the validation rules):
+1. Creating enums for fields of type "*Select*".
 
-For each **Collection**:
+2. Assigning validation rules for all fields with restrictions.
 
-- Generate a class for the collection (for example _PostsCollection_)
-- Generate a class for its Registries (for example _Post_)
+3. Mapping related registry Ids to relations between objects.
 
-**Fields** of **Registries**:
+4. Managing the comunication with PocketBase server.
 
-- Each field is a property of the Registry class (for example _Post.Title_)
-- If there are restrictions in the PocketBase field, these are translated to Validation Attributes.
-- The "**select**" type fields maps to enums
-- If the field accept multiple values is mapped to:
-  - A specific LimitedList if there are a limit of values
-  - A List if there are no limits
-- If the field is a "**relation**", is integrated with the ORM to link with the object that represents the related registry
-- Fields of type "**file**": Not implemented yet
+5. Caching objects in memory to minimize the api calls.
 
-# Example
+6. Getting unknown object data from server when needed (lazy load).
 
-Imagine a PocketBase application for a basic blog, with the "*APPLICATION NAME = orm-csharp-test*", and "*APPLICATION URL = https://orm-csharp-test.pockethost.io*"
+7. Registering changed objects that are in memory and not updated to server.
 
-## PocketBase Collections
+8. Registering new objects in memory that will map to a new registry in the server. 
 
-For the example, the PocketBase application has the following collections:
+9. Exposing a simple fluent Filter adapted to the objects
 
-- posts: with the blog posts information
+10. CRUD options with objects
 
-- authors: with basic information about authors: name, email, url and profile
+11. ...
 
-- categories: only with name
+Is a real ORM for a concrete PocketBase application.
 
-- tags: only with name
+Ok, it sounds good, but, how really works?
 
-The most "complex" collection is *posts*, with this definition:
+## How it works
 
-![](doc/img/PocketBase_Collection_posts.png)
+The magic happens at the junction of PocketBaseClient library and the code generated with *PocketBaseClient.CodeGenerator*:
 
-Where:
+- Every Collection has its own class with internal cache for its Registries
 
-- **title**: Has a "*MIN LENGTH = 5*", is "*Nonempty*" and "*Unique*"
+- Registries have their own class, mapping fields to properties
 
-- **author**: relation to "*COLLECTION = authors*" with "*MAX SELECT = 1*"
+- Each Registry field is mapped to the correct type, enum or class
 
-- **summary**: Has a "*MAX LENGTH = 100*" 
+### Collections and Model Registries
 
-- **status**: Select with "*MAX SELECT = 1*", and *CHOICES = draft, to review, reviewed, to publish, published*
+Each collection has its own class, and internally mantains a cache for its objects. Every object in a Collection is (or will be) a Registry in the mapped PocketBase Collection.
 
-- **categories**: relation to "*COLLECTION = categories*" with "*MAX SELECT = 3*"
+Every registry belongs to a Collection. This is translated as every Modeled object belongs to a Collection: also new ones (that are only in memory, without a Registry in the server yet).
 
-- **tags**: relation to "*COLLECTION = tags*", without "*MAX SELECT*"
+When is created a new object that would become a Registry in PocketBase, it is registered automatically to the correct Collection.
 
-## Generated code
+Every change in an object that maps to a registry, marks the object as "modified".
 
-With PocketBaseClient.CodeGenerator, we will generate the code to access to the PocketBase application. 
+The changes in memory of the objects can be discarded or saved.
 
-After generating the code, we can create a new project (library) and include all the generated code, adding a reference to PocketBaseClient, or include all generated code in your main project.
+There is only a function `Save` to save objects to server, it does not matter if the Registry is to be created or updated.
 
-With these steps we will have a custom tools to access our PocketBase application.
+### Cache
 
-The entry point of our application is the class **OrmCsharpTestApplication** (name generated from the Application name "*orm-csharp-test*" )
+Every time a Registry is downloaded from PocketBase, it will be cached for the containing Collection. 
 
-## Using the code
+Every time is created a new object of the collection, is cached: The new elements are also cached and marked as they are new
 
-Whe can use the main application class without any parameter:
+When an element is requested, by default it will try to serve it from memory and if is not cached, from server. This behavior can be modified at every call.
 
-```csharp
-// Our application with defined url and name inside
-var app = new OrmCsharpTestApplication();
-```
+### Methods and Properties of any Collection
 
-In the Application main class, we have these main properties:
+- Information about the Collection (properties `Id`, `Name` and `System`)
 
-### Auth
+- Get all elements of the collection (property `Items` and method `GetItems`)
 
-Object with options to authenticate in PocketBase. The authentication may be as "Admin" or "User":
+- Get an element by Id (methods `GetById` and `GetByIdAsync`)
 
-```csharp
-// Authenticate as Admin
-var resAdmin = await app.Auth.Admin.AuthenticateWithPassword("myadmin@email.io", "MyAdminPwd");
+- Save elements (create or update) to server (methods `Save` and `SaveAsync`)
 
-// Authenticate as User
-var resUser = await app.Auth.User.AuthenticateWithPassword("myUser@email.io", "MyUserPwd");
-```
-
-There are also functions to Reset passwords, authenticate clients with OAuth2, and to create new users.
-
-### Sdk
-
-PocketBaseClient internally uses **[pocketbase-csharp-sdk](https://github.com/PRCV1/pocketbase-csharp-sdk)**
-
-With this property you can access directly to the sdk. In many cases, this access will not be necessary since the generated client will be enough for us.
-
-### Data
-
-This property is the main entry for our data: our collections and registries. With the generated code, we have all collections inside:
-
-```csharp
-// Our Collection "posts"
-var posts = app.Data.PostsCollection;
-// Or
-var posts = Post.GetCollection();
-```
-
-And we have several ways to access our data:
-
-```csharp
-// Accessing a post
-var post = app.Data.GetById<Post>("myPostId");
-// Or
-var post = posts.GetById("myPostId");
-// Or
-var post = Post.GetById("myPostId");
-```
-
-Every post maps a registry in posts Collection, with all fields.
-
-Every field type in PocketBase is converted as a c# equivalent, depending of the restrictions defined in the model.
-
-Note that relations are mapped to *objects* and selects to *enums*, and they can be inside *Lists* (or *LimitedLists*) if the schema says that can store multiple elements:
-
-*(LimitedList is a custom List with defined maximum elements)*
-
-```csharp
-post.Title = "The title";  //Text
-post.Content = "Lorem Ipsum.... "; //Text
-post.Status = Post.StatusEnum.ToPublish; //Select "MAX SELECT = 1"
-post.Author = Author.GetById("MyAuthorId"); //Relation "MAX SELECT = 1"
-post.Tags.Add(Tag.GetById("MyTagId")); //Relation "MAX SELECT null"
-```
-
-The defined restrictions in PocketBase are automatically translated as Validations:
-
-```csharp
-if (!post.Validate(out var validationErrors))
-{
-    foreach (var validationError in validationErrors)
-        Console.WriteLine(validationError);
-}
-// Or
-if (!post.Metadata.IsValid)
-{
-    foreach (var validationError in post.Metadata.ValidationErrors)
-        Console.WriteLine(validationError);
-}
-```
-
-You can create new registries as objects, in memory:
-
-```csharp
-var post = new Post
-{
-    Title = "The title",
-    Content = "Lorem Ipsum.... ",
-    Status = Post.StatusEnum.ToPublish,
-    Author = Author.GetById("MyAuthorId")
-};
-```
-
-And you can modify objects in memory:
-
-```csharp
-post.Status = Post.StatusEnum.Reviewed;
-```
-
-And Save changes to PocketBase (it does not matter if the record is to be created or updated):
-
-```csharp
-post.Save();
-// Or
-posts.Save(post);
-// Or
-app.Data.Save(post);
-```
-
-Or discard local (in memory) changes for an element:
-
-```csharp
-post.DiscardChanges();
-// Or
-posts.DiscardChanges(post);
-// Or
-app.Data.DiscardChanges(post);
-```
-
-Or for all elements with changes:
-
-```csharp
-// Discard changes in a collection
-posts.DiscardChanges();
-// Or
-app.Data.DiscardChanges(posts);
-
-// Discard all changes in all Data
-app.Data.DiscardChanges();
-```
-
-And also, you can delete an element:
-
-```csharp
-post.Delete();
-// Or
-posts.Delete(post);
-// Or
-app.Data.Delete(post);
-```
+- Discard changes not saved to server (method `DiscardChanges`)
+
+- Delete elements (methods `Delete`, `DeleteAsync`, `DeleteById` and `DeleteByIdAsync`)
+
+- Query elements (property `Filter`). This will be explained below
+
+### Methods and Properties of any Model
+
+* Each field has its own Property of the correct type
+
+* Validate object data (methods `Validate` and `IsValid`)
+
+* Reload object with data in server (methods `Reload` and `ReloadAsync`)
+
+* Discard local changes of the object (method `DiscardChanges`)
+
+* Save element to server (create or update) (methods `Save` and `SaveAsync`)
+
+* Delete the element (methods `Delete` and `DeleteAsync`)
+
+And other advanced:
+
+- Information about collection (properties `Collection`, `CollectionId` and `CollectionName`)
+
+- Information about object status (property `Metadata`)
+
+- Check if two objects references the same registry (method `IsSame`)
+
+- Update the object with data of other (method `UpdateWith`)
+
+# Installation
+
+Coming soon
+
+# Usage
+
+(Documentation incomplete)
+
+## Create your client
+
+1. **Download your schema**: use PocketBaseClient.CodeGenerator with *Admin credentials* to connect with your PocketBase application and download your schema definition in a json file
+2. **Generate the code**: use PocketBaseClient.CodeGenerator again to create the C# code for your client from your downloaded schema definition.
+3. **Create your client library**: Create an empty C# project (library) for your client:
+   - Add a reference to PocketBaseClient
+   - Add the generated C# files
+
+## Using your client
+
+(Documentation incomplete)

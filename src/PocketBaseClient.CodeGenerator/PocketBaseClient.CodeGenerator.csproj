@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
@@ -6,7 +6,15 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <AssemblyName>pbcodegen</AssemblyName>
-    <Version>0.0.1</Version>
+    <Version>0.1.0</Version>
+    <AssemblyVersion>0.1.0</AssemblyVersion>
+    <FileVersion>0.1.0</FileVersion>
+    <Title>PocketBaseClient-csharp: CodeGenerator</Title>
+    <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+    <PackageProjectUrl>https://github.com/iluvadev/PocketBaseClient-csharp</PackageProjectUrl>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <Authors>iluvadev</Authors>
+    <PackageId>PocketBaseClient.CodeGenerator</PackageId>
   </PropertyGroup>
   <ItemGroup>
 	  <PackageReference Include="CG.Pluralization" Version="0.3000.12" />
