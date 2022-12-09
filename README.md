@@ -1,3 +1,5 @@
+**Warning**: This project is in active development. Things described bellow could change. There is no available release yet.
+
 # PocketBaseClient-csharp
 
 PocketBaseClient-csharp is a Client library in C# for interacting with a particular PocketBase application: It maps all the PocketBase Collections and Registries to Objects and structures to work in c#
