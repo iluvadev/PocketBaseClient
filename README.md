@@ -9,8 +9,10 @@ PocketBaseClient-csharp is a Client library in C# for interacting with a particu
   * [How it works](#how-it-works)
     * [Collections and Model Registries](#collections-and-model-registries)
     * [Cache](#cache)
-    * [Methods and Properties of any Collection](#methods-and-properties-of-any-collection)
-    * [Methods and Properties of any Model](#methods-and-properties-of-any-model)
+  * [Methods and Properties](#methods-and-properties)
+    * [Of any Collection](#of-any-collection)
+    * [Of any Model](#of-any-model)
+  * [Querying](#querying)
 * [Installation](#installation)
 * [Usage](#usage)
   * [Create your client](#create-your-client)
@@ -84,7 +86,9 @@ Every time is created a new object of the collection, is cached: The new element
 
 When an element is requested, by default it will try to serve it from memory and if is not cached, from server. This behavior can be modified at every call.
 
-### Methods and Properties of any Collection
+## Methods and Properties
+
+### Of any Collection
 
 - Information about the Collection (properties `Id`, `Name` and `System`)
 
@@ -100,7 +104,7 @@ When an element is requested, by default it will try to serve it from memory and
 
 - Query elements (property `Filter`). This will be explained below
 
-### Methods and Properties of any Model
+### Of any Model
 
 * Each field has its own Property of the correct type
 
@@ -123,6 +127,10 @@ And other advanced:
 - Check if two objects references the same registry (method `IsSame`)
 
 - Update the object with data of other (method `UpdateWith`)
+
+## Querying
+
+(Documentation incomplete)
 
 # Installation
 
