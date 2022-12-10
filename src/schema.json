@@ -456,7 +456,7 @@
     {
       "Id": "ev0tqm560oseykn",
       "Created": "5/12/2022 13:22:41",
-      "Updated": "5/12/2022 13:52:49",
+      "Updated": "5/12/2022 15:53:26",
       "Name": "posts",
       "System": false,
       "ListRule": "",
@@ -500,7 +500,7 @@
           "Unique": false,
           "Options": {
             "min": null,
-            "max": 256,
+            "max": 100,
             "pattern": ""
           }
         },

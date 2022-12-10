@@ -647,5 +647,26 @@ namespace {GeneratedNamespaceModels}
                 //    sb.AppendLine($@"{indent}[JsonConverter(typeof(RelationListConverter<List<{colInfo.ItemsClassName}>, {colInfo.ItemsClassName}>))]");
             }
         }
+
+
+        public static void GenerateCode(string jsonPath, string outputPath, string generatedNamespace)
+        {
+            ConsoleExtensions.WriteProcess($"Generating code from schema file {jsonPath}");
+            PocketBaseSchema schema;
+            try
+            {
+                schema = PocketBaseSchema.LoadFromFile(jsonPath) ?? throw new Exception("Empty schema");
+
+            }
+            catch (Exception ex)
+            {
+                ConsoleExtensions.WriteError($"Failed to read schema from file {jsonPath}");
+                ConsoleExtensions.WriteError($"Exception: {ex}");
+                return;
+            }
+            var codeGenerator = new CodeGenerator(schema, outputPath, generatedNamespace);
+            codeGenerator.GenerateCode();
+            ConsoleExtensions.WriteDone();
+        }
     }
 }

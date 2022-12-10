@@ -23,15 +23,20 @@ namespace PocketBaseClient.CodeGenerator
         {
             var rootCommand = new RootCommand("PocketBaseClient Code Generator: An application to generate client side code of your PocketBase application");
 
+            rootCommand.AddCommand(GetInteractiveCommand());
             rootCommand.AddCommand(GetSaveschemaCommand());
 
             // Commands:
             //  * saveschema --url --email --pwd --file
             //  * generate --schema --format --folder
 
+            //TODO: Do it in own option, not Hardcoded!!
+            //GenerateCode(file.FullName, @"C:\Dev\iluvadev\projects\PocketBaseClient-csharp\src\PocketBaseClient.SampleApp", "PocketBaseClient.SampleApp");
+
             return await rootCommand.InvokeAsync(args);
         }
 
+        #region Commands
         private static Command GetSaveschemaCommand()
         {
             var urlOption = new Option<Uri?>(
@@ -74,70 +79,18 @@ namespace PocketBaseClient.CodeGenerator
                 fileOption
             };
 
-            commandDownloadSchema.SetHandler(async (url, email, pwd, file) => await DownloadSchema(url!, email!, pwd!, file!),
+            commandDownloadSchema.SetHandler(async (url, email, pwd, file) => await SchemaDownloader.DownloadSchema(url!, email!, pwd!, file!),
                                              urlOption, emailOption, pwdOption, fileOption);
             return commandDownloadSchema;
         }
 
-        static async Task DownloadSchema(Uri url, string email, string pwd, FileInfo file)
+        private static Command GetInteractiveCommand()
         {
-            //TODO: Do it in own option, not Hardcoded!!
-            GenerateCode(file.FullName, @"C:\Dev\iluvadev\projects\PocketBaseClient-csharp\src\PocketBaseClient.SampleApp", "PocketBaseClient.SampleApp");
-            return;
-
-            var app = new PocketBaseClientApplication(url.ToString());
-
-            Console.WriteLine($"Connecting to {url} with Admin {email}...");
-            var admin = await app.Auth.Admin.AuthenticateWithPassword(email, pwd);
-            if (string.IsNullOrEmpty(admin?.Token))
-            {
-                Console.WriteLine($">> Failed to connect to {url} with Admin {email} credentials");
-                return;
-            }
-
-            Console.WriteLine($"Connected!");
-            var schema = new PocketBaseSchema();
-
-            Console.WriteLine($"Getting PocketBase Application Settings...");
-            schema.SetSettingsAsync(await app.Sdk.Settings.GetAllAsync());
-
-            Console.WriteLine($"Getting PocketBase Application Collections...");
-            int? totalItems = null;
-            int currentPage = 1;
-            while (totalItems == null || schema.Collections.Count < totalItems)
-            {
-                var collections = await app.Sdk.HttpGetListAsync<CollectionModel>("/api/collections", page: currentPage);
-                //var collections = await app.Sdk.Collections.ListAsync();
-                totalItems = collections!.TotalItems;
-                schema.Collections.AddRange(collections.Items ?? Enumerable.Empty<CollectionModel>());
-                currentPage++;
-            }
-
-            Console.WriteLine($"Saving to file {file.FullName}...");
-            schema.SaveToFile(file.FullName);
-
-            Console.WriteLine($"Done!");
+            var commandInteractive = new Command("i", "Executes PocketBaseClient Code Generator in interactive mode");
+            commandInteractive.SetHandler(Interactive.Start);
+            return commandInteractive;
         }
-
-
-        private static void GenerateCode(string jsonPath, string outputPath, string generatedNamespace)
-        {
-            Console.WriteLine($"Generating code from schema file {jsonPath}...");
-            PocketBaseSchema schema;
-            try
-            {
-                schema = PocketBaseSchema.LoadFromFile(jsonPath) ?? throw new Exception("Empty schema");
-
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($">> Failed to read schema from file {jsonPath}");
-                Console.WriteLine($">> Exception: {ex}");
-                return;
-            }
-            var codeGenerator = new CodeGenerator(schema, outputPath, generatedNamespace);
-            codeGenerator.GenerateCode();
-        }
+        #endregion Commands
 
         private static async void GetTestData(PocketBaseClientApplication app, string path)
         {
@@ -173,38 +126,6 @@ namespace PocketBaseClient.CodeGenerator
             return pagedCollection;
         }
 
-
-        private static Command InitializeGenerate()
-        {
-            var urlOption = new Option<Uri?>(
-                name: "--url",
-                description: "The url of your PocketBase application",
-                getDefaultValue: () => new Uri("http://127.0.0.1:8090"));
-
-            var emailOption = new Option<string>(
-                name: "--email",
-                description: "email to login with Admin rights in your PocketBase application");
-
-            var pwdOption = new Option<string>(
-                name: "--pwd",
-                description: "Password to login with Admin rights in your PocketBase application");
-
-            var fileOption = new Option<FileInfo?>(
-                name: "--file",
-                description: "The file where download the schema information of your application");
-
-            var commandDownloadSchema = new Command("saveschema", "Download the schema of your PocketBase application")
-            {
-                urlOption,
-                emailOption,
-                pwdOption,
-                fileOption
-            };
-
-            commandDownloadSchema.SetHandler(async (url, email, pwd, file) => await DownloadSchema(url!, email!, pwd!, file!),
-                                             urlOption, emailOption, pwdOption, fileOption);
-            return commandDownloadSchema;
-        }
 
     }
 }
