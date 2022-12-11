@@ -1,10 +1,13 @@
-**Warning**: This project is in active development. Things described bellow could change. There is no available release yet.
+**Warning**: This project is in active development. Things described bellow could change.
 
 # PocketBaseClient-csharp
 
 PocketBaseClient-csharp is a Client library in C# for interacting with a particular PocketBase application: It maps all the PocketBase Collections and Registries to Objects and structures to work in c#
 
+Set up an ORM to access your PocketBase application data in less than 1 minute with pbcodegen, the **PocketBaseClient CodeGenerator**
+
 * [PocketBaseClient-csharp](#pocketbaseclient-csharp)
+* [Installation](#installation)
 * [Overview](#overview)
   * [Code Generator](#code-generator)
   * [What PocketBaseClient can do](#what-pocketbaseclient-can-do)
@@ -15,16 +18,27 @@ PocketBaseClient-csharp is a Client library in C# for interacting with a particu
     * [Of any Collection](#of-any-collection)
     * [Of any Model](#of-any-model)
   * [Querying](#querying)
-* [Installation](#installation)
 * [Usage](#usage)
-  * [Create your client](#create-your-client)
-  * [Using your client](#using-your-client)
+
+# Installation
+
+The only thing that you need is [pbcodegen](doc/pbcodegen.md). Download the latest version from the [Releases section](https://github.com/iluvadev/PocketBaseClient-csharp/releases), and follow the process.
+
+In less than 1 minute, you will have a customized ORM in c# for your PocketBase application, your own PocketBaseClient.
+
+More information in [pbcodegen](doc/pbcodegen.md)
 
 # Overview
 
 ## Code Generator
 
-Fitrst, you need to use **PocketBaseClient.CodeGenerator**: It connects to PocketBase (with admin rights) and generates all custom classes and structures needed to work in your c# projects.
+[**pbcodegen**](doc/pbcodegen.md) generates your PocketBaseClient, the ORM for your PocketBase application in less than 1 munute: 
+
+It connects to your PocketBase (with admin rights) and generates a c# project for you, with all the logic for the management of comunications with server and  persistence of objects. Exposes custom classes and structures that maps to your Collections and Registries.
+
+In your .NET projects, you will only need a reference to this generated project to access your PocketBase application.
+
+See more information in [pbcodegen](doc/pbcodegen.md)
 
 ## What PocketBaseClient can do
 
@@ -134,22 +148,6 @@ And other advanced:
 
 (Documentation incomplete)
 
-# Installation
-
-Coming soon
-
 # Usage
-
-(Documentation incomplete)
-
-## Create your client
-
-1. **Download your schema**: use PocketBaseClient.CodeGenerator with *Admin credentials* to connect with your PocketBase application and download your schema definition in a json file
-2. **Generate the code**: use PocketBaseClient.CodeGenerator again to create the C# code for your client from your downloaded schema definition.
-3. **Create your client library**: Create an empty C# project (library) for your client:
-   - Add a reference to PocketBaseClient
-   - Add the generated C# files
-
-## Using your client
 
 (Documentation incomplete)
