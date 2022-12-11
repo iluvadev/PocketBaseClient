@@ -3,7 +3,12 @@
   <PropertyGroup>
     <OutputType>Exe</OutputType>
     <TargetFramework>net6.0</TargetFramework>
-    <ImplicitUsings>enable</ImplicitUsings>
+	<PublishSingleFile>true</PublishSingleFile>
+	<SelfContained>true</SelfContained>
+	<RuntimeIdentifiers>win-x64;linux-x64;osx-x64</RuntimeIdentifiers>
+	<PublishReadyToRun>true</PublishReadyToRun>
+    
+	<ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <AssemblyName>pbcodegen</AssemblyName>
     <Version>0.3.0</Version>
@@ -16,11 +21,23 @@
     <Authors>iluvadev</Authors>
     <PackageId>PocketBaseClient.CodeGenerator</PackageId>
 	  <PublishSingleFile>true</PublishSingleFile>
+	  <PlatformTarget>AnyCPU</PlatformTarget>
+	  <GenerateDocumentationFile>False</GenerateDocumentationFile>
+	  <RepositoryUrl>https://github.com/iluvadev/PocketBaseClient-csharp</RepositoryUrl>
+	  <RepositoryType>git</RepositoryType>
+	  <PackageTags>pocketbase, orm</PackageTags>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <DebugType>embedded</DebugType>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <DebugType>embedded</DebugType>
   </PropertyGroup>
   <ItemGroup>
 	  <PackageReference Include="CG.Pluralization" Version="0.3000.12" />
 	  <PackageReference Include="Sharprompt" Version="2.4.5" />
-	  <PackageReference Include="System.CommandLine" Version="2.0.0-beta4.22272.1" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\PocketBaseClient\PocketBaseClient.csproj" />

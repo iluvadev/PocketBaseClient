@@ -20,6 +20,14 @@
 	<Description>Client in C# for interacting with a particular PocketBase application, with an ORM to manage Collections and Registries.</Description>
   </PropertyGroup>
 
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <DebugType>embedded</DebugType>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <DebugType>embedded</DebugType>
+  </PropertyGroup>
+
   <ItemGroup>
     <PackageReference Include="pocketbase-csharp-sdk" Version="1.0.0-prerelease" />
   </ItemGroup>
