@@ -8,16 +8,23 @@
 // pocketbase-csharp-sdk project: https://github.com/PRCV1/pocketbase-csharp-sdk 
 // pocketbase project: https://github.com/pocketbase/pocketbase
 
-using System.Text.Json.Serialization;
+using System.ComponentModel.DataAnnotations;
 
 namespace PocketBaseClient.CodeGenerator.Models
 {
-    public class PocketBaseApplicationModel
+    internal class PocketBaseCredentials
     {
-        [JsonPropertyName("appName")]
-        public string? Name { get; set; }
+        [Display(Name = "Type an Admin email")]
+        [DataType(DataType.EmailAddress)]
+        [Required]
+        [MinLength(5)]
+        public string? Email { get; set; }
 
-        [JsonPropertyName("appUrl")]
-        public string? Url { get; set; }
+        [Display(Name = "Type the password")]
+        [DataType(DataType.Password)]
+        [Required]
+        [MinLength(5)]
+        public string? Password { get; set; }
     }
+
 }

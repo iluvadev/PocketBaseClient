@@ -20,6 +20,11 @@ namespace PocketBaseClient.CodeGenerator
         private static PluralizationService? _PluralizationService = null;
         private static PluralizationService PluralizationService => _PluralizationService ??= PluralizationService.CreateService(new CultureInfo("en"));
 
+        public static string ToPascalCaseForNamespace(this string s)
+        {
+            var splitted = s.Split('.');
+            return string.Join(".", splitted.Select(n => n.ToPascalCase()));
+        }
         public static string ToPascalCase(this string s)
         {
             var result = new StringBuilder();
@@ -48,7 +53,7 @@ namespace PocketBaseClient.CodeGenerator
         }
 
         // Convert the string to camel case.
-        public static string ToCamelCase(this string the_string)
+        public static string? ToCamelCase(this string the_string)
         {
             // If there are 0 or 1 characters, just return the string.
             if (the_string == null || the_string.Length < 2)
@@ -60,7 +65,7 @@ namespace PocketBaseClient.CodeGenerator
 
         // Capitalize the first character and add a space before
         // each capitalized letter (except the first character).
-        public static string ToProperCase(this string the_string)
+        public static string? ToProperCase(this string the_string)
         {
             // If there are 0 or 1 characters, just return the string.
             if (the_string == null) return the_string;

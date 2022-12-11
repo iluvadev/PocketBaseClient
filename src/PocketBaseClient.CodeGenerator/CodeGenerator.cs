@@ -9,7 +9,9 @@
 // pocketbase project: https://github.com/pocketbase/pocketbase
 
 using pocketbase_csharp_sdk.Models.Collection;
+using PocketBaseClient.CodeGenerator.Helpers;
 using PocketBaseClient.CodeGenerator.Models;
+using System.Diagnostics;
 using System.Text;
 using System.Text.Json;
 
@@ -17,18 +19,24 @@ namespace PocketBaseClient.CodeGenerator
 {
     internal class CodeGenerator
     {
+        public static string GeneratedPropertiesFileName = "pbcodegen.json";
+
         public PocketBaseSchema Schema { get; set; }
         public string OutputPath { get; set; }
         private string OutputPathModels => Path.Combine(OutputPath, "Models");
         private string OutputPathServices => Path.Combine(OutputPath, "Services");
+        private string OutputProjectFileName => Path.Combine(OutputPath, $"{Schema.ProjectName}.csproj");
+        private string OutputSummaryFileName => Path.Combine(OutputPath, "CodeGenerationSummary.txt");
+        private string SchemaFileName => Path.Combine(OutputPath, GeneratedPropertiesFileName);
 
-        public string GeneratedNamespace { get; set; }
+        public string GeneratedNamespace => Schema.Namespace;
         private string GeneratedNamespaceModels => GeneratedNamespace + ".Models";
         private string GeneratedNamespaceServices => GeneratedNamespace + ".Services";
 
         private string? _CodeHeader = null;
         private string CodeHeader => _CodeHeader ??= $@"
-// This file was generated automatically on {DateTime.UtcNow}(UTC) from the PocketBase schema for Application {Schema.Application.AppName} ({Schema.Application.AppUrl})
+// This file was generated automatically for the PocketBase Application {Schema.PocketBaseApplication.Name} ({Schema.PocketBaseApplication.Url})
+//    See CodeGenerationSummary.txt for more details
 //
 // PocketBaseClient-csharp project: https://github.com/iluvadev/PocketBaseClient-csharp
 // Issues: https://github.com/iluvadev/PocketBaseClient-csharp/issues
@@ -38,11 +46,10 @@ namespace PocketBaseClient.CodeGenerator
 // pocketbase project: https://github.com/pocketbase/pocketbase
 ";
 
-        public CodeGenerator(PocketBaseSchema schema, string outputPath, string? generatedNamespace = null)
+        public CodeGenerator(PocketBaseSchema schema, string outputPath)
         {
             Schema = schema;
             OutputPath = outputPath;
-            GeneratedNamespace = generatedNamespace ?? $"{schema.Application.AppName?.ToPascalCase() ?? "PocketBaseClient"}.Models";
         }
 
         private struct GeneratedCode
@@ -79,17 +86,85 @@ namespace PocketBaseClient.CodeGenerator
                 ProcessSchemaCollection(colInfo);
 
             ProcessApplicationAndService();
+            ProcessProject();
+            ProcessGenerationSummary();
 
             foreach (var generatedCode in _GeneratedCodeList)
             {
                 Directory.CreateDirectory(Path.GetDirectoryName(generatedCode.Path) ?? OutputPath);
                 File.WriteAllText(generatedCode.Path, generatedCode.Content);
             }
+
+            Schema.SaveToFile(SchemaFileName);
         }
+
+        private void ProcessProject()
+        {
+            _GeneratedCodeList.Add(
+                new GeneratedCode
+                {
+                    Path = OutputProjectFileName,
+                    Content = @"
+<Project Sdk=""Microsoft.NET.Sdk"">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include=""PocketBaseClient"" Version=""*"" />
+  </ItemGroup>
+
+</Project>
+"
+                });
+        }
+
+        private void ProcessGenerationSummary()
+        {
+            var appName = System.Reflection.Assembly.GetExecutingAssembly().GetName().Name;
+            var appVer = System.Reflection.Assembly.GetExecutingAssembly().GetName().Version;
+
+            var summaryFile = new GeneratedCode
+            {
+                Path = OutputSummaryFileName
+            };
+
+            StringBuilder sb = new StringBuilder();
+            sb.AppendLine(@"
+PocketBaseClient-csharp project: https://github.com/iluvadev/PocketBaseClient-csharp
+Issues: https://github.com/iluvadev/PocketBaseClient-csharp/issues
+License (MIT): https://github.com/iluvadev/PocketBaseClient-csharp/blob/main/LICENSE
+
+pocketbase-csharp-sdk project: https://github.com/PRCV1/pocketbase-csharp-sdk
+pocketbase project: https://github.com/pocketbase/pocketbase
+");
+            sb.AppendLine(Program.Banner);
+            sb.AppendLine($@"
+Code generated with:
+    PocketBaseClient CodeGenerator: {appName} v.{appVer}
+    At: {DateTime.UtcNow.ToString("O")}
+
+PocketBase Application: 
+    Name: {Schema.PocketBaseApplication.Name}
+    Url: {Schema.PocketBaseApplication.Url}
+    Schema Date: {Schema.SchemaDate.ToString("O")}
+
+Files Generated:");
+            foreach (var strFile in _GeneratedCodeList.Select(c => c.Path).OrderBy(c => c))
+                sb.AppendLine($"    {strFile}");
+
+            summaryFile.Content = sb.ToString();
+
+            _GeneratedCodeList.Add(summaryFile);
+        }
+
         private void ProcessApplicationAndService()
         {
-            string appClassName = (Schema.Application.AppName ?? "MyPocketBase").ToPascalCase() + "Application";
-            string serviceClassName = (Schema.Application.AppName ?? "MyPocketBase").ToPascalCase() + "DataService";
+            string appClassName = (Schema.PocketBaseApplication.Name ?? "MyPocketBase").ToPascalCase() + "Application";
+            string serviceClassName = (Schema.PocketBaseApplication.Name ?? "MyPocketBase").ToPascalCase() + "DataService";
             var itemCodeApp = new GeneratedCode
             {
                 Path = Path.Combine(OutputPath, $"{appClassName}.cs")
@@ -107,8 +182,8 @@ namespace {GeneratedNamespace}
         public {serviceClassName} Data => _Data ??= new {serviceClassName}(this);
 
         #region Constructors
-        public {appClassName}() : this(""{Schema.Application.AppUrl}"") {{ }}
-        public {appClassName}(string url, string appName = ""{Schema.Application.AppName}"") : base(url, appName) {{ }}
+        public {appClassName}() : this(""{Schema.PocketBaseApplication.Url}"") {{ }}
+        public {appClassName}(string url, string appName = ""{Schema.PocketBaseApplication.Name}"") : base(url, appName) {{ }}
         #endregion Constructors
     }}
 }}
@@ -122,6 +197,7 @@ namespace {GeneratedNamespace}
             };
             StringBuilder sbService = new StringBuilder();
             sbService.Append($@"{CodeHeader}
+using PocketBaseClient;
 using PocketBaseClient.Services;
 using {GeneratedNamespaceModels};
 
@@ -265,12 +341,6 @@ namespace {GeneratedNamespaceModels}
                 sb.AppendLine($@"                {propertyName} = item.{propertyName};");
             sb.AppendLine($@"
             }}
-        }}
-
-        public override string ToString()
-        {{
-            var options = new JsonSerializerOptions {{ WriteIndented = true }};
-            return JsonSerializer.Serialize(this, options);
         }}");
 
             if (relatedItems.Any())
@@ -649,24 +719,40 @@ namespace {GeneratedNamespaceModels}
         }
 
 
-        public static void GenerateCode(string jsonPath, string outputPath, string generatedNamespace)
-        {
-            ConsoleExtensions.WriteProcess($"Generating code from schema file {jsonPath}");
-            PocketBaseSchema schema;
-            try
-            {
-                schema = PocketBaseSchema.LoadFromFile(jsonPath) ?? throw new Exception("Empty schema");
+        //public static void GenerateCode(string jsonPath, string outputPath, string generatedNamespace)
+        //{
+        //    ConsoleExtensions.WriteProcess($"Generating code from schema file {jsonPath}");
+        //    PocketBaseSchema schema;
+        //    try
+        //    {
+        //        schema = PocketBaseSchema.LoadFromFile(jsonPath) ?? throw new Exception("Empty schema");
 
-            }
-            catch (Exception ex)
-            {
-                ConsoleExtensions.WriteError($"Failed to read schema from file {jsonPath}");
-                ConsoleExtensions.WriteError($"Exception: {ex}");
-                return;
-            }
-            var codeGenerator = new CodeGenerator(schema, outputPath, generatedNamespace);
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        ConsoleExtensions.WriteError($"Failed to read schema from file {jsonPath}");
+        //        ConsoleExtensions.WriteError($"Exception: {ex}");
+        //        return;
+        //    }
+        //    var codeGenerator = new CodeGenerator(schema, outputPath, generatedNamespace);
+        //    codeGenerator.GenerateCode();
+        //    ConsoleExtensions.WriteDone();
+        //}
+
+        public static void GenerateCode(PocketBaseSchema schema, string projectFolder)
+        {
+            ConsoleHelper.WriteProcess($"Generating code for {schema.PocketBaseApplication.Name} in {projectFolder}");
+            var codeGenerator = new CodeGenerator(schema, projectFolder);
             codeGenerator.GenerateCode();
-            ConsoleExtensions.WriteDone();
+            ConsoleHelper.WriteDone();
+
+            new Process
+            {
+                StartInfo = new ProcessStartInfo(codeGenerator.OutputSummaryFileName)
+                {
+                    UseShellExecute = true,
+                }
+            }.Start();
         }
     }
 }

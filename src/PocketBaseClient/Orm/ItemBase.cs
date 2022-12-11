@@ -11,6 +11,7 @@
 using pocketbase_csharp_sdk.Json;
 using pocketbase_csharp_sdk.Models;
 using System.ComponentModel.DataAnnotations;
+using System.Text.Json;
 using System.Text.Json.Serialization;
 
 namespace PocketBaseClient.Orm
@@ -62,18 +63,16 @@ namespace PocketBaseClient.Orm
             if (valueVar == null || !valueVar.Equals(value))
             {
                 valueVar = value;
-                Metadata.HasLocalChanges = true;
+                Metadata_.HasLocalChanges = true;
             }
         }
 
         #endregion Get and Set 
 
         #region Metadata
-        private ItemMetadata? _Metadata = null;
-#if !DEBUG 
+        private ItemMetadata? _Metadata_ = null;
         [JsonIgnore]
-#endif
-        public ItemMetadata Metadata => _Metadata ??= new ItemMetadata(this);
+        public ItemMetadata Metadata_ => _Metadata_ ??= new ItemMetadata(this);
         #endregion Metadata
 
         #region Validation
@@ -91,15 +90,15 @@ namespace PocketBaseClient.Orm
         private async Task LoadAsync(bool forceLoad = false)
         {
             if (Collection == null) return;
-            if (Metadata.IsNew) return;
-            if (Metadata.IsTrash) return;
-            if (Metadata.IsLoaded && !forceLoad) return;
+            if (Metadata_.IsNew) return;
+            if (Metadata_.IsTrash) return;
+            if (Metadata_.IsLoaded && !forceLoad) return;
 
             if (!await Collection.FillFromPbAsync(this))
             {
                 //IEPA!!
                 // The registry does not exists in PocketBase
-                Metadata.IsTrash = true;
+                Metadata_.IsTrash = true;
                 throw new Exception($"Object does not exists in PocketBase; Collection:{Collection.Name}; RegistryId:{Id}");
             }
         }
@@ -120,11 +119,11 @@ namespace PocketBaseClient.Orm
         #region DiscardChanges
         public void DiscardChanges()
         {
-            if (Metadata.HasLocalChanges)
-                Metadata.SetNeedBeLoaded();
+            if (Metadata_.HasLocalChanges)
+                Metadata_.SetNeedBeLoaded();
 
-            if (Metadata.IsNew)
-                Metadata.IsTrash = true;
+            if (Metadata_.IsNew)
+                Metadata_.IsTrash = true;
         }
         #endregion DiscardChanges
 
@@ -148,6 +147,11 @@ namespace PocketBaseClient.Orm
         {
             Id = Random.Shared.PseudorandomString(15).ToLowerInvariant();
             Collection.AddToCache(this);
+        }
+
+        public override string ToString()
+        {
+            return $"{GetType().Name}.{Id}";
         }
     }
 }

@@ -124,7 +124,7 @@ And other advanced:
 
 - Information about collection (properties `Collection`, `CollectionId` and `CollectionName`)
 
-- Information about object status (property `Metadata`)
+- Information about object status (property `Metadata_`)
 
 - Check if two objects references the same registry (method `IsSame`)
 

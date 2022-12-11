@@ -1,0 +1,63 @@
+
+PocketBaseClient-csharp project: https://github.com/iluvadev/PocketBaseClient-csharp
+Issues: https://github.com/iluvadev/PocketBaseClient-csharp/issues
+License (MIT): https://github.com/iluvadev/PocketBaseClient-csharp/blob/main/LICENSE
+
+pocketbase-csharp-sdk project: https://github.com/PRCV1/pocketbase-csharp-sdk
+pocketbase project: https://github.com/pocketbase/pocketbase
+
+
+  _____           _        _   ____                  _____ _ _            _   
+ |  __ \         | |      | | |  _ \                / ____| (_)          | |  
+ | |__) |__   ___| | _____| |_| |_) | __ _ ___  ___| |    | |_  ___ _ __ | |_ 
+ |  ___/ _ \ / __| |/ / _ \ __|  _ < / _` / __|/ _ \ |    | | |/ _ \ '_ \| __|
+ | |  | (_) | (__|   <  __/ |_| |_) | (_| \__ \  __/ |____| | |  __/ | | | |_ 
+ |_|   \___/ \___|_|\_\___|\__|____/ \__,_|___/\___|\_____|_|_|\___|_| |_|\__|
+   _____          _       _____                           _                   
+  / ____|        | |     / ____|                         | |                  
+ | |     ___   __| | ___| |  __  ___ _ __   ___ _ __ __ _| |_ ___  _ __       
+ | |    / _ \ / _` |/ _ \ | |_ |/ _ \ '_ \ / _ \ '__/ _` | __/ _ \| '__|      
+ | |___| (_) | (_| |  __/ |__| |  __/ | | |  __/ | | (_| | || (_) | |         
+  \_____\___/ \__,_|\___|\_____|\___|_| |_|\___|_|  \__,_|\__\___/|_|         
+
+
+Code generated with:
+    PocketBaseClient CodeGenerator: pbcodegen v.0.3.0.0
+    At: 2022-12-11T17:46:41.6363750Z
+
+PocketBase Application: 
+    Name: demo-test
+    Url: https://orm-csharp-test.pockethost.io
+    Schema Date: 2022-12-11T17:45:44.3691526Z
+
+Files Generated:
+    C:\Dev\iluvadev\projects\PocketBaseClient-csharp\src\test\PocketBaseClient.DemoTest\DemoTestApplication.cs
+    C:\Dev\iluvadev\projects\PocketBaseClient-csharp\src\test\PocketBaseClient.DemoTest\Models\Author.cs
+    C:\Dev\iluvadev\projects\PocketBaseClient-csharp\src\test\PocketBaseClient.DemoTest\Models\Author.Filters.cs
+    C:\Dev\iluvadev\projects\PocketBaseClient-csharp\src\test\PocketBaseClient.DemoTest\Models\Category.cs
+    C:\Dev\iluvadev\projects\PocketBaseClient-csharp\src\test\PocketBaseClient.DemoTest\Models\Category.Filters.cs
+    C:\Dev\iluvadev\projects\PocketBaseClient-csharp\src\test\PocketBaseClient.DemoTest\Models\CollectionAuthors.cs
+    C:\Dev\iluvadev\projects\PocketBaseClient-csharp\src\test\PocketBaseClient.DemoTest\Models\CollectionCategories.cs
+    C:\Dev\iluvadev\projects\PocketBaseClient-csharp\src\test\PocketBaseClient.DemoTest\Models\CollectionPosts.cs
+    C:\Dev\iluvadev\projects\PocketBaseClient-csharp\src\test\PocketBaseClient.DemoTest\Models\CollectionTags.cs
+    C:\Dev\iluvadev\projects\PocketBaseClient-csharp\src\test\PocketBaseClient.DemoTest\Models\CollectionTestForRelated.cs
+    C:\Dev\iluvadev\projects\PocketBaseClient-csharp\src\test\PocketBaseClient.DemoTest\Models\CollectionTestForTypes.cs
+    C:\Dev\iluvadev\projects\PocketBaseClient-csharp\src\test\PocketBaseClient.DemoTest\Models\CollectionUsers.cs
+    C:\Dev\iluvadev\projects\PocketBaseClient-csharp\src\test\PocketBaseClient.DemoTest\Models\Post.CategoriesList.cs
+    C:\Dev\iluvadev\projects\PocketBaseClient-csharp\src\test\PocketBaseClient.DemoTest\Models\Post.cs
+    C:\Dev\iluvadev\projects\PocketBaseClient-csharp\src\test\PocketBaseClient.DemoTest\Models\Post.Filters.cs
+    C:\Dev\iluvadev\projects\PocketBaseClient-csharp\src\test\PocketBaseClient.DemoTest\Models\Post.StatusEnum.cs
+    C:\Dev\iluvadev\projects\PocketBaseClient-csharp\src\test\PocketBaseClient.DemoTest\Models\Tag.cs
+    C:\Dev\iluvadev\projects\PocketBaseClient-csharp\src\test\PocketBaseClient.DemoTest\Models\Tag.Filters.cs
+    C:\Dev\iluvadev\projects\PocketBaseClient-csharp\src\test\PocketBaseClient.DemoTest\Models\TestForRelated.cs
+    C:\Dev\iluvadev\projects\PocketBaseClient-csharp\src\test\PocketBaseClient.DemoTest\Models\TestForRelated.Filters.cs
+    C:\Dev\iluvadev\projects\PocketBaseClient-csharp\src\test\PocketBaseClient.DemoTest\Models\TestForTypes.cs
+    C:\Dev\iluvadev\projects\PocketBaseClient-csharp\src\test\PocketBaseClient.DemoTest\Models\TestForTypes.Filters.cs
+    C:\Dev\iluvadev\projects\PocketBaseClient-csharp\src\test\PocketBaseClient.DemoTest\Models\TestForTypes.RelationMultipleLimitList.cs
+    C:\Dev\iluvadev\projects\PocketBaseClient-csharp\src\test\PocketBaseClient.DemoTest\Models\TestForTypes.SelectMultipleEnum.cs
+    C:\Dev\iluvadev\projects\PocketBaseClient-csharp\src\test\PocketBaseClient.DemoTest\Models\TestForTypes.SelectMultipleList.cs
+    C:\Dev\iluvadev\projects\PocketBaseClient-csharp\src\test\PocketBaseClient.DemoTest\Models\TestForTypes.SelectSingleEnum.cs
+    C:\Dev\iluvadev\projects\PocketBaseClient-csharp\src\test\PocketBaseClient.DemoTest\Models\User.cs
+    C:\Dev\iluvadev\projects\PocketBaseClient-csharp\src\test\PocketBaseClient.DemoTest\Models\User.Filters.cs
+    C:\Dev\iluvadev\projects\PocketBaseClient-csharp\src\test\PocketBaseClient.DemoTest\PocketBaseClient.DemoTest.csproj
+    C:\Dev\iluvadev\projects\PocketBaseClient-csharp\src\test\PocketBaseClient.DemoTest\Services\DemoTestDataService.cs

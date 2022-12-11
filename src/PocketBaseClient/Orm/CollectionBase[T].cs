@@ -52,7 +52,7 @@ namespace PocketBaseClient.Orm
         internal T? AddIdFromPb(string id)
         {
             var item = Cache.Get(id) ?? Cache.AddOrUpdate(new T() { Id = id });
-            item.Metadata.IsNew = false;
+            item.Metadata_.IsNew = false;
             return item;
 
         }
@@ -63,7 +63,7 @@ namespace PocketBaseClient.Orm
             foreach (var itemFromPb in page?.Items ?? Enumerable.Empty<T>())
             {
                 var item = Cache.AddOrUpdate(itemFromPb);
-                item.Metadata.SetLoaded();
+                item.Metadata_.SetLoaded();
             }
             return page;
         }
@@ -121,10 +121,10 @@ namespace PocketBaseClient.Orm
 
             var loadedItem = await PocketBase.HttpGetAsync<T>(UrlRecord(item));
             if (loadedItem == null) return false;
-            loadedItem.Metadata.SetLoaded();
+            loadedItem.Metadata_.SetLoaded();
 
             item.UpdateWith(loadedItem);
-            item.Metadata.SetLoaded();
+            item.Metadata_.SetLoaded();
             return true;
         }
 
@@ -144,7 +144,7 @@ namespace PocketBaseClient.Orm
             T? item = Cache.Get(id);
             if (item != null)
             {
-                if (reload) item.Metadata.SetNeedBeLoaded();
+                if (reload) item.Metadata_.SetNeedBeLoaded();
                 return item;
                 //return !forceLoad || await FillFromPbAsync(item) ? item : null;
             }
@@ -181,7 +181,7 @@ namespace PocketBaseClient.Orm
                 var idsToTrash = new List<string>();
                 foreach (var notNewItem in Cache.NotNewItems)
                 {
-                    notNewItem.Metadata.SetNeedBeLoaded();
+                    notNewItem.Metadata_.SetNeedBeLoaded();
                     idsToTrash.Add(notNewItem.Id!);
                 }
 
@@ -213,7 +213,7 @@ namespace PocketBaseClient.Orm
                 {
                     var itemToTrash = Cache.Get(idToTrash);
                     if (itemToTrash != null)
-                        itemToTrash.Metadata.IsTrash = true;
+                        itemToTrash.Metadata_.IsTrash = true;
                 }
                 Cache.RemoveTrash();
             }
@@ -237,16 +237,16 @@ namespace PocketBaseClient.Orm
         public async Task<bool> SaveAsync(T item, bool onlyIfChanges = false)
         {
             if (item.Id == null) return false;
-            if (!item.Metadata.IsValid) return false;
+            if (!item.Metadata_.IsValid) return false;
 
             // WARNING: There is no check for circular references!!
 
-            var newItems = item.RelatedItems.Where(i => i != null && !i.IsSame(item) && i.Metadata.IsNew).Distinct().ToList();
-            var cachedItems = item.RelatedItems.Where(i => i != null && !i.IsSame(item) && !i.Metadata.IsNew).Distinct().ToList();
+            var newItems = item.RelatedItems.Where(i => i != null && !i.IsSame(item) && i.Metadata_.IsNew).Distinct().ToList();
+            var cachedItems = item.RelatedItems.Where(i => i != null && !i.IsSame(item) && !i.Metadata_.IsNew).Distinct().ToList();
 
             // Save related new items
             foreach (var relatedNew in newItems)
-                if (relatedNew?.Metadata.IsNew ?? false)
+                if (relatedNew?.Metadata_.IsNew ?? false)
                     await relatedNew.SaveAsync(true);
 
             // Save related changed items
@@ -256,7 +256,7 @@ namespace PocketBaseClient.Orm
 
             // WARNING: There is no wait for Cascade saving!!
 
-            if (item.Metadata.IsNew)
+            if (item.Metadata_.IsNew)
                 return await CreateAsync(item);
             else
                 return await UpdateAsync(item, onlyIfChanges);
@@ -275,20 +275,20 @@ namespace PocketBaseClient.Orm
             if (savedItem == null) return false;
 
             item.UpdateWith(savedItem);
-            item.Metadata.SetLoaded();
+            item.Metadata_.SetLoaded();
             return true;
         }
 
         private async Task<bool> UpdateAsync(T item, bool onlyIfChanges = false)
         {
             if (item.Id == null) return false;
-            if (onlyIfChanges && !item.Metadata.HasLocalChanges) return true;
+            if (onlyIfChanges && !item.Metadata_.HasLocalChanges) return true;
 
             var savedItem = await PocketBase.HttpPatchAsync(UrlRecord(item), item);
             if (savedItem == null) return false;
 
             item.UpdateWith(savedItem);
-            item.Metadata.SetLoaded();
+            item.Metadata_.SetLoaded();
             return true;
         }
         #endregion Save Item
@@ -304,7 +304,7 @@ namespace PocketBaseClient.Orm
             //Remove from Cache
             var item = Cache.Remove(id);
             if (item != null)
-                item.Metadata.IsTrash = true;
+                item.Metadata_.IsTrash = true;
 
             return true;
         }
@@ -313,7 +313,7 @@ namespace PocketBaseClient.Orm
         public async Task<bool> DeleteAsync(T item)
         {
             if (item.Id == null) return false;
-            if (item.Metadata.IsNew) return false;
+            if (item.Metadata_.IsNew) return false;
 
             return await DeleteByIdAsync(item.Id);
         }

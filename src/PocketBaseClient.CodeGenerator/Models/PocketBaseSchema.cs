@@ -15,20 +15,42 @@ namespace PocketBaseClient.CodeGenerator.Models
 {
     public class PocketBaseSchema
     {
+        private string? _ProjectName = null;
+        public string ProjectName
+        {
+            get => _ProjectName ?? ("PocketBaseClient." + (PocketBaseApplication.Name ?? "Application")).ToPascalCaseForNamespace();
+            set => _ProjectName = value;
+        }
+
+        private string? _Namespace = null;
+        public string Namespace
+        {
+            get => _Namespace ?? ProjectName;
+            set => _Namespace = value;
+        }
+
+        public PocketBaseApplicationModel PocketBaseApplication { get; set; } = new PocketBaseApplicationModel();
+
+
+        public DateTime SchemaDate { get; set; } = DateTime.UtcNow;
+
         public List<CollectionModel> Collections { get; set; } = new List<CollectionModel>();
-        public PocketBaseApplicationModel Application { get; set; } = new PocketBaseApplicationModel();
+
+
 
         public void SetSettingsAsync(IDictionary<string, object>? settings)
         {
             if (settings?.ContainsKey("meta") ?? false)
-                Application = JsonSerializer.Deserialize<PocketBaseApplicationModel>(settings["meta"]?.ToString() ?? "") ?? new PocketBaseApplicationModel();
+                PocketBaseApplication = JsonSerializer.Deserialize<PocketBaseApplicationModel>(settings["meta"]?.ToString() ?? "") ?? new PocketBaseApplicationModel();
         }
-        public void SaveToFile(string path)
+        public async Task SaveToFileAsync(string path)
         {
             var options = new JsonSerializerOptions { WriteIndented = true };
             var jsonString = JsonSerializer.Serialize(this, options);
-            File.WriteAllText(path, jsonString);
+            await File.WriteAllTextAsync(path, jsonString);
         }
+        public void SaveToFile(string path)
+            => SaveToFileAsync(path).Wait();
 
         public static PocketBaseSchema? LoadFromFile(string path)
         {

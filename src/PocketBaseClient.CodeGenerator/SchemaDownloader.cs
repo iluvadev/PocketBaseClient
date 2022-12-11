@@ -1,35 +1,41 @@
-﻿using pocketbase_csharp_sdk.Models.Collection;
+﻿// Project site: https://github.com/iluvadev/PocketBaseClient-csharp
+//
+// Issues: https://github.com/iluvadev/PocketBaseClient-csharp/issues
+// License (MIT): https://github.com/iluvadev/PocketBaseClient-csharp/blob/main/LICENSE
+//
+// Copyright (c) 2022, iluvadev, and released under MIT License.
+//
+// pocketbase-csharp-sdk project: https://github.com/PRCV1/pocketbase-csharp-sdk 
+// pocketbase project: https://github.com/pocketbase/pocketbase
+
+using pocketbase_csharp_sdk.Models.Collection;
+using PocketBaseClient.CodeGenerator.Helpers;
 using PocketBaseClient.CodeGenerator.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace PocketBaseClient.CodeGenerator
 {
     internal class SchemaDownloader
     {
-        public static async Task DownloadSchema(Uri url, string email, string pwd, FileInfo file)
+        public static async Task<PocketBaseSchema?> GetSchemaAsync(Uri url, string email, string pwd)
         {
             var app = new PocketBaseClientApplication(url.ToString());
 
-            ConsoleExtensions.WriteProcess($"Connecting to {url} with Admin {email}");
+            ConsoleHelper.WriteProcess($"Connecting to {url} with Admin {email}");
             var admin = await app.Auth.Admin.AuthenticateWithPassword(email, pwd);
             if (string.IsNullOrEmpty(admin?.Token))
             {
-                ConsoleExtensions.WriteError($"Failed to connect to {url} with Admin {email} credentials");
-                return;
+                ConsoleHelper.WriteError($"Failed to connect to {url} with Admin {email} credentials");
+                return null;
             }
-            ConsoleExtensions.WriteDone();
+            ConsoleHelper.WriteDone();
 
             var schema = new PocketBaseSchema();
 
-            ConsoleExtensions.WriteProcess($"Getting PocketBase Application Settings");
+            ConsoleHelper.WriteProcess($"Getting PocketBase Application Settings");
             schema.SetSettingsAsync(await app.Sdk.Settings.GetAllAsync());
-            ConsoleExtensions.WriteDone();
+            ConsoleHelper.WriteDone();
 
-            ConsoleExtensions.WriteProcess($"Getting PocketBase Application Collections");
+            ConsoleHelper.WriteProcess($"Getting PocketBase Application Collections");
             int? totalItems = null;
             int currentPage = 1;
             while (totalItems == null || schema.Collections.Count < totalItems)
@@ -40,11 +46,21 @@ namespace PocketBaseClient.CodeGenerator
                 schema.Collections.AddRange(collections.Items ?? Enumerable.Empty<CollectionModel>());
                 currentPage++;
             }
-            ConsoleExtensions.WriteDone();
+            schema.SchemaDate = DateTime.UtcNow;
+            ConsoleHelper.WriteDone();
 
-            ConsoleExtensions.WriteProcess($"Saving to file {file.FullName}");
-            schema.SaveToFile(file.FullName);
-            ConsoleExtensions.WriteDone();
+            return schema;
+        }
+        public static async Task DownloadSchemaAsync(Uri url, string email, string pwd, FileInfo file)
+        {
+            var schema = await GetSchemaAsync(url, email, pwd);
+
+            if (schema != null)
+            {
+                ConsoleHelper.WriteProcess($"Saving PocketBase Application information to file {file.FullName}");
+                schema.SaveToFile(file.FullName);
+                ConsoleHelper.WriteDone();
+            }
         }
     }
 }

@@ -29,7 +29,7 @@ namespace PocketBaseClient.Orm.Cache
         private List<CachedItem> CachedItems { get; } = new List<CachedItem>();
         private Dictionary<string, T> Items { get; } = new Dictionary<string, T>();
 
-        public int Count => Items.Values.Where(i => !i.Metadata.IsTrash && i.Metadata.IsLoaded).Count();
+        public int Count => Items.Values.Where(i => !i.Metadata_.IsTrash && i.Metadata_.IsLoaded).Count();
 
         public T AddOrUpdate(T item)
         {
@@ -47,10 +47,10 @@ namespace PocketBaseClient.Orm.Cache
                 cachedItem = Items[item.Id];
 
                 // Update Item cached if item has more recent data and cached item is not modified
-                bool needToUpdate = cachedItem.Metadata.IsTrash;
-                if (!item.Metadata.IsTrash && item.Metadata.IsLoaded)
-                    needToUpdate |= !cachedItem.Metadata.IsLoaded ||
-                                    cachedItem.Metadata.LastLoad! < item.Metadata.LastLoad!;
+                bool needToUpdate = cachedItem.Metadata_.IsTrash;
+                if (!item.Metadata_.IsTrash && item.Metadata_.IsLoaded)
+                    needToUpdate |= !cachedItem.Metadata_.IsLoaded ||
+                                    cachedItem.Metadata_.LastLoad! < item.Metadata_.LastLoad!;
                 if (needToUpdate)
                     cachedItem.UpdateWith(item);
             }
@@ -63,7 +63,7 @@ namespace PocketBaseClient.Orm.Cache
             if (!Items.ContainsKey(id)) return null;
 
             var item = Items[id];
-            if (item.Metadata.IsTrash) return null;
+            if (item.Metadata_.IsTrash) return null;
 
             return item;
         }
@@ -79,16 +79,16 @@ namespace PocketBaseClient.Orm.Cache
 
         public void RemoveTrash()
         {
-            var trashIds = Items.Values.Where(i => i.Metadata.IsTrash).Select(i => i.Id!).ToList();
+            var trashIds = Items.Values.Where(i => i.Metadata_.IsTrash).Select(i => i.Id!).ToList();
             foreach (var id in trashIds)
                 Remove(id);
         }
 
         public IEnumerable<T> AllItems => Items.Values;
 
-        public IEnumerable<T> NewItems => Items.Values.Where(i => !i.Metadata.IsTrash && i.Metadata.IsNew);
+        public IEnumerable<T> NewItems => Items.Values.Where(i => !i.Metadata_.IsTrash && i.Metadata_.IsNew);
 
-        public IEnumerable<T> NotNewItems => Items.Values.Where(i => !i.Metadata.IsTrash && !i.Metadata.IsNew);
+        public IEnumerable<T> NotNewItems => Items.Values.Where(i => !i.Metadata_.IsTrash && !i.Metadata_.IsNew);
 
     }
 }

@@ -8,16 +8,15 @@
 // pocketbase-csharp-sdk project: https://github.com/PRCV1/pocketbase-csharp-sdk 
 // pocketbase project: https://github.com/pocketbase/pocketbase
 
-using System.Text.Json.Serialization;
+using System.ComponentModel.DataAnnotations;
 
-namespace PocketBaseClient.CodeGenerator.Models
+namespace PocketBaseClient.CodeGenerator.Interactive
 {
-    public class PocketBaseApplicationModel
+    internal enum MainActions
     {
-        [JsonPropertyName("appName")]
-        public string? Name { get; set; }
-
-        [JsonPropertyName("appUrl")]
-        public string? Url { get; set; }
+        [Display(Name = "Generate code for first time")]
+        GenerateNew,
+        [Display(Name = "Regenerate code")]
+        Regenerate,
     }
 }

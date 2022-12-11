@@ -2,14 +2,14 @@
 
   <PropertyGroup>
     <TargetFramework>net6.0</TargetFramework>
-	<TargetsForTfmSpecificBuildOutput>$(TargetsForTfmSpecificBuildOutput);IncludeP2PAssets</TargetsForTfmSpecificBuildOutput>
+	<TargetsForTfmSpecificBuildOutput>$(TargetsForTfmSpecificBuildOutput)</TargetsForTfmSpecificBuildOutput>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
     <Title>PocketBaseClient-csharp</Title>
-    <FileVersion>0.1.4</FileVersion>
-    <AssemblyVersion>0.1.4</AssemblyVersion>
-    <Version>0.1.4</Version>
+    <FileVersion>0.1.5</FileVersion>
+    <AssemblyVersion>0.1.5</AssemblyVersion>
+    <Version>0.1.5</Version>
     <PackageProjectUrl>https://github.com/iluvadev/PocketBaseClient-csharp</PackageProjectUrl>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <Authors>iluvadev</Authors>
@@ -21,19 +21,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\..\pocketbase-csharp-sdk\pocketbase-csharp-sdk\pocketbase-csharp-sdk.csproj">
-      <Private></Private>
-    </ProjectReference>
+    <PackageReference Include="pocketbase-csharp-sdk" Version="1.0.0-prerelease" />
   </ItemGroup>
-	<Target Name="IncludeP2PAssets">
-		<ItemGroup>
-			<BuildOutputInPackage Include="..\..\..\pocketbase-csharp-sdk\pocketbase-csharp-sdk\bin\Release\net6.0\pocketbase-csharp-sdk.dll" />
-		</ItemGroup>
-	</Target>
-    <!--<ItemGroup>
-		<Content Include="..\..\..\pocketbase-csharp-sdk\pocketbase-csharp-sdk\bin\Release\net6.0\pocketbase-csharp-sdk.dll">
-			<Pack>true</Pack>
-			<PackagePath>lib\net6.0</PackagePath>
-		</Content>
-	</ItemGroup>-->
 </Project>

@@ -2,7 +2,8 @@
   "profiles": {
     "PocketBaseClient.CodeGenerator": {
       "commandName": "Project",
-      "commandLineArgs": "saveschema --url https://orm-csharp-test.pockethost.io --email iluvadev@gmail.com --pwd 1234567890A --file \"C:\\Dev\\iluvadev\\projects\\PocketBaseClient-csharp\\src\\schema.json\""
+      //"commandLineArgs": "i"
+      //"commandLineArgs": "saveschema --url https://orm-csharp-test.pockethost.io --email iluvadev@gmail.com --pwd 1234567890A --file \"C:\\Dev\\iluvadev\\projects\\PocketBaseClient-csharp\\src\\schema.json\""
     }
   }
 }
