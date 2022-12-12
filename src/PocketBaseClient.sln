@@ -7,12 +7,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PocketBaseClient", "PocketB
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PocketBaseClient.CodeGenerator", "PocketBaseClient.CodeGenerator\PocketBaseClient.CodeGenerator.csproj", "{5F9F967E-54F7-4713-BF59-B8C72FF3C37F}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Test", "Test", "{7363B460-62CC-42A4-870F-93942C614DED}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PocketBaseClient.DemoTest", "test\PocketBaseClient.DemoTest\PocketBaseClient.DemoTest.csproj", "{D30CCFD5-D6EF-4A32-BBAC-70CEBFDBFF29}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DemoTest.ConsoleApp", "test\DemoTest.ConsoleApp\DemoTest.ConsoleApp.csproj", "{96A33E7A-452E-4C53-B7D4-5D11EDB6D8C1}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,21 +21,9 @@ Global
 		{5F9F967E-54F7-4713-BF59-B8C72FF3C37F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5F9F967E-54F7-4713-BF59-B8C72FF3C37F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5F9F967E-54F7-4713-BF59-B8C72FF3C37F}.Release|Any CPU.Build.0 = Release|Any CPU
-		{D30CCFD5-D6EF-4A32-BBAC-70CEBFDBFF29}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{D30CCFD5-D6EF-4A32-BBAC-70CEBFDBFF29}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{D30CCFD5-D6EF-4A32-BBAC-70CEBFDBFF29}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{D30CCFD5-D6EF-4A32-BBAC-70CEBFDBFF29}.Release|Any CPU.Build.0 = Release|Any CPU
-		{96A33E7A-452E-4C53-B7D4-5D11EDB6D8C1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{96A33E7A-452E-4C53-B7D4-5D11EDB6D8C1}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{96A33E7A-452E-4C53-B7D4-5D11EDB6D8C1}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{96A33E7A-452E-4C53-B7D4-5D11EDB6D8C1}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
-	EndGlobalSection
-	GlobalSection(NestedProjects) = preSolution
-		{D30CCFD5-D6EF-4A32-BBAC-70CEBFDBFF29} = {7363B460-62CC-42A4-870F-93942C614DED}
-		{96A33E7A-452E-4C53-B7D4-5D11EDB6D8C1} = {7363B460-62CC-42A4-870F-93942C614DED}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {9C86BEE7-8359-48F9-8628-7357AEB0C833}

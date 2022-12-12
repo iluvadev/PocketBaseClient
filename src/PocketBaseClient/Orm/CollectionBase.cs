@@ -42,10 +42,12 @@ namespace PocketBaseClient.Orm
 
         internal abstract bool AddToCache<T>(T elem) where T : ItemBase;
 
+        internal abstract bool ChangeIdInCache<T>(string oldId, T elem) where T : ItemBase;
 
         #region DiscardChanges
         public abstract void DiscardChanges();
         #endregion DiscardChanges
+
 
         #region  Save Item
         internal abstract Task<bool> SaveAsync<T>(T elem, bool onlyIfChanges = false) where T : ItemBase;

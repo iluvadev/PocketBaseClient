@@ -7,9 +7,9 @@
     <Nullable>enable</Nullable>
     <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
     <Title>PocketBaseClient-csharp</Title>
-    <FileVersion>0.1.5</FileVersion>
-    <AssemblyVersion>0.1.5</AssemblyVersion>
-    <Version>0.1.5</Version>
+    <FileVersion>0.2.0</FileVersion>
+    <AssemblyVersion>0.2.0</AssemblyVersion>
+    <Version>0.2.0</Version>
     <PackageProjectUrl>https://github.com/iluvadev/PocketBaseClient-csharp</PackageProjectUrl>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <Authors>iluvadev</Authors>
@@ -28,7 +28,7 @@
     <DebugType>embedded</DebugType>
   </PropertyGroup>
 
-  <ItemGroup>
-    <PackageReference Include="pocketbase-csharp-sdk" Version="1.0.0-prerelease" />
-  </ItemGroup>
+	<ItemGroup>
+		<PackageReference Include="pocketbase-csharp-sdk" Version="1.0.0-prerelease" />
+	</ItemGroup>
 </Project>

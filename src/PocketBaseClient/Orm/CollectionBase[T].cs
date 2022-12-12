@@ -32,6 +32,13 @@ namespace PocketBaseClient.Orm
                 return Cache.AddOrUpdate(item) != null;
             return false;
         }
+        internal override bool ChangeIdInCache<E>(string oldId, E elem)
+        {
+            if (elem is T item && item.Id != null)
+                return Cache.ChangeId(oldId, item) != null;
+            return false;
+        }
+
         internal override bool CacheContains<E>(E elem)
         {
             if (elem is T item && item.Id != null)
@@ -59,12 +66,10 @@ namespace PocketBaseClient.Orm
         internal async Task<PagedCollectionModel<T>?> GetPageFromPbAsync(int? pageNumber = null, int? perPage = null, string? filter = null, string? sort = null)
         {
             var page = await PocketBase.HttpGetListAsync<T>(UrlRecords, pageNumber, perPage, filter, sort);
-            // Cache all items in the page
+            // Cache all items in the page automatically at creation
             foreach (var itemFromPb in page?.Items ?? Enumerable.Empty<T>())
-            {
-                var item = Cache.AddOrUpdate(itemFromPb);
-                item.Metadata_.SetLoaded();
-            }
+                itemFromPb.Metadata_.SetLoaded();
+
             return page;
         }
         internal async IAsyncEnumerable<T> GetItemsFromPbAsync(string? filter = null, string? sort = null)
@@ -83,9 +88,12 @@ namespace PocketBaseClient.Orm
                     var pageItems = page.Items ?? Enumerable.Empty<T>();
                     loadedItems += pageItems.Count();
 
-                    // Return downloaded cached items
                     foreach (var item in pageItems)
-                        yield return Cache.Get(item.Id!) ?? item;
+                        yield return item;
+
+                    //// Return downloaded cached items
+                    //foreach (var item in pageItems)
+                    //    yield return Cache.Get(item.Id!) ?? item;
                 }
             }
         }
@@ -105,9 +113,12 @@ namespace PocketBaseClient.Orm
                     var pageItems = page.Items ?? Enumerable.Empty<T>();
                     loadedItems += pageItems.Count();
 
-                    // Return downloaded cached items
                     foreach (var item in pageItems)
-                        yield return Cache.Get(item.Id!) ?? item;
+                        yield return item;
+
+                    //// Return downloaded cached items
+                    //foreach (var item in pageItems)
+                    //    yield return Cache.Get(item.Id!) ?? item;
                 }
             }
         }
@@ -162,15 +173,22 @@ namespace PocketBaseClient.Orm
 
         public IEnumerable<T> GetItems(bool reload = false)
         {
+            //Com és que Cache s'omple a saco??
+
+            //No marcar com a necessita recarregar si té canvis locals! O gestionar-ho bé!!
+
+            var newItems = Cache.NewItems.ToList();
+            var notNewItems = Cache.NotNewItems.ToList();
+
             // First: return new items
-            foreach (var item in Cache.NewItems)
+            foreach (var item in newItems)
                 yield return item;
 
             // Count not new Items to compare with _PocketBaseCount
-            if (!reload && Cache.NotNewItems.Count() == _PocketBaseCount)
+            if (!reload && notNewItems.Count() == _PocketBaseCount)
             {
                 // Return cached items
-                foreach (var item in Cache.NotNewItems)
+                foreach (var item in notNewItems)
                     yield return item;
             }
             else
@@ -202,9 +220,12 @@ namespace PocketBaseClient.Orm
                         foreach (var item in pageItems)
                             idsToTrash.Remove(item.Id!);
 
-                        // Return downloaded cached items
                         foreach (var item in pageItems)
-                            yield return Cache.Get(item.Id!) ?? item;
+                            yield return item;
+
+                        //// Return downloaded cached items
+                        //foreach (var item in pageItems)
+                        //    yield return Cache.Get(item.Id!) ?? item;
                     }
                 }
 
@@ -313,7 +334,7 @@ namespace PocketBaseClient.Orm
         public async Task<bool> DeleteAsync(T item)
         {
             if (item.Id == null) return false;
-            if (item.Metadata_.IsNew) return false;
+            if (item.Metadata_.IsNew) return item.Metadata_.IsTrash = true;
 
             return await DeleteByIdAsync(item.Id);
         }

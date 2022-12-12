@@ -216,7 +216,7 @@ namespace {GeneratedNamespaceServices}
         {{");
             foreach (var colInfo in _CollectionList)
                 sbService.Append($@"
-            RegisterCollection(typeof({colInfo.ItemsClassName}), {colInfo.CollectionName});");
+            RegisterCollection(typeof({GeneratedNamespaceModels}.{colInfo.ItemsClassName}), {colInfo.CollectionName});");
             sbService.Append($@"
         }}
         #endregion Collections
@@ -247,12 +247,14 @@ namespace {GeneratedNamespaceServices}
             if (collection.Schema == null) throw new Exception($"Schema is empty for collection {collection.Name}");
             if (collection.Id == null) throw new Exception($"Collection Id is empty for collection {collection.Name}");
 
+            var collectionNaturalName = collection.Name.Replace("_", " ");
+
             var colInfo = new CollectionInfo
             {
-                CollectionName = collection.Name.Pluralize().ToPascalCase() + "Collection",
+                CollectionName = collectionNaturalName.Pluralize().ToPascalCase() + "Collection",
                 CollectionId = collection.Id,
-                CollectionClassName = "Collection" + collection.Name.Pluralize().ToPascalCase(),
-                ItemsClassName = collection.Name.Singularize().ToPascalCase(),
+                CollectionClassName = "Collection" + collectionNaturalName.Pluralize().ToPascalCase(),
+                ItemsClassName = collectionNaturalName.Singularize().ToPascalCase(),
                 CollectionModel = collection,
             };
             _CollectionList.Add(colInfo);
@@ -403,8 +405,8 @@ namespace {GeneratedNamespaceModels}
                     initialValue = $"new {propertyName}List()";
                     return $"{propertyName}List";
                 }
-                initialValue = $"new List<{propertyName}Enum>()";
-                return $"List<{propertyName}Enum>";
+                initialValue = $"new LimitableList<{propertyName}Enum>()";
+                return $"LimitableList<{propertyName}Enum>";
             }
             if (schemaType == "json") return $"dynamic?";
 
@@ -422,8 +424,8 @@ namespace {GeneratedNamespaceModels}
                     initialValue = $"new {propertyName}List()";
                     return $"{propertyName}List";
                 }
-                initialValue = $"new List<{colInfo.ItemsClassName}>()";
-                return $"List<{colInfo.ItemsClassName}>";
+                initialValue = $"new LimitableList<{colInfo.ItemsClassName}>()";
+                return $"LimitableList<{colInfo.ItemsClassName}>";
             }
 
             return $"object";
@@ -506,7 +508,7 @@ namespace {GeneratedNamespaceModels}
 {{
     public partial class {colInfo.ItemsClassName}
     {{
-        public class {propertyName}List : LimitedList<{propertyType}>
+        public class {propertyName}List : LimitableList<{propertyType}>
         {{
             public {propertyName}List() : base({limit}) {{ }}
         }}
@@ -525,6 +527,7 @@ namespace {GeneratedNamespaceModels}
             var sb = new StringBuilder();
             sb.AppendLine($@"{indent}[JsonPropertyName(""{schemaField.Name}"")]");
             sb.AppendLine($@"{indent}[PocketBaseField(id: ""{schemaField.Id}"", name: ""{schemaField.Name}"", required: {(schemaField.Required ?? false).ToString().ToLower()}, system: {(schemaField.System ?? false).ToString().ToLower()}, unique: {(schemaField.Unique ?? false).ToString().ToLower()}, type: ""{schemaField.Type}"")]");
+            sb.AppendLine($@"{indent}[Display(Name = ""{(schemaField.Name ?? propertyName).ToProperCase()}"")]");
             if (schemaField.Required ?? false)
                 sb.AppendLine($@"{indent}[Required(ErrorMessage = @""{schemaField.Name} is required"")]");
             if (schemaField.Type == "text")
@@ -592,7 +595,7 @@ namespace {GeneratedNamespaceModels}
                 else if (options.MaxSelect != null)
                     sb.AppendLine($@"{indent}[JsonConverter(typeof(EnumListConverter<{propertyName}List, {propertyName}Enum>))]");
                 else //List
-                    sb.AppendLine($@"{indent}[JsonConverter(typeof(EnumListConverter<List<{propertyName}Enum>, {propertyName}Enum>))]");
+                    sb.AppendLine($@"{indent}[JsonConverter(typeof(EnumListConverter<LimitableList<{propertyName}Enum>, {propertyName}Enum>))]");
             }
             else if (schemaField.Type == "json")
             {
@@ -609,7 +612,7 @@ namespace {GeneratedNamespaceModels}
                 else if (options.MaxSelect != null)
                     sb.AppendLine($@"{indent}[JsonConverter(typeof(RelationListConverter<{propertyName}List, {colInfo.ItemsClassName}>))]");
                 else //List
-                    sb.AppendLine($@"{indent}[JsonConverter(typeof(RelationListConverter<List<{colInfo.ItemsClassName}>, {colInfo.ItemsClassName}>))]");
+                    sb.AppendLine($@"{indent}[JsonConverter(typeof(RelationListConverter<LimitableList<{colInfo.ItemsClassName}>, {colInfo.ItemsClassName}>))]");
             }
             return sb;
         }
@@ -624,7 +627,7 @@ namespace {GeneratedNamespaceModels}
                           $@"{indent}   get => Get(() => _{propertyName});" :
                           $@"{indent}   get => Get(() => _{propertyName} ??= {initialVal});");
             sb.Append($@"{indent}   ");
-            if (initialVal.StartsWith("new List<") || initialVal.EndsWith("List()"))
+            if (initialVal.StartsWith("new LimitableList<") || initialVal.EndsWith("List()"))
                 sb.Append($@"private ");
             sb.AppendLine($@"set => Set(value, ref _{propertyName});");
             sb.AppendLine($@"{indent}}}");

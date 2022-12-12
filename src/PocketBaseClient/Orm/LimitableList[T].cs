@@ -8,28 +8,30 @@
 // pocketbase-csharp-sdk project: https://github.com/PRCV1/pocketbase-csharp-sdk 
 // pocketbase project: https://github.com/pocketbase/pocketbase
 
+using System;
 using System.Collections;
 
 namespace PocketBaseClient.Orm
 {
-    [Serializable]
-    public class LimitedList<T> : IList<T>
+    public class LimitableList<T> : IList<T>, ILimitableList
     {
+        public int? MaxSize { get; }
+
         private List<T> InnerList { get; }
 
-        public int MaxSize { get; }
+        public ItemBase? Owner { get; set; }
         public int Count => InnerList.Count;
 
         bool ICollection<T>.IsReadOnly => false;
 
-        public LimitedList() : this(1000)
+        public LimitableList() : this(null) { }
+        public LimitableList(ItemBase? owner) : this(owner, null) { }
+        public LimitableList(ItemBase? owner, int? maxSize)
         {
-        }
+            InnerList = new List<T>(maxSize ?? 512);
 
-        public LimitedList(int maxsize)
-        {
-            InnerList = new List<T>(maxsize);
-            MaxSize = maxsize;
+            MaxSize = maxSize;
+            Owner = owner;
         }
 
         public T this[int index]
@@ -42,9 +44,11 @@ namespace PocketBaseClient.Orm
             }
             set
             {
-                if (index > MaxSize - 1)
+                if (MaxSize != null && index > MaxSize - 1)
                     throw new Exception($"Index {index} is out of range {MaxSize - 1}");
+
                 InnerList[index] = value;
+                Owner?.SetModified();
             }
         }
 
@@ -55,7 +59,10 @@ namespace PocketBaseClient.Orm
             => this[index] = item;
 
         public void RemoveAt(int index)
-            => InnerList.RemoveAt(index);
+        {
+            InnerList.RemoveAt(index);
+            Owner?.SetModified();
+        }
 
 
         IEnumerator<T> IEnumerable<T>.GetEnumerator()
@@ -66,14 +73,18 @@ namespace PocketBaseClient.Orm
 
         public void Add(T value)
         {
-            if (Count == MaxSize)
+            if (MaxSize != null && Count == MaxSize)
                 throw new Exception($"List is full: limited to {MaxSize}");
 
             InnerList.Add(value);
+            Owner?.SetModified();
         }
 
         public void Clear()
-            => InnerList.Clear();
+        {
+            InnerList.Clear();
+            Owner?.SetModified();
+        }
 
         public bool Contains(T item)
             => InnerList.Contains(item);
@@ -82,7 +93,27 @@ namespace PocketBaseClient.Orm
             => InnerList.CopyTo(array, arrayIndex);
 
         public bool Remove(T item)
-            => InnerList.Remove(item);
+        {
+            bool bRet = InnerList.Remove(item);
+            if (bRet)
+                Owner?.SetModified();
+            return bRet;
+        }
 
+        void ILimitableList.UpdateWith(ILimitableList? limitableList)
+        {
+            if (limitableList != null && limitableList is LimitableList<T> list)
+            {
+                // Remove old items
+                for(int i=0; i<Count; i++)
+                    InnerList.RemoveAt(i);
+
+                // Add new items
+                for (int i = 0; i < list.Count; i++)
+                    InnerList.Add(list[i]);
+
+                Owner?.SetModified();
+            }
+        }
     }
 }

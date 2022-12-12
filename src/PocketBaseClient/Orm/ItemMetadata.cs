@@ -29,7 +29,8 @@ namespace PocketBaseClient.Orm
 
         public bool IsTrash { get; internal set; } = false;
 
-        public bool IsCached => Item.Collection.CacheContains(Item);
+        public bool IsCached { get; set; } = false;
+
 
         [JsonConverter(typeof(DateTimeConverter))]
         public DateTime? LastLoad { get; private set; } = null;

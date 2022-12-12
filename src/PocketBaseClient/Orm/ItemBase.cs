@@ -11,7 +11,6 @@
 using pocketbase_csharp_sdk.Json;
 using pocketbase_csharp_sdk.Models;
 using System.ComponentModel.DataAnnotations;
-using System.Text.Json;
 using System.Text.Json.Serialization;
 
 namespace PocketBaseClient.Orm
@@ -19,9 +18,20 @@ namespace PocketBaseClient.Orm
     public abstract class ItemBase : BaseModel
     {
         #region Field Properties
+        private string? _Id = null;
         [JsonPropertyName("id")]
         [JsonInclude]
-        public new string? Id { get; internal set; }
+        public new string? Id
+        {
+            get => _Id ?? "";
+            internal set
+            {
+                var oldValue = _Id;
+                _Id = value;
+                if (oldValue != null && value != oldValue)
+                    Collection.ChangeIdInCache(oldValue, this);
+            }
+        }
 
         [JsonPropertyName("collectionId")]
         [JsonInclude]
@@ -49,23 +59,32 @@ namespace PocketBaseClient.Orm
         protected T Get<T>(Func<T> func)
         {
             Load();
-            return func();
+            T value = func();
+            if (value is ILimitableList limitableList)
+                limitableList.Owner = this;
+
+            return value;
         }
         protected void Set<T>(T value, ref T valueVar)
         {
-            if (value == null && valueVar == null) return;
-
-            //if (typeof(T).IsGenericType && typeof(T).GetGenericTypeDefinition() == typeof(IList<>) &&
-            //    typeof(T).GetGenericArguments()[0].BaseType == typeof(ItemBase))
-            //{
-            //    //IList<T> where T : ItemBase
-            //}
-            if (valueVar == null || !valueVar.Equals(value))
+            if (valueVar is ILimitableList limitableList)
             {
-                valueVar = value;
-                Metadata_.HasLocalChanges = true;
+                limitableList.Owner = this;
+                limitableList.UpdateWith(value as ILimitableList);
+            }
+            else
+            {
+                if (value == null && valueVar == null) return;
+
+                if (valueVar == null || !valueVar.Equals(value))
+                {
+                    valueVar = value;
+                    SetModified();
+                }
             }
         }
+        internal bool SetModified(bool modification = true)
+            => Metadata_.HasLocalChanges |= modification;
 
         #endregion Get and Set 
 

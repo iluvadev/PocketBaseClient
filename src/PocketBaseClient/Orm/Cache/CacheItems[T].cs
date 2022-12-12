@@ -13,23 +13,15 @@ namespace PocketBaseClient.Orm.Cache
     internal class CacheItems<T>
         where T : ItemBase
     {
-        private class CachedItem
-        {
-            public DateTime DateCached { get; }
-            public string Id { get; }
-            public CachedItem(T item)
-            {
-                if (item.Id == null) throw new ArgumentException("Can not cache a non saved item");
-
-                DateCached = DateTime.UtcNow;
-                Id = item.Id;
-            }
-        }
-
-        private List<CachedItem> CachedItems { get; } = new List<CachedItem>();
         private Dictionary<string, T> Items { get; } = new Dictionary<string, T>();
 
-        public int Count => Items.Values.Where(i => !i.Metadata_.IsTrash && i.Metadata_.IsLoaded).Count();
+        public T ChangeId(string oldId, T item)
+        {
+            if (Items.ContainsKey(oldId))
+                Items.Remove(oldId);
+
+            return AddOrUpdate(item);
+        }
 
         public T AddOrUpdate(T item)
         {
@@ -38,7 +30,6 @@ namespace PocketBaseClient.Orm.Cache
             T cachedItem;
             if (!Items.ContainsKey(item.Id))
             {
-                CachedItems.Add(new CachedItem(item));
                 Items.Add(item.Id, item);
                 cachedItem = item;
             }
@@ -64,6 +55,7 @@ namespace PocketBaseClient.Orm.Cache
 
             var item = Items[id];
             if (item.Metadata_.IsTrash) return null;
+            item.Metadata_.IsCached = true;
 
             return item;
         }
@@ -73,6 +65,8 @@ namespace PocketBaseClient.Orm.Cache
             if (!Items.ContainsKey(id)) return null;
 
             var item = Items[id];
+            item.Metadata_.IsCached = false;
+
             Items.Remove(id);
             return item;
         }
@@ -84,11 +78,21 @@ namespace PocketBaseClient.Orm.Cache
                 Remove(id);
         }
 
-        public IEnumerable<T> AllItems => Items.Values;
+        public IEnumerable<T> AllItems
+        {
+            get
+            {
+                foreach (var item in Items.Values)
+                {
+                    item.Metadata_.IsCached = true;
+                    yield return item;
+                }
+            }
+        }
 
-        public IEnumerable<T> NewItems => Items.Values.Where(i => !i.Metadata_.IsTrash && i.Metadata_.IsNew);
+        public IEnumerable<T> NewItems => AllItems.Where(i => !i.Metadata_.IsTrash && i.Metadata_.IsNew);
 
-        public IEnumerable<T> NotNewItems => Items.Values.Where(i => !i.Metadata_.IsTrash && !i.Metadata_.IsNew);
+        public IEnumerable<T> NotNewItems => AllItems.Where(i => !i.Metadata_.IsTrash && !i.Metadata_.IsNew);
 
     }
 }
