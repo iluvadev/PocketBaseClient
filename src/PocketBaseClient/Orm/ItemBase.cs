@@ -19,6 +19,7 @@ namespace PocketBaseClient.Orm
     {
         #region Field Properties
         private string? _Id = null;
+        /// <summary> Maps to 'id' field in PocketBase </summary>
         [JsonPropertyName("id")]
         [JsonInclude]
         public new string? Id
@@ -33,10 +34,12 @@ namespace PocketBaseClient.Orm
             }
         }
 
+        /// <summary> Maps to 'collectionId' field in PocketBase </summary>
         [JsonPropertyName("collectionId")]
         [JsonInclude]
         public new string? CollectionId => Collection.Id;
 
+        /// <summary> Maps to 'collectionName' field in PocketBase </summary>
         [JsonPropertyName("collectionName")]
         [JsonInclude]
         public new string? CollectionName => Collection.Name;
@@ -44,11 +47,13 @@ namespace PocketBaseClient.Orm
         [JsonIgnore]
         public abstract CollectionBase Collection { get; }
 
+        /// <summary> Maps to 'created' field in PocketBase </summary>
         [JsonPropertyName("created")]
         [JsonConverter(typeof(DateTimeConverter))]
         [JsonInclude]
         public new DateTime? Created { get; private set; }
 
+        /// <summary> Maps to 'updated' field in PocketBase </summary>
         [JsonPropertyName("updated")]
         [JsonConverter(typeof(DateTimeConverter))]
         [JsonInclude]

@@ -525,6 +525,7 @@ namespace {GeneratedNamespaceModels}
         private StringBuilder GetDecoratorsForSchemaField(SchemaFieldModel schemaField, string indent, string propertyName)
         {
             var sb = new StringBuilder();
+            sb.AppendLine($"{indent}/// <summary> Maps to '{schemaField.Name}' field in PocketBase </summary>");
             sb.AppendLine($@"{indent}[JsonPropertyName(""{schemaField.Name}"")]");
             sb.AppendLine($@"{indent}[PocketBaseField(id: ""{schemaField.Id}"", name: ""{schemaField.Name}"", required: {(schemaField.Required ?? false).ToString().ToLower()}, system: {(schemaField.System ?? false).ToString().ToLower()}, unique: {(schemaField.Unique ?? false).ToString().ToLower()}, type: ""{schemaField.Type}"")]");
             sb.AppendLine($@"{indent}[Display(Name = ""{(schemaField.Name ?? propertyName).ToProperCase()}"")]");
