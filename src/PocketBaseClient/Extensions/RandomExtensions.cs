@@ -12,7 +12,7 @@ using System.Text;
 
 namespace PocketBaseClient
 {
-    public static class RandomExtensions
+    internal static class RandomExtensions
     {
         //const string defaultRandomAlphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
         const string defaultRandomAlphabet = "abcdefghijklmnopqrstuvwxyz0123456789";

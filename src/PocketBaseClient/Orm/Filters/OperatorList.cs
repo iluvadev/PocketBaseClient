@@ -10,6 +10,7 @@
 
 namespace PocketBaseClient.Orm.Filters
 {
+    /// <summary> Operators for lists </summary>
     public enum OperatorList
     {
         Contains,

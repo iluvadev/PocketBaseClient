@@ -31,4 +31,5 @@
 	<ItemGroup>
 		<PackageReference Include="pocketbase-csharp-sdk" Version="1.0.0-prerelease" />
 	</ItemGroup>
+
 </Project>

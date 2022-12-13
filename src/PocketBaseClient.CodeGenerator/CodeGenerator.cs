@@ -179,6 +179,7 @@ namespace {GeneratedNamespace}
     public partial class {appClassName} : PocketBaseClientApplication
     {{
         private {serviceClassName}? _Data = null;
+        /// <summary> Access to Data for Application {Schema.PocketBaseApplication.Name} </summary>
         public {serviceClassName} Data => _Data ??= new {serviceClassName}(this);
 
         #region Constructors
@@ -209,9 +210,11 @@ namespace {GeneratedNamespaceServices}
 
             foreach (var colInfo in _CollectionList)
                 sbService.Append($@"
+        /// <summary> Collection '{colInfo.CollectionModel.Name}' in PocketBase </summary>
         public {colInfo.CollectionClassName} {colInfo.CollectionName} {{ get; }}");
             sbService.Append($@"
 
+        /// <inheritdoc />
         protected override void RegisterCollections()
         {{");
             foreach (var colInfo in _CollectionList)
@@ -271,16 +274,23 @@ namespace {GeneratedNamespaceModels}
 {{
     public partial class {colInfo.CollectionClassName} : CollectionBase<{colInfo.ItemsClassName}>
     {{
+        /// <inheritdoc />
         public override string Id => ""{collection.Id}"";
+
+        /// <inheritdoc />
         public override string Name => ""{collection.Name}"";
+
+        /// <inheritdoc />
         public override bool System => {(collection.System ?? false).ToString().ToLower()};
 
         public {colInfo.CollectionClassName}(DataServiceBase context) : base(context) {{ }}
 
 
+        /// <summary> Query data at PocketBase, defining a Filter over collection '{colInfo.CollectionModel.Name}' </summary>
         public CollectionQuery<{colInfo.CollectionClassName}, {colInfo.ItemsClassName}> Filter(string filterString)
              => new CollectionQuery<{colInfo.CollectionClassName}, {colInfo.ItemsClassName}>(this, FilterQuery.Create(filterString));
 
+        /// <summary> Query data at PocketBase, defining a Filter over collection '{colInfo.CollectionModel.Name}' </summary>
         public CollectionQuery<{colInfo.CollectionClassName}, {colInfo.ItemsClassName}> Filter(Func<{colInfo.ItemsClassName}.Filters, FilterQuery> filter)
             => new CollectionQuery<{colInfo.CollectionClassName}, {colInfo.ItemsClassName}>(this, filter(new {colInfo.ItemsClassName}.Filters()));
 
@@ -322,6 +332,7 @@ namespace {GeneratedNamespaceModels}
     {{
         #region Collection
         private static CollectionBase? _Collection = null;
+        /// <inheritdoc />
         [JsonIgnore]
         public override CollectionBase Collection => _Collection ??= DataServiceBase.GetCollection<{colInfo.ItemsClassName}>()!;
         #endregion Collection
@@ -333,6 +344,7 @@ namespace {GeneratedNamespaceModels}
             sb.AppendLine($@"
         #endregion Field Properties
 
+        /// <inheritdoc />
         public override void UpdateWith(ItemBase itemBase)
         {{
             base.UpdateWith(itemBase);
@@ -348,6 +360,7 @@ namespace {GeneratedNamespaceModels}
             if (relatedItems.Any())
             {
                 sb.Append($@"
+        /// <inheritdoc />
         protected override IEnumerable<ItemBase?> RelatedItems 
             => base.RelatedItems");
                 foreach (var relatedItem in relatedItems)
@@ -669,28 +682,38 @@ namespace {GeneratedNamespaceModels}
         {
             if (schemaField.Type == "text")
             {
+                sb.AppendLine($@"{indent}/// <summary>Makes a Filter to Query data over the '{schemaField.Name}' field</summary>");
                 sb.AppendLine($@"{indent}public FilterQuery {propertyName}(OperatorText op, string value) => FilterQuery.Create(""{schemaField.Name}"", op, value);");
             }
             else if (schemaField.Type == "number")
             {
+                sb.AppendLine($@"{indent}/// <summary>Makes a Filter to Query data over the '{schemaField.Name}' field</summary>");
                 sb.AppendLine($@"{indent}public FilterQuery {propertyName}(OperatorNumeric op, int value) => FilterQuery.Create(""{schemaField.Name}"", op, value);");
             }
             else if (schemaField.Type == "bool")
             {
+                sb.AppendLine($@"{indent}/// <summary>Makes a Filter to Query data over the '{schemaField.Name}' field</summary>");
                 sb.AppendLine($@"{indent}public FilterQuery {propertyName}(bool value) => FilterQuery.Create(""{schemaField.Name}"", value);");
             }
             else if (schemaField.Type == "email")
             {
+                sb.AppendLine($@"{indent}/// <summary>Makes a Filter to Query data over the '{schemaField.Name}' field</summary>");
                 sb.AppendLine($@"{indent}public FilterQuery {propertyName}(OperatorText op, MailAddress value) => FilterQuery.Create(""{schemaField.Name}"", op, value);");
+
+                sb.AppendLine($@"{indent}/// <summary>Makes a Filter to Query data over the '{schemaField.Name}' field</summary>");
                 sb.AppendLine($@"{indent}public FilterQuery {propertyName}(OperatorText op, string value) => FilterQuery.Create(""{schemaField.Name}"", op, value);");
             }
             else if (schemaField.Type == "url")
             {
+                sb.AppendLine($@"{indent}/// <summary>Makes a Filter to Query data over the '{schemaField.Name}' field</summary>");
                 sb.AppendLine($@"{indent}public FilterQuery {propertyName}(OperatorText op, Uri value) => FilterQuery.Create(""{schemaField.Name}"", op, value);");
+
+                sb.AppendLine($@"{indent}/// <summary>Makes a Filter to Query data over the '{schemaField.Name}' field</summary>");
                 sb.AppendLine($@"{indent}public FilterQuery {propertyName}(OperatorText op, string value) => FilterQuery.Create(""{schemaField.Name}"", op, value);");
             }
             else if (schemaField.Type == "date")
             {
+                sb.AppendLine($@"{indent}/// <summary>Makes a Filter to Query data over the '{schemaField.Name}' field</summary>");
                 sb.AppendLine($@"{indent}public FilterQuery {propertyName}(OperatorNumeric op, DateTime value) => FilterQuery.Create(""{schemaField.Name}"", op, value);");
             }
             else if (schemaField.Type == "select")

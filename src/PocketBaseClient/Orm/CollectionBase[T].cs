@@ -53,6 +53,10 @@ namespace PocketBaseClient.Orm
         internal string UrlRecord(T item) => UrlRecord(item.Id!);
         #endregion  Url
 
+        /// <summary>
+        /// Ctor
+        /// </summary>
+        /// <param name="context"></param>
         public CollectionBase(DataServiceBase context) : base(context) { }
 
         #region Support functions
@@ -148,8 +152,20 @@ namespace PocketBaseClient.Orm
         #endregion Fill Item from PocketBase
 
         #region Get Item
+        /// <summary>
+        /// Gets the item, with its id
+        /// </summary>
+        /// <param name="id">The id of the item to get</param>
+        /// <param name="reload">True if is forced to reload from PocketBase (default is false)</param>
+        /// <returns></returns>
         public T? GetById(string id, bool reload = false) => GetByIdAsync(id, reload).Result;
 
+        /// <summary>
+        /// Gets the item, with its id (async)
+        /// </summary>
+        /// <param name="id">The id of the item to get</param>
+        /// <param name="reload">True if is forced to reload from PocketBase ignoring Cache (default is false)</param>
+        /// <returns></returns>
         public async Task<T?> GetByIdAsync(string id, bool reload = false)
         {
             T? item = Cache.Get(id);
@@ -169,8 +185,18 @@ namespace PocketBaseClient.Orm
         #region Get All Items
         private int? _PocketBaseCount = null;
 
+        /// <summary>
+        /// Get all Items in the Collection.
+        /// Prefer cached items, but if PocketBase has more items than cached,
+        /// then ask for items in the server
+        /// </summary>
         public IEnumerable<T> Items_ => GetItems();
 
+        /// <summary>
+        /// Get all Items in the Collection
+        /// </summary>
+        /// <param name="reload">True if is forced to reload from PocketBase ignoring Cache (default is false)</param>
+        /// <returns></returns>
         public IEnumerable<T> GetItems(bool reload = false)
         {
             //No marcar com a necessita recarregar si té canvis locals! O gestionar-ho bé!!
@@ -240,6 +266,7 @@ namespace PocketBaseClient.Orm
         #endregion Get All Items
 
         #region DiscardChanges
+        /// <inheritdoc />
         public override void DiscardChanges()
         {
             foreach (var item in Cache.AllItems)
@@ -247,12 +274,29 @@ namespace PocketBaseClient.Orm
 
             Cache.RemoveTrash();
         }
+        /// <summary>
+        /// Discards all changes not saved in PocketBase of the Item
+        /// </summary>
+        /// <param name="item"></param>
         public void DiscardChanges(T item)
             => item.DiscardChanges();
         #endregion DiscardChanges
 
         #region Save Item
+        /// <summary>
+        /// Save an item to PocketBase, performing a Create or Update to server
+        /// </summary>
+        /// <param name="item">The item to be saved</param>
+        /// <param name="onlyIfChanges">False to force saving unmodified items (default behaviour)</param>
+        /// <returns></returns>
         public bool Save(T item, bool onlyIfChanges = false) => SaveAsync(item, onlyIfChanges).Result;
+
+        /// <summary>
+        /// Save an item to PocketBase, performing a Create or Update to server (async)
+        /// </summary>
+        /// <param name="item">The item to be saved</param>
+        /// <param name="onlyIfChanges">False to force saving unmodified items (default behaviour)</param>
+        /// <returns></returns>
         public async Task<bool> SaveAsync(T item, bool onlyIfChanges = false)
         {
             if (item.Id == null) return false;
@@ -313,7 +357,18 @@ namespace PocketBaseClient.Orm
         #endregion Save Item
 
         #region Delete Item
+        /// <summary>
+        /// Delete an item from PocketBase, identifying with Id
+        /// </summary>
+        /// <param name="id">The id of the item to delete</param>
+        /// <returns></returns>
         public bool DeleteById(string id) => DeleteByIdAsync(id).Result;
+
+        /// <summary>
+        /// Delete an item from PocketBase, identifying with Id (async)
+        /// </summary>
+        /// <param name="id">The id of the item to delete</param>
+        /// <returns></returns>
         public async Task<bool> DeleteByIdAsync(string? id)
         {
             if (id == null) return false;
@@ -328,7 +383,18 @@ namespace PocketBaseClient.Orm
             return true;
         }
 
+        /// <summary>
+        /// Delete an item from PocketBase
+        /// </summary>
+        /// <param name="item">The item to delete</param>
+        /// <returns></returns>
         public bool Delete(T item) => DeleteAsync(item).Result;
+
+        /// <summary>
+        /// Delete an item from PocketBase (async)
+        /// </summary>
+        /// <param name="item">The item to delete</param>
+        /// <returns></returns>
         public async Task<bool> DeleteAsync(T item)
         {
             if (item.Id == null) return false;

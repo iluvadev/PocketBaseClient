@@ -15,8 +15,19 @@ namespace PocketBaseClient.Orm
 {
     public abstract class CollectionBase
     {
+        /// <summary>
+        /// The PocketBase 'id' of the Collection
+        /// </summary>
         public abstract string Id { get; }
+
+        /// <summary>
+        /// The PocketBase 'name' of the collection
+        /// </summary>
         public abstract string Name { get; }
+
+        /// <summary>
+        /// The PocketBase flag 'system' of the collection
+        /// </summary>
         public abstract bool System { get; }
 
         //public DateTime? Created { get; set; }
@@ -31,7 +42,11 @@ namespace PocketBaseClient.Orm
         protected DataServiceBase Context { get; }
         protected PocketBase PocketBase => Context.App.Sdk;
 
-        public CollectionBase(DataServiceBase context)
+        /// <summary>
+        /// Ctor
+        /// </summary>
+        /// <param name="context"></param>
+        internal CollectionBase(DataServiceBase context)
         {
             Context = context;
         }
@@ -45,6 +60,9 @@ namespace PocketBaseClient.Orm
         internal abstract bool ChangeIdInCache<T>(string oldId, T elem) where T : ItemBase;
 
         #region DiscardChanges
+        /// <summary>
+        /// Discards all changes not saved in PocketBase of all Items managed by the collection
+        /// </summary>
         public abstract void DiscardChanges();
         #endregion DiscardChanges
 

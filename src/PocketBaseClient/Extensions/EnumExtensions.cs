@@ -13,8 +13,17 @@ using System.Reflection;
 
 namespace PocketBaseClient
 {
-    public static class EnumExtensions
+    /// <summary>
+    /// Extensions for Enums
+    /// </summary>
+    internal static class EnumExtensions
     {
+        /// <summary>
+        /// Gets the Description defined in a <seealso cref="DescriptionAttribute"/>
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="enumValue"></param>
+        /// <returns></returns>
         public static string? GetDescription<T>(this T enumValue) where T : struct, IConvertible
         {
             string? output = null;
@@ -25,6 +34,13 @@ namespace PocketBaseClient
             return output;
         }
 
+        /// <summary>
+        /// Gets the enum values with their Descriptions defined in a <seealso cref="DescriptionAttribute"/>
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="type"></param>
+        /// <returns></returns>
+        /// <exception cref="ArgumentException"></exception>
         public static IDictionary<T, string?> GetEnumValuesWithDescription<T>(this Type type) where T : struct, IConvertible
         {
             if (!type.IsEnum) throw new ArgumentException("T must be an enumerated type");

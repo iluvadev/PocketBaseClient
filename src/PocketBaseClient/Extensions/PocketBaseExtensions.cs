@@ -14,8 +14,12 @@ using System.Text.Json;
 
 namespace PocketBaseClient
 {
+    /// <summary>
+    /// Extensions for PocketBase
+    /// </summary>
     public static class PocketBaseExtensions
     {
+
         internal static async Task<T?> HttpGetAsync<T>(this PocketBase pocketBase, string url)
         {
             return await pocketBase.SendAsync<T>(url, HttpMethod.Get);

@@ -10,6 +10,7 @@
 
 namespace PocketBaseClient.Orm.Filters
 {
+    /// <summary> Operators for texts </summary>
     public enum OperatorText
     {
         Equal,
