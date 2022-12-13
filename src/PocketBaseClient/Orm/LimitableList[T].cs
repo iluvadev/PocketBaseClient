@@ -24,7 +24,9 @@ namespace PocketBaseClient.Orm
 
         bool ICollection<T>.IsReadOnly => false;
 
+        #region Ctor
         public LimitableList() : this(null) { }
+        public LimitableList(int maxSize): this(null, maxSize) { }
         public LimitableList(ItemBase? owner) : this(owner, null) { }
         public LimitableList(ItemBase? owner, int? maxSize)
         {
@@ -33,6 +35,7 @@ namespace PocketBaseClient.Orm
             MaxSize = maxSize;
             Owner = owner;
         }
+        #endregion Ctor
 
         public T this[int index]
         {

@@ -173,8 +173,6 @@ namespace PocketBaseClient.Orm
 
         public IEnumerable<T> GetItems(bool reload = false)
         {
-            //Com és que Cache s'omple a saco??
-
             //No marcar com a necessita recarregar si té canvis locals! O gestionar-ho bé!!
 
             var newItems = Cache.NewItems.ToList();
