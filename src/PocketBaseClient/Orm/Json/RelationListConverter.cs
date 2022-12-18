@@ -8,6 +8,7 @@
 // pocketbase-csharp-sdk project: https://github.com/PRCV1/pocketbase-csharp-sdk 
 // pocketbase project: https://github.com/pocketbase/pocketbase
 
+using PocketBaseClient.Orm.Structures;
 using PocketBaseClient.Services;
 using System.Text.Json;
 using System.Text.Json.Serialization;
@@ -15,7 +16,7 @@ using System.Text.Json.Serialization;
 namespace PocketBaseClient.Orm.Json
 {
     public class RelationListConverter<L, T> : JsonConverter<L?>
-        where L : IList<T>, new()
+        where L : IBasicList<T>, new()
         where T : ItemBase, new()
     {
         public override L? Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)

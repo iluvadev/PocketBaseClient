@@ -8,16 +8,17 @@
 // pocketbase-csharp-sdk project: https://github.com/PRCV1/pocketbase-csharp-sdk 
 // pocketbase project: https://github.com/pocketbase/pocketbase
 
-using System.Collections;
 
-namespace PocketBaseClient.Orm
+namespace PocketBaseClient.Orm.Structures
 {
-    internal interface ILimitableList : IEnumerable
+    /// <summary>
+    /// Definition for types that belongs to an ItemBase
+    /// </summary>
+    public interface IOwnedByItem
     {
-        int? MaxSize { get; }
-
+        /// <summary>
+        /// The Owner 
+        /// </summary>
         ItemBase? Owner { get; set; }
-
-        void UpdateWith(ILimitableList? limitableList);
     }
 }

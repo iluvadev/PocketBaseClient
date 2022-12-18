@@ -23,9 +23,9 @@ namespace PocketBaseClient.Orm.Cache
             return AddOrUpdate(item);
         }
 
-        public T AddOrUpdate(T item)
+        public T AddOrUpdate(T? item)
         {
-            if (item.Id == null) throw new ArgumentException("Can not cache a non valid item");
+            if (item?.Id == null) throw new ArgumentException("Can not cache a non valid item");
 
             T cachedItem;
             if (!Items.ContainsKey(item.Id))
@@ -36,14 +36,7 @@ namespace PocketBaseClient.Orm.Cache
             else
             {
                 cachedItem = Items[item.Id];
-
-                // Update Item cached if item has more recent data and cached item is not modified
-                bool needToUpdate = cachedItem.Metadata_.IsTrash;
-                if (!item.Metadata_.IsTrash && item.Metadata_.IsLoaded)
-                    needToUpdate |= !cachedItem.Metadata_.IsLoaded ||
-                                    cachedItem.Metadata_.LastLoad! < item.Metadata_.LastLoad!;
-                if (needToUpdate)
-                    cachedItem.UpdateWith(item);
+                cachedItem.UpdateWith(item);
             }
 
             return cachedItem;
@@ -82,17 +75,12 @@ namespace PocketBaseClient.Orm.Cache
         {
             get
             {
-                foreach (var item in Items.Values)
+                foreach (var item in Items.Values.Where(i => !i.Metadata_.IsTrash))
                 {
                     item.Metadata_.IsCached = true;
                     yield return item;
                 }
             }
         }
-
-        public IEnumerable<T> NewItems => AllItems.Where(i => !i.Metadata_.IsTrash && i.Metadata_.IsNew);
-
-        public IEnumerable<T> NotNewItems => AllItems.Where(i => !i.Metadata_.IsTrash && !i.Metadata_.IsNew);
-
     }
 }

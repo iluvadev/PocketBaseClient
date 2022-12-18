@@ -23,10 +23,6 @@ namespace PocketBaseClient.Services
 
         protected abstract void RegisterCollections();
 
-        internal static T UpdateCached<T>(T item)
-            where T : ItemBase, new()
-            => GetCollection<T>()!.UpdateCached(item);
-
         public static CollectionBase<T>? GetCollection<T>()
             where T : ItemBase, new()
         {
@@ -82,9 +78,6 @@ namespace PocketBaseClient.Services
         #region Delete Item
         public bool Delete(ItemBase item)
             => item.Delete();
-
-        public async Task<bool> DeleteAsync(ItemBase item)
-            => await item.DeleteAsync();
         #endregion Delete Item
 
     }
