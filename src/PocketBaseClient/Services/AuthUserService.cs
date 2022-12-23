@@ -48,7 +48,7 @@ namespace PocketBaseClient.Services
         /// <param name="email"></param>
         /// <param name="password"></param>
         /// <returns></returns>
-        public async Task<UserAuthModel?> AuthenticateWithPassword(string email, string password)
+        public async Task<UserAuthModel?> AuthenticateWithPasswordAsync(string email, string password)
             => await App.Sdk.User.AuthenticateWithPassword(email, password);
 
         /// <summary>
@@ -59,7 +59,7 @@ namespace PocketBaseClient.Services
         /// <param name="codeVerifier"></param>
         /// <param name="redirectUrl"></param>
         /// <returns></returns>
-        public async Task<UserAuthModel?> AuthenticateViaOAuth2(string provider, string code, string codeVerifier, string redirectUrl)
+        public async Task<UserAuthModel?> AuthenticateViaOAuth2Async(string provider, string code, string codeVerifier, string redirectUrl)
             => await App.Sdk.User.AuthenticateViaOAuth2(provider, code, codeVerifier, redirectUrl);
 
         /// <summary>
@@ -125,7 +125,7 @@ namespace PocketBaseClient.Services
         /// </summary>
         /// <param name="userId"></param>
         /// <returns></returns>
-        public async Task<IEnumerable<ExternalAuthModel>?> GetExternalAuthenticationMethods(string userId)
+        public async Task<IEnumerable<ExternalAuthModel>?> GetExternalAuthenticationMethodsAsync(string userId)
             => await App.Sdk.User.GetExternalAuthenticationMethods(userId);
     }
 }

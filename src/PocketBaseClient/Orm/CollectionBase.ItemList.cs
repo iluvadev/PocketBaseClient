@@ -19,10 +19,14 @@ namespace PocketBaseClient.Orm
         public abstract bool Contains(object? element);
 
         /// <inheritdoc />
-        public abstract object? Add(object? element);
+        object? IBasicList.Add(object? element)
+            => AddInternal(element);
+        internal abstract object? AddInternal(object? element);
 
         /// <inheritdoc />
-        public abstract object? Remove(object? element);
+        object? IBasicList.Remove(object? element)
+            => RemoveInternal(element);
+        protected abstract object? RemoveInternal(object? element);
 
 
         /// <inheritdoc />

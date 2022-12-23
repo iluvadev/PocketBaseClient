@@ -52,7 +52,7 @@ namespace PocketBaseClient.Orm
         /// <param name="item">The item to be saved</param>
         /// <param name="onlyIfChanges">False to force saving unmodified items</param>
         /// <returns></returns>
-        public bool Save(T item, bool onlyIfChanges = true) 
+        internal bool Save(T item, bool onlyIfChanges = true) 
             => SaveAsync(item, onlyIfChanges).Result;
 
         /// <summary>
@@ -61,7 +61,7 @@ namespace PocketBaseClient.Orm
         /// <param name="item">The item to be saved</param>
         /// <param name="onlyIfChanges">False to force saving unmodified items</param>
         /// <returns></returns>
-        public async Task<bool> SaveAsync(T item, bool onlyIfChanges = true)
+        internal async Task<bool> SaveAsync(T item, bool onlyIfChanges = true)
             => await SaveInternalAsync(item, onlyIfChanges);
 
         internal override async Task<bool> SaveAsync<E>(E elem, bool onlyIfChanges = true)

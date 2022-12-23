@@ -48,31 +48,40 @@ namespace PocketBaseClient.Orm
 
         /// <inheritdoc />
         public bool Contains(T? element)
-            => Contains(element?.Id);
+            => GetById(element?.Id) != null;
 
         /// <inheritdoc />
-        public override object? Add(object? item)
-            => Add(item as T);
-        
-        /// <inheritdoc />
-        public T? Add(T? item)
-            => Cache.AddOrUpdate(item);
+        T? IBasicList<T>.Add(T? item)
+            => AddInternal(item) as T;
 
-        /// <inheritdoc />
-        public override object? Remove(object? element)
-            => Remove(element as T);
-
-        /// <inheritdoc />
-        public T? Remove(T? item)
+        internal override object? AddInternal(object? element)
         {
-            if (item == null) return null;
-            if (!Delete(item)) return null;
-            return item;
+            if (element is T item && item.Id != null)
+                return Cache.AddOrUpdate(item);
+
+            return default(T);
+        }
+
+
+        /// <inheritdoc />
+        T? IBasicList<T>.Remove(T? item)
+            => RemoveInternal(item) as T;
+        
+        protected override object? RemoveInternal(object? element)
+        {
+            if (element is T item && Delete(item))
+                return item;
+            return default(T);
         }
 
         /// <inheritdoc />
-        public T? Remove(string? id)
-            => Remove(GetById(id));
+        T? IItemList<T>.Remove(string? id)
+        {
+            var item = GetById(id);
+            if (Delete(item))
+                return item;
+            return null;
+        }
 
 
         /// <inheritdoc />

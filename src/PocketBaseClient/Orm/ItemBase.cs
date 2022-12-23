@@ -77,9 +77,9 @@ namespace PocketBaseClient.Orm
             if (valueVar is IOwnedByItem ownedBy)
                 ownedBy.Owner = this;
 
-            if (valueVar is IBasicList basicList)
+            if (valueVar is IBasicList basicList && value is IBasicList valueBasicList)
             {
-                basicList.UpdateWith(value as IBasicList);
+                basicList.UpdateWith(valueBasicList);
                 SetModified();
             }
             else
@@ -242,7 +242,7 @@ namespace PocketBaseClient.Orm
         public ItemBase()
         {
             Id = Random.Shared.PseudorandomString(15).ToLowerInvariant();
-            Collection.Add(this);
+            Collection.AddInternal(this);
         }
 
         /// <inheritdoc />

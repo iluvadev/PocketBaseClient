@@ -15,8 +15,9 @@ Set up an ORM to access your PocketBase application data in less than 1 minute w
     * [Collections and Model Registries](#collections-and-model-registries)
     * [Cache](#cache)
   * [Methods and Properties](#methods-and-properties)
-    * [Of any Collection](#of-any-collection)
-    * [Of any Model](#of-any-model)
+    * [Collections](#collections)
+    * [Object Models](#object-models)
+      * [Object Metadata](#object-metadata)
   * [Querying](#querying)
 * [Usage](#usage)
 
@@ -24,7 +25,7 @@ Set up an ORM to access your PocketBase application data in less than 1 minute w
 
 The only thing that you need is [pbcodegen](doc/pbcodegen.md). Download the latest version from the [Releases section](https://github.com/iluvadev/PocketBaseClient-csharp/releases), and follow the process.
 
-In less than 1 minute, you will have a customized ORM in c# for your PocketBase application, your own PocketBaseClient.
+In less than 1 minute you will have a customized ORM in c# for your PocketBase application, your own PocketBaseClient.
 
 More information in [pbcodegen](doc/pbcodegen.md)
 
@@ -92,62 +93,152 @@ Every change in an object that maps to a registry, marks the object as "modified
 
 The changes in memory of the objects can be discarded or saved.
 
-There is only a function `Save` to save objects to server, it does not matter if the Registry is to be created or updated.
+There is only a function `Save` to save objects to server, it does not matter if the Registry is to be created, updated or deleted in PocketBase.
 
 ### Cache
 
-Every time a Registry is downloaded from PocketBase, it will be cached for the containing Collection. 
+Every time a Registry is downloaded from PocketBase, it will be mapped as an object and cached. 
 
-Every time is created a new object of the collection, is cached: The new elements are also cached and marked as they are new
+The new objects are also cached: they live in memory until they are saved to PocketBase.
 
-When an element is requested, by default it will try to serve it from memory and if is not cached, from server. This behavior can be modified at every call.
+The deleted objects are marked as "to be deleted in PocketBase"
+
+When an element is requested, by default PocketBaseClient will try to serve it from memory and if it is not cached, from server. This behavior can be modified at every call.
 
 ## Methods and Properties
 
-### Of any Collection
+There are a lot of properties and methods in any modeled object:
+
+### Collections
 
 - Information about the Collection (properties `Id`, `Name` and `System`)
 
-- Get all elements of the collection (property `Items` and method `GetItems`)
+- Get all elements of the collection (enumerate over the collection, implements `IEnumerable<T>`, or use the method `GetItems`)
 
 - Get an element by Id (methods `GetById` and `GetByIdAsync`)
 
-- Save elements (create or update) to server (methods `Save` and `SaveAsync`)
+- Check if contains an element (method `Contains`)
 
-- Discard changes not saved to server (method `DiscardChanges`)
+- Delete an element (method `Delete`)
 
-- Delete elements (methods `Delete`, `DeleteAsync`, `DeleteById` and `DeleteByIdAsync`)
+- Save to server all changes in the collection and its elements (create, update or delete) (methods `SaveChanges`, `SaveChangesAsync`)
+
+- Discard changes in the collection that are not saved to server (method `DiscardChanges`)
 
 - Query elements (property `Filter`). This will be explained below
 
-### Of any Model
+### Object Models
 
-* Each field has its own Property of the correct type
+* Each field has its own Property with the correct type
 
-* Validate object data (methods `Validate` and `IsValid`)
+* Information about collection (properties `Collection`, `CollectionId` and `CollectionName`)
 
-* Reload object with data in server (methods `Reload` and `ReloadAsync`)
+* Information about the object status (property `Metadata_`, see [Object Metadata](#object-metadata))
+
+* Validate object data (method `Validate` or properties `Metadata_.IsValid` and `Metadata_.ValidationErrors`)
+
+* Reload the object with data in server (methods `Reload` and `ReloadAsync`)
+
+* Delete the element (method `Delete`)
 
 * Discard local changes of the object (method `DiscardChanges`)
 
 * Save element to server (create or update) (methods `Save` and `SaveAsync`)
 
-* Delete the element (methods `Delete` and `DeleteAsync`)
+* Check if two objects references the same registry (method `IsSame`)
 
-And other advanced:
+* Update the object with data of other (method `UpdateWith`)
 
-- Information about collection (properties `Collection`, `CollectionId` and `CollectionName`)
+#### Object Metadata
 
-- Information about object status (property `Metadata_`)
+Contains properties with information about the object:
 
-- Check if two objects references the same registry (method `IsSame`)
+* Validation:  `IsValid`, `ValidationErrors`
 
-- Update the object with data of other (method `UpdateWith`)
+* Changes:  `HasLocalChanges`, `FirstChange`, `LastChange`
+
+* Status: `IsCached`, `IsLoaded`, `IsNew`, `IsTobeDeleted`, `IsTrash`, `SyncStatus`
 
 ## Querying
 
 (Documentation incomplete)
 
 # Usage
+
+Supose this PocketBase Schema of an application with name '`my-todo-list`':
+
+```
+ ┌──────────────────┐       ┌──────────────────┐
+ │ todo_lists       │       │ tasks            │       ┌────────────────┐
+ ├──────────────────┤       ├──────────────────┤       │ priorities     │
+ │ name        :T   │       │ title       :T   │       ├────────────────┤
+ │ description :T   │     N │ description :T   │     1 │ name        :T │
+ │ tasks       :Rel ------->│ priority    :Rel ------->│ value       :# │
+ └──────────────────┘       │ status      :Sel │       │ description :T │
+                            │     │to do       │       └────────────────┘
+                            │     │doing       │
+                            │     │paused      │
+                            │     │done        │
+                            └──────────────────┘
+```
+
+With [pbcodegen](doc/pbcodegen.md) you can generate the Model and it can be used as:
+
+```csharp
+// 'my-todo-list' application
+var myApp = new MyTodoListApplication(); 
+
+// The data of the application
+var myData = myApp.Data;
+
+// Print all todo_lists registries:
+foreach (var todoList in myData.TodoListsCollection)
+{
+   Console.WriteLine($"{todoList.Name} ({todoList.Description})");
+   foreach (var task in todoList.Tasks)
+   {
+      Console.WriteLine($"   - {task.Title} ({task.Description})");
+      Console.WriteLine($"     {task.Priority.Name}");
+      Console.WriteLine($"     {task.Status}");
+      if (task.Status == Task.StatusEnum.Done)
+         Console.WriteLine("Well done!!");
+   }
+}
+
+// Filter over todo_lists collection in PocketBase
+var myTodoLists = myData.TodoListsCollection.Filter(todo => todo.Name(OperatorText.Like, "my todo list")).GetItems();
+
+// Linq in-memory (using cache, getting all registries from server if needed)
+var myTodoLists2 = myData.TodoListsCollection.Where(t => t.Name.Contains("my todo list"));
+
+var allPriorities = myData.PrioritiesCollection;
+
+// Getting by Id
+var myList = myData.TodoListsCollection.GetById("qwertyuiop");
+// Creating a new Task (it will be a registry in 'tasks' collection)
+var newTask = new Task
+{
+   Title = "My Title",
+   Description = "My Description",
+   Priority = allPriorities.OrderByDescending(p => p.Value).First(),
+   Status = Task.StatusEnum.ToDo
+};
+// Add it in the Tasks list (it will modify the 'tasks' field)
+myList.Tasks.Add(newTask);
+
+// Now, the changes are only in memory
+
+// Save the todo_list (and its tasks)
+myList.Save();
+
+// Or save all todo_lists
+myData.TodoListsCollection.SaveChanges();
+
+// Now, the changes are saved to PocketBase
+
+
+```
+
+
 
 (Documentation incomplete)

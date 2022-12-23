@@ -184,8 +184,7 @@ namespace PocketBaseClient.Orm
 
                         foreach (var item in pageItems)
                             // Check if item must be returned
-                            if ((item.Metadata_.SyncStatus == ItemSyncStatuses.Loaded && (include & GetItemsFilter.Load) == GetItemsFilter.Load) ||
-                                (item.Metadata_.SyncStatus == ItemSyncStatuses.ToBeDeleted && (include & GetItemsFilter.Erased) == GetItemsFilter.Erased))
+                            if (item.Metadata_.MatchFilter(include))
                                 yield return item;
                     }
                 }
