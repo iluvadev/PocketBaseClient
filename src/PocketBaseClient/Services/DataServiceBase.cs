@@ -59,26 +59,28 @@ namespace PocketBaseClient.Services
             foreach (var collection in Collections)
                 collection.DiscardChanges();
         }
-        public void DiscardChanges(ItemBase item)
-            => item.DiscardChanges();
-
-        public void DiscardChanges(CollectionBase collection)
-            => collection.DiscardChanges();
-
         #endregion DiscardChanges
 
-        #region Save Item
-        public bool Save(ItemBase item)
-            => item.Save();
+        #region SaveChanges
+        /// <summary>
+        /// Save all changed items to PocketBase, performing Create, Update or Delete for every Item changed to server (async)
+        /// </summary>
+        /// <returns></returns>
+        public async Task<bool> SaveChangesAsync()
+        {
+            bool bRet = true;
+            foreach (var collection in Collections)
+                bRet &= await collection.SaveChangesAsync();
 
-        public async Task<bool> SaveAsync(ItemBase item)
-            => await item.SaveAsync();
-        #endregion Save Item
-
-        #region Delete Item
-        public bool Delete(ItemBase item)
-            => item.Delete();
-        #endregion Delete Item
+            return bRet;
+        }
+        /// <summary>
+        /// Save all changed items to PocketBase, performing Create, Update or Delete for every Item changed to server 
+        /// </summary>
+        /// <returns></returns>
+        public bool SaveChanges()
+            => SaveChangesAsync().Result;
+        #endregion SaveChanges
 
     }
 }

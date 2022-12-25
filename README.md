@@ -234,11 +234,10 @@ myList.Save();
 // Or save all todo_lists
 myData.TodoListsCollection.SaveChanges();
 
+//Or save all changes in all collections
+myData.SaveChanges();
+
 // Now, the changes are saved to PocketBase
-
-
 ```
-
-
 
 (Documentation incomplete)
