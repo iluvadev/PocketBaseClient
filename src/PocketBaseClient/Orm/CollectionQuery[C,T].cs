@@ -9,10 +9,11 @@
 // pocketbase project: https://github.com/pocketbase/pocketbase
 
 using PocketBaseClient.Orm.Filters;
+using System.Collections;
 
 namespace PocketBaseClient.Orm
 {
-    public class CollectionQuery<C, T>
+    public class CollectionQuery<C, T>:IEnumerable<T>
         where C : CollectionBase<T>
         where T : ItemBase, new()
     {
@@ -25,16 +26,16 @@ namespace PocketBaseClient.Orm
             Filter = filter;
         }
 
-        public async IAsyncEnumerable<T> GetItemsAsync()
-        {
-            await foreach (var item in Collection.GetItemsFromPbAsync(Filter.FilterString))
-                yield return item;
-        }
-        public IEnumerable<T> GetItems()
+        private IEnumerable<T> GetItems()
         {
             foreach (var item in Collection.GetItemsFromPb(Filter.FilterString))
                 yield return item;
         }
 
+        public IEnumerator<T> GetEnumerator()
+            => GetItems().GetEnumerator();
+
+        IEnumerator IEnumerable.GetEnumerator()
+            => GetEnumerator();
     }
 }
