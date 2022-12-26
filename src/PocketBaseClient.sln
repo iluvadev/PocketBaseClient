@@ -7,6 +7,12 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PocketBaseClient", "PocketB
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PocketBaseClient.CodeGenerator", "PocketBaseClient.CodeGenerator\PocketBaseClient.CodeGenerator.csproj", "{5F9F967E-54F7-4713-BF59-B8C72FF3C37F}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Test", "Test", "{0D4E72E6-4620-439F-A302-3AFCB7BEF6F2}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PocketBaseClient.DemoTest", "Test\PocketBaseClient.DemoTest\PocketBaseClient.DemoTest.csproj", "{D112C5A5-38CD-4FFB-9674-65FA61C07C10}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PocketBaseClient.Test", "Test\PocketBaseClient.Test\PocketBaseClient.Test.csproj", "{AD01E4F3-7FE6-4B89-937E-2413EADF302E}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,9 +27,21 @@ Global
 		{5F9F967E-54F7-4713-BF59-B8C72FF3C37F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5F9F967E-54F7-4713-BF59-B8C72FF3C37F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5F9F967E-54F7-4713-BF59-B8C72FF3C37F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D112C5A5-38CD-4FFB-9674-65FA61C07C10}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D112C5A5-38CD-4FFB-9674-65FA61C07C10}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D112C5A5-38CD-4FFB-9674-65FA61C07C10}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D112C5A5-38CD-4FFB-9674-65FA61C07C10}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AD01E4F3-7FE6-4B89-937E-2413EADF302E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AD01E4F3-7FE6-4B89-937E-2413EADF302E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AD01E4F3-7FE6-4B89-937E-2413EADF302E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AD01E4F3-7FE6-4B89-937E-2413EADF302E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{D112C5A5-38CD-4FFB-9674-65FA61C07C10} = {0D4E72E6-4620-439F-A302-3AFCB7BEF6F2}
+		{AD01E4F3-7FE6-4B89-937E-2413EADF302E} = {0D4E72E6-4620-439F-A302-3AFCB7BEF6F2}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {9C86BEE7-8359-48F9-8628-7357AEB0C833}
