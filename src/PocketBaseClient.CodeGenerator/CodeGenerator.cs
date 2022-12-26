@@ -287,11 +287,7 @@ namespace {GeneratedNamespaceModels}
 
 
         /// <summary> Query data at PocketBase, defining a Filter over collection '{colInfo.CollectionModel.Name}' </summary>
-        public CollectionQuery<{colInfo.CollectionClassName}, {colInfo.ItemsClassName}> Filter(string filterString)
-             => new CollectionQuery<{colInfo.CollectionClassName}, {colInfo.ItemsClassName}>(this, FilterQuery.Create(filterString));
-
-        /// <summary> Query data at PocketBase, defining a Filter over collection '{colInfo.CollectionModel.Name}' </summary>
-        public CollectionQuery<{colInfo.CollectionClassName}, {colInfo.ItemsClassName}> Filter(Func<{colInfo.ItemsClassName}.Filters, FilterQuery> filter)
+        public CollectionQuery<{colInfo.CollectionClassName}, {colInfo.ItemsClassName}> Filter(Func<{colInfo.ItemsClassName}.Filters, FilterCommand> filter)
             => new CollectionQuery<{colInfo.CollectionClassName}, {colInfo.ItemsClassName}>(this, filter(new {colInfo.ItemsClassName}.Filters()));
 
     }}
@@ -680,38 +676,32 @@ namespace {GeneratedNamespaceModels}
             if (schemaField.Type == "text")
             {
                 sb.AppendLine($@"{indent}/// <summary>Makes a Filter to Query data over the '{schemaField.Name}' field</summary>");
-                sb.AppendLine($@"{indent}public FilterQuery {propertyName}(OperatorText op, string value) => FilterQuery.Create(""{schemaField.Name}"", op, value);");
+                sb.AppendLine($@"{indent}public FieldFilterText {propertyName} => new FieldFilterText(""{schemaField.Name}"");");
             }
             else if (schemaField.Type == "number")
             {
                 sb.AppendLine($@"{indent}/// <summary>Makes a Filter to Query data over the '{schemaField.Name}' field</summary>");
-                sb.AppendLine($@"{indent}public FilterQuery {propertyName}(OperatorNumeric op, int value) => FilterQuery.Create(""{schemaField.Name}"", op, value);");
+                sb.AppendLine($@"{indent}public FieldFilterNumber {propertyName} => new FieldFilterNumber(""{schemaField.Name}"");");
             }
             else if (schemaField.Type == "bool")
             {
                 sb.AppendLine($@"{indent}/// <summary>Makes a Filter to Query data over the '{schemaField.Name}' field</summary>");
-                sb.AppendLine($@"{indent}public FilterQuery {propertyName}(bool value) => FilterQuery.Create(""{schemaField.Name}"", value);");
+                sb.AppendLine($@"{indent}public FieldFilterBool {propertyName} => new FieldFilterBool(""{schemaField.Name}"");");
             }
             else if (schemaField.Type == "email")
             {
                 sb.AppendLine($@"{indent}/// <summary>Makes a Filter to Query data over the '{schemaField.Name}' field</summary>");
-                sb.AppendLine($@"{indent}public FilterQuery {propertyName}(OperatorText op, MailAddress value) => FilterQuery.Create(""{schemaField.Name}"", op, value);");
-
-                sb.AppendLine($@"{indent}/// <summary>Makes a Filter to Query data over the '{schemaField.Name}' field</summary>");
-                sb.AppendLine($@"{indent}public FilterQuery {propertyName}(OperatorText op, string value) => FilterQuery.Create(""{schemaField.Name}"", op, value);");
+                sb.AppendLine($@"{indent}public FieldFilterMailAddress {propertyName} => new FieldFilterMailAddress(""{schemaField.Name}"");");
             }
             else if (schemaField.Type == "url")
             {
                 sb.AppendLine($@"{indent}/// <summary>Makes a Filter to Query data over the '{schemaField.Name}' field</summary>");
-                sb.AppendLine($@"{indent}public FilterQuery {propertyName}(OperatorText op, Uri value) => FilterQuery.Create(""{schemaField.Name}"", op, value);");
-
-                sb.AppendLine($@"{indent}/// <summary>Makes a Filter to Query data over the '{schemaField.Name}' field</summary>");
-                sb.AppendLine($@"{indent}public FilterQuery {propertyName}(OperatorText op, string value) => FilterQuery.Create(""{schemaField.Name}"", op, value);");
+                sb.AppendLine($@"{indent}public FieldFilterUri {propertyName} => new FieldFilterUri(""{schemaField.Name}"");");
             }
             else if (schemaField.Type == "date")
             {
                 sb.AppendLine($@"{indent}/// <summary>Makes a Filter to Query data over the '{schemaField.Name}' field</summary>");
-                sb.AppendLine($@"{indent}public FilterQuery {propertyName}(OperatorNumeric op, DateTime value) => FilterQuery.Create(""{schemaField.Name}"", op, value);");
+                sb.AppendLine($@"{indent}public FieldFilterDate {propertyName} => new FieldFilterDate(""{schemaField.Name}"");");
             }
             else if (schemaField.Type == "select")
             {

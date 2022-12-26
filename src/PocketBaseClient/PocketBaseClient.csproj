@@ -7,9 +7,9 @@
     <Nullable>enable</Nullable>
     <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
     <Title>PocketBaseClient-csharp</Title>
-    <FileVersion>0.3.1</FileVersion>
-    <AssemblyVersion>0.3.1</AssemblyVersion>
-    <Version>0.3.1</Version>
+    <FileVersion>0.4.0</FileVersion>
+    <AssemblyVersion>0.4.0</AssemblyVersion>
+    <Version>0.4.0</Version>
     <PackageProjectUrl>https://github.com/iluvadev/PocketBaseClient-csharp</PackageProjectUrl>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <Authors>iluvadev</Authors>

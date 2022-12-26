@@ -1,26 +1,21 @@
-﻿// Project site: https://github.com/iluvadev/PocketBaseClient-csharp
-//
-// Issues: https://github.com/iluvadev/PocketBaseClient-csharp/issues
-// License (MIT): https://github.com/iluvadev/PocketBaseClient-csharp/blob/main/LICENSE
-//
-// Copyright (c) 2022, iluvadev, and released under MIT License.
-//
-// pocketbase-csharp-sdk project: https://github.com/PRCV1/pocketbase-csharp-sdk 
-// pocketbase project: https://github.com/pocketbase/pocketbase
-
-using PocketBaseClient.Orm.Filters;
+﻿using PocketBaseClient.Orm.Filters;
+using System;
 using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace PocketBaseClient.Orm
 {
-    public class CollectionQuery<C, T> : IEnumerable<T>
+    public class FilteredCollection<C, T> : IEnumerable<T>
         where C : CollectionBase<T>
         where T : ItemBase, new()
     {
         private FilterCommand Filter { get; set; }
         private C Collection { get; set; }
 
-        public CollectionQuery(C collection, FilterCommand filter)
+        public FilteredCollection(C collection, FilterCommand filter)
         {
             Collection = collection;
             Filter = filter;

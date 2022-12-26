@@ -20,11 +20,11 @@ namespace PocketBaseClient.DemoTest.Models
         {
 
             /// <summary>Makes a Filter to Query data over the 'number_unique' field</summary>
-            public FilterQuery NumberUnique(OperatorNumeric op, int value) => FilterQuery.Create("number_unique", op, value);
+            public FieldFilterNumber NumberUnique => new FieldFilterNumber("number_unique");
             /// <summary>Makes a Filter to Query data over the 'number_nonempty' field</summary>
-            public FilterQuery NumberNonempty(OperatorNumeric op, int value) => FilterQuery.Create("number_nonempty", op, value);
+            public FieldFilterNumber NumberNonempty => new FieldFilterNumber("number_nonempty");
             /// <summary>Makes a Filter to Query data over the 'number_nonempty_unique' field</summary>
-            public FilterQuery NumberNonemptyUnique(OperatorNumeric op, int value) => FilterQuery.Create("number_nonempty_unique", op, value);
+            public FieldFilterNumber NumberNonemptyUnique => new FieldFilterNumber("number_nonempty_unique");
 
         }
     }

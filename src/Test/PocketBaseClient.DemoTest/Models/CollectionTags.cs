@@ -30,11 +30,7 @@ namespace PocketBaseClient.DemoTest.Models
 
 
         /// <summary> Query data at PocketBase, defining a Filter over collection 'tags' </summary>
-        public CollectionQuery<CollectionTags, Tag> Filter(string filterString)
-             => new CollectionQuery<CollectionTags, Tag>(this, FilterQuery.Create(filterString));
-
-        /// <summary> Query data at PocketBase, defining a Filter over collection 'tags' </summary>
-        public CollectionQuery<CollectionTags, Tag> Filter(Func<Tag.Filters, FilterQuery> filter)
+        public CollectionQuery<CollectionTags, Tag> Filter(Func<Tag.Filters, FilterCommand> filter)
             => new CollectionQuery<CollectionTags, Tag>(this, filter(new Tag.Filters()));
 
     }

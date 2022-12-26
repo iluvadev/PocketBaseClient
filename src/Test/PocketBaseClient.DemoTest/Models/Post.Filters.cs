@@ -20,13 +20,13 @@ namespace PocketBaseClient.DemoTest.Models
         {
 
             /// <summary>Makes a Filter to Query data over the 'title' field</summary>
-            public FilterQuery Title(OperatorText op, string value) => FilterQuery.Create("title", op, value);
+            public FieldFilterText Title => new FieldFilterText("title");
             /// <summary>Makes a Filter to Query data over the 'summary' field</summary>
-            public FilterQuery Summary(OperatorText op, string value) => FilterQuery.Create("summary", op, value);
+            public FieldFilterText Summary => new FieldFilterText("summary");
             /// <summary>Makes a Filter to Query data over the 'content' field</summary>
-            public FilterQuery Content(OperatorText op, string value) => FilterQuery.Create("content", op, value);
+            public FieldFilterText Content => new FieldFilterText("content");
             /// <summary>Makes a Filter to Query data over the 'published' field</summary>
-            public FilterQuery Published(OperatorNumeric op, DateTime value) => FilterQuery.Create("published", op, value);
+            public FieldFilterDate Published => new FieldFilterDate("published");
 
         }
     }

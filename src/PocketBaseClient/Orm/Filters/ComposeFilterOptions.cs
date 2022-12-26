@@ -8,23 +8,17 @@
 // pocketbase-csharp-sdk project: https://github.com/PRCV1/pocketbase-csharp-sdk 
 // pocketbase project: https://github.com/pocketbase/pocketbase
 
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
 namespace PocketBaseClient.Orm.Filters
 {
-    /// <summary> Operators for lists </summary>
-    public enum OperatorList
+    internal enum ComposeFilterOptions
     {
-        Contains,
-        NotContains,
-    }
-
-    internal static class OperatorListExtensions
-    {
-        public static string OperatorString(this OperatorList op)
-            => op switch
-            {
-                OperatorList.Contains => "~",
-                OperatorList.NotContains => "!~",
-                _ => "",
-            };
+        And = 1,
+        Or = 2,
     }
 }

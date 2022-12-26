@@ -30,11 +30,7 @@ namespace PocketBaseClient.DemoTest.Models
 
 
         /// <summary> Query data at PocketBase, defining a Filter over collection 'test_for_related' </summary>
-        public CollectionQuery<CollectionTestForRelateds, TestForRelated> Filter(string filterString)
-             => new CollectionQuery<CollectionTestForRelateds, TestForRelated>(this, FilterQuery.Create(filterString));
-
-        /// <summary> Query data at PocketBase, defining a Filter over collection 'test_for_related' </summary>
-        public CollectionQuery<CollectionTestForRelateds, TestForRelated> Filter(Func<TestForRelated.Filters, FilterQuery> filter)
+        public CollectionQuery<CollectionTestForRelateds, TestForRelated> Filter(Func<TestForRelated.Filters, FilterCommand> filter)
             => new CollectionQuery<CollectionTestForRelateds, TestForRelated>(this, filter(new TestForRelated.Filters()));
 
     }

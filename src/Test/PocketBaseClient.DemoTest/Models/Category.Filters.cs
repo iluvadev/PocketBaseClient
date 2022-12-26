@@ -20,7 +20,7 @@ namespace PocketBaseClient.DemoTest.Models
         {
 
             /// <summary>Makes a Filter to Query data over the 'name' field</summary>
-            public FilterQuery Name(OperatorText op, string value) => FilterQuery.Create("name", op, value);
+            public FieldFilterText Name => new FieldFilterText("name");
 
         }
     }

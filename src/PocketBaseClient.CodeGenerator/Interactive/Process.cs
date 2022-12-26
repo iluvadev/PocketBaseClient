@@ -84,7 +84,7 @@ namespace PocketBaseClient.CodeGenerator.Interactive
             ConsoleHelper.WriteStep(3, "Code generation");
             // Generate code
             ConsoleHelper.WriteCurrentValue("Folder to overwrite:", projectFolder);
-            if (Prompt.Confirm($"Do you want to overwrite all generated code?", false))
+            if (Prompt.Confirm($"Do you want to overwrite all generated code?", true))
                 CodeGenerator.GenerateCode(schema, projectFolder);
 
             ConsoleHelper.WriteDone();

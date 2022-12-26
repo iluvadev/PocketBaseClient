@@ -15,28 +15,13 @@ namespace PocketBaseClient.Orm.Filters
     /// </summary>
     public class ItemBaseFilters
     {
-        /// <summary>
-        /// Makes a Filter to Query data over the 'id' field
-        /// </summary>
-        /// <param name="op"></param>
-        /// <param name="operand"></param>
-        /// <returns></returns>
-        public FilterQuery Id(OperatorText op, string operand) => FilterQuery.Create("id", op, operand);
+        /// <summary>Makes a Filter to Query data over the 'id' field</summary>
+        public FieldFilterText Id => new FieldFilterText("id");
 
-        /// <summary>
-        /// Makes a Filter to Query data over the 'created' field
-        /// </summary>
-        /// <param name="op"></param>
-        /// <param name="operand"></param>
-        /// <returns></returns>
-        public FilterQuery Created(OperatorNumeric op, DateTime operand) => FilterQuery.Create("created", op, operand);
+        /// <summary>Makes a Filter to Query data over the 'created' field</summary>
+        public FieldFilterDate Created => new FieldFilterDate("created");
 
-        /// <summary>
-        /// Makes a Filter to Query data over the 'updated' field
-        /// </summary>
-        /// <param name="op"></param>
-        /// <param name="operand"></param>
-        /// <returns></returns>
-        public FilterQuery Updated(OperatorNumeric op, DateTime operand) => FilterQuery.Create("updated", op, operand);
+        /// <summary>Makes a Filter to Query data over the 'updated' field</summary>
+        public FieldFilterDate Updated => new FieldFilterDate("updated");
     }
 }
