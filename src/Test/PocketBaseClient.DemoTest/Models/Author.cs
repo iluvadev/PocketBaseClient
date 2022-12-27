@@ -37,12 +37,8 @@ namespace PocketBaseClient.DemoTest.Models
         [JsonPropertyName("name")]
         [PocketBaseField(id: "vxfcwb67", name: "name", required: true, system: false, unique: false, type: "text")]
         [Display(Name = "Name")]
-        [Required(ErrorMessage = @"name is required")]
-        public string? Name
-        {
-           get => Get(() => _Name);
-           set => Set(value, ref _Name);
-        }
+        [Required(ErrorMessage = @"Name is required")]
+        public string? Name { get => Get(() => _Name); set => Set(value, ref _Name); }
 
         private MailAddress? _Email = null;
         /// <summary> Maps to 'email' field in PocketBase </summary>
@@ -50,11 +46,7 @@ namespace PocketBaseClient.DemoTest.Models
         [PocketBaseField(id: "47aw4yhp", name: "email", required: false, system: false, unique: false, type: "email")]
         [Display(Name = "Email")]
         [JsonConverter(typeof(EmailConverter))]
-        public MailAddress? Email
-        {
-           get => Get(() => _Email);
-           set => Set(value, ref _Email);
-        }
+        public MailAddress? Email { get => Get(() => _Email); set => Set(value, ref _Email); }
 
         private Uri? _Url = null;
         /// <summary> Maps to 'url' field in PocketBase </summary>
@@ -62,23 +54,14 @@ namespace PocketBaseClient.DemoTest.Models
         [PocketBaseField(id: "pm9srne2", name: "url", required: false, system: false, unique: false, type: "url")]
         [Display(Name = "Url")]
         [JsonConverter(typeof(UrlConverter))]
-        public Uri? Url
-        {
-           get => Get(() => _Url);
-           set => Set(value, ref _Url);
-        }
+        public Uri? Url { get => Get(() => _Url); set => Set(value, ref _Url); }
 
         private string? _Profile = null;
         /// <summary> Maps to 'profile' field in PocketBase </summary>
         [JsonPropertyName("profile")]
         [PocketBaseField(id: "oiphi3xd", name: "profile", required: false, system: false, unique: false, type: "text")]
         [Display(Name = "Profile")]
-        public string? Profile
-        {
-           get => Get(() => _Profile);
-           set => Set(value, ref _Profile);
-        }
-
+        public string? Profile { get => Get(() => _Profile); set => Set(value, ref _Profile); }
 
         #endregion Field Properties
 
@@ -101,7 +84,6 @@ namespace PocketBaseClient.DemoTest.Models
         public static CollectionAuthors GetCollection() 
             => (CollectionAuthors)DataServiceBase.GetCollection<Author>()!;
         #endregion Collection
-
 
         #region GetById
         public static Author? GetById(string id, bool reload = false) 

@@ -37,14 +37,9 @@ namespace PocketBaseClient.DemoTest.Models
         [JsonPropertyName("name")]
         [PocketBaseField(id: "jdukbual", name: "name", required: true, system: false, unique: true, type: "text")]
         [Display(Name = "Name")]
-        [Required(ErrorMessage = @"name is required")]
+        [Required(ErrorMessage = @"Name is required")]
         [StringLength(10, MinimumLength = 2, ErrorMessage = "Minimum 2, Maximum 10 characters")]
-        public string? Name
-        {
-           get => Get(() => _Name);
-           set => Set(value, ref _Name);
-        }
-
+        public string? Name { get => Get(() => _Name); set => Set(value, ref _Name); }
 
         #endregion Field Properties
 
@@ -64,7 +59,6 @@ namespace PocketBaseClient.DemoTest.Models
         public static CollectionTags GetCollection() 
             => (CollectionTags)DataServiceBase.GetCollection<Tag>()!;
         #endregion Collection
-
 
         #region GetById
         public static Tag? GetById(string id, bool reload = false) 

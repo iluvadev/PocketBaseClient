@@ -26,12 +26,12 @@ namespace PocketBaseClient.DemoTest.Models
         /// <inheritdoc />
         public override bool System => false;
 
-        public CollectionAuthors(DataServiceBase context) : base(context) { }
-
+        /// <summary> Contructor: The Collection 'authors' </summary>
+        /// <param name="context">The DataService for the collection</param>
+        internal CollectionAuthors(DataServiceBase context) : base(context) { }
 
         /// <summary> Query data at PocketBase, defining a Filter over collection 'authors' </summary>
         public CollectionQuery<CollectionAuthors, Author> Filter(Func<Author.Filters, FilterCommand> filter)
             => new CollectionQuery<CollectionAuthors, Author>(this, filter(new Author.Filters()));
-
     }
 }

@@ -37,22 +37,14 @@ namespace PocketBaseClient.DemoTest.Models
         [JsonPropertyName("name")]
         [PocketBaseField(id: "users_name", name: "name", required: false, system: false, unique: false, type: "text")]
         [Display(Name = "Name")]
-        public string? Name
-        {
-           get => Get(() => _Name);
-           set => Set(value, ref _Name);
-        }
+        public string? Name { get => Get(() => _Name); set => Set(value, ref _Name); }
 
         private object? _Avatar = null;
         /// <summary> Maps to 'avatar' field in PocketBase </summary>
         [JsonPropertyName("avatar")]
         [PocketBaseField(id: "users_avatar", name: "avatar", required: false, system: false, unique: false, type: "file")]
         [Display(Name = "Avatar")]
-        public object? Avatar
-        {
-           get => Get(() => _Avatar);
-           set => Set(value, ref _Avatar);
-        }
+        public object? Avatar { get => Get(() => _Avatar); set => Set(value, ref _Avatar); }
 
         private Uri? _Url = null;
         /// <summary> Maps to 'url' field in PocketBase </summary>
@@ -60,12 +52,7 @@ namespace PocketBaseClient.DemoTest.Models
         [PocketBaseField(id: "3wsfdiz3", name: "url", required: false, system: false, unique: false, type: "url")]
         [Display(Name = "Url")]
         [JsonConverter(typeof(UrlConverter))]
-        public Uri? Url
-        {
-           get => Get(() => _Url);
-           set => Set(value, ref _Url);
-        }
-
+        public Uri? Url { get => Get(() => _Url); set => Set(value, ref _Url); }
 
         #endregion Field Properties
 
@@ -87,7 +74,6 @@ namespace PocketBaseClient.DemoTest.Models
         public static CollectionUsers GetCollection() 
             => (CollectionUsers)DataServiceBase.GetCollection<User>()!;
         #endregion Collection
-
 
         #region GetById
         public static User? GetById(string id, bool reload = false) 

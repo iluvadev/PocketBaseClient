@@ -14,19 +14,23 @@ using System.Net.Mail;
 
 namespace PocketBaseClient.DemoTest.Models
 {
-    public partial class Author 
+    public partial class Author
     {
         public class Filters : ItemBaseFilters
         {
 
-            /// <summary>Makes a Filter to Query data over the 'name' field</summary>
+            /// <summary> Gets a Filter to Query data over the 'name' field in PocketBase </summary>
             public FieldFilterText Name => new FieldFilterText("name");
-            /// <summary>Makes a Filter to Query data over the 'email' field</summary>
+
+            /// <summary> Gets a Filter to Query data over the 'email' field in PocketBase </summary>
             public FieldFilterMailAddress Email => new FieldFilterMailAddress("email");
-            /// <summary>Makes a Filter to Query data over the 'url' field</summary>
+
+            /// <summary> Gets a Filter to Query data over the 'url' field in PocketBase </summary>
             public FieldFilterUri Url => new FieldFilterUri("url");
-            /// <summary>Makes a Filter to Query data over the 'profile' field</summary>
+
+            /// <summary> Gets a Filter to Query data over the 'profile' field in PocketBase </summary>
             public FieldFilterText Profile => new FieldFilterText("profile");
+
 
         }
     }

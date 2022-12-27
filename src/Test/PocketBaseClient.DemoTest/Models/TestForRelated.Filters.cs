@@ -14,17 +14,20 @@ using System.Net.Mail;
 
 namespace PocketBaseClient.DemoTest.Models
 {
-    public partial class TestForRelated 
+    public partial class TestForRelated
     {
         public class Filters : ItemBaseFilters
         {
 
-            /// <summary>Makes a Filter to Query data over the 'number_unique' field</summary>
+            /// <summary> Gets a Filter to Query data over the 'number_unique' field in PocketBase </summary>
             public FieldFilterNumber NumberUnique => new FieldFilterNumber("number_unique");
-            /// <summary>Makes a Filter to Query data over the 'number_nonempty' field</summary>
+
+            /// <summary> Gets a Filter to Query data over the 'number_nonempty' field in PocketBase </summary>
             public FieldFilterNumber NumberNonempty => new FieldFilterNumber("number_nonempty");
-            /// <summary>Makes a Filter to Query data over the 'number_nonempty_unique' field</summary>
+
+            /// <summary> Gets a Filter to Query data over the 'number_nonempty_unique' field in PocketBase </summary>
             public FieldFilterNumber NumberNonemptyUnique => new FieldFilterNumber("number_nonempty_unique");
+
 
         }
     }

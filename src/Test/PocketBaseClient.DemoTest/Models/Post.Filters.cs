@@ -14,27 +14,35 @@ using System.Net.Mail;
 
 namespace PocketBaseClient.DemoTest.Models
 {
-    public partial class Post 
+    public partial class Post
     {
         public class Filters : ItemBaseFilters
         {
 
-            /// <summary>Makes a Filter to Query data over the 'title' field</summary>
+            /// <summary> Gets a Filter to Query data over the 'title' field in PocketBase </summary>
             public FieldFilterText Title => new FieldFilterText("title");
-            /// <summary>Makes a Filter to Query data over the 'author' field</summary>
+
+            /// <summary> Gets a Filter to Query data over the 'author' field in PocketBase </summary>
             public FieldFilterItem<Author> Author => new FieldFilterItem<Author>("author");
-            /// <summary>Makes a Filter to Query data over the 'summary' field</summary>
+
+            /// <summary> Gets a Filter to Query data over the 'summary' field in PocketBase </summary>
             public FieldFilterText Summary => new FieldFilterText("summary");
-            /// <summary>Makes a Filter to Query data over the 'content' field</summary>
+
+            /// <summary> Gets a Filter to Query data over the 'content' field in PocketBase </summary>
             public FieldFilterText Content => new FieldFilterText("content");
-            /// <summary>Makes a Filter to Query data over the 'published' field</summary>
+
+            /// <summary> Gets a Filter to Query data over the 'published' field in PocketBase </summary>
             public FieldFilterDate Published => new FieldFilterDate("published");
-            /// <summary>Makes a Filter to Query data over the 'status' field</summary>
+
+            /// <summary> Gets a Filter to Query data over the 'status' field in PocketBase </summary>
             public FieldFilterEnum<StatusEnum> Status => new FieldFilterEnum<StatusEnum>("status");
-            /// <summary>Makes a Filter to Query data over the 'categories' field</summary>
+
+            /// <summary> Gets a Filter to Query data over the 'categories' field in PocketBase </summary>
             public FieldFilterItemList<CategoriesList, Category> Categories => new FieldFilterItemList<CategoriesList, Category>("categories");
-            /// <summary>Makes a Filter to Query data over the 'tags' field</summary>
+
+            /// <summary> Gets a Filter to Query data over the 'tags' field in PocketBase </summary>
             public FieldFilterItemList<TagsList, Tag> Tags => new FieldFilterItemList<TagsList, Tag>("tags");
+
 
         }
     }

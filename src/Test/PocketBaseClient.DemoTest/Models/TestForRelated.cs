@@ -37,36 +37,23 @@ namespace PocketBaseClient.DemoTest.Models
         [JsonPropertyName("number_unique")]
         [PocketBaseField(id: "s10g39sb", name: "number_unique", required: false, system: false, unique: true, type: "number")]
         [Display(Name = "Number_unique")]
-        public int? NumberUnique
-        {
-           get => Get(() => _NumberUnique);
-           set => Set(value, ref _NumberUnique);
-        }
+        public int? NumberUnique { get => Get(() => _NumberUnique); set => Set(value, ref _NumberUnique); }
 
         private int? _NumberNonempty = null;
         /// <summary> Maps to 'number_nonempty' field in PocketBase </summary>
         [JsonPropertyName("number_nonempty")]
         [PocketBaseField(id: "iy8rrkm2", name: "number_nonempty", required: true, system: false, unique: false, type: "number")]
         [Display(Name = "Number_nonempty")]
-        [Required(ErrorMessage = @"number_nonempty is required")]
-        public int? NumberNonempty
-        {
-           get => Get(() => _NumberNonempty);
-           set => Set(value, ref _NumberNonempty);
-        }
+        [Required(ErrorMessage = @"NumberNonempty is required")]
+        public int? NumberNonempty { get => Get(() => _NumberNonempty); set => Set(value, ref _NumberNonempty); }
 
         private int? _NumberNonemptyUnique = null;
         /// <summary> Maps to 'number_nonempty_unique' field in PocketBase </summary>
         [JsonPropertyName("number_nonempty_unique")]
         [PocketBaseField(id: "mmzxqln4", name: "number_nonempty_unique", required: true, system: false, unique: true, type: "number")]
         [Display(Name = "Number_nonempty_unique")]
-        [Required(ErrorMessage = @"number_nonempty_unique is required")]
-        public int? NumberNonemptyUnique
-        {
-           get => Get(() => _NumberNonemptyUnique);
-           set => Set(value, ref _NumberNonemptyUnique);
-        }
-
+        [Required(ErrorMessage = @"NumberNonemptyUnique is required")]
+        public int? NumberNonemptyUnique { get => Get(() => _NumberNonemptyUnique); set => Set(value, ref _NumberNonemptyUnique); }
 
         #endregion Field Properties
 
@@ -88,7 +75,6 @@ namespace PocketBaseClient.DemoTest.Models
         public static CollectionTestForRelateds GetCollection() 
             => (CollectionTestForRelateds)DataServiceBase.GetCollection<TestForRelated>()!;
         #endregion Collection
-
 
         #region GetById
         public static TestForRelated? GetById(string id, bool reload = false) 

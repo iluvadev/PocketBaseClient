@@ -26,12 +26,12 @@ namespace PocketBaseClient.DemoTest.Models
         /// <inheritdoc />
         public override bool System => false;
 
-        public CollectionTestForTypes(DataServiceBase context) : base(context) { }
-
+        /// <summary> Contructor: The Collection 'test_for_types' </summary>
+        /// <param name="context">The DataService for the collection</param>
+        internal CollectionTestForTypes(DataServiceBase context) : base(context) { }
 
         /// <summary> Query data at PocketBase, defining a Filter over collection 'test_for_types' </summary>
         public CollectionQuery<CollectionTestForTypes, TestForType> Filter(Func<TestForType.Filters, FilterCommand> filter)
             => new CollectionQuery<CollectionTestForTypes, TestForType>(this, filter(new TestForType.Filters()));
-
     }
 }

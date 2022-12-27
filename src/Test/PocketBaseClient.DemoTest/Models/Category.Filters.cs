@@ -14,13 +14,14 @@ using System.Net.Mail;
 
 namespace PocketBaseClient.DemoTest.Models
 {
-    public partial class Category 
+    public partial class Category
     {
         public class Filters : ItemBaseFilters
         {
 
-            /// <summary>Makes a Filter to Query data over the 'name' field</summary>
+            /// <summary> Gets a Filter to Query data over the 'name' field in PocketBase </summary>
             public FieldFilterText Name => new FieldFilterText("name");
+
 
         }
     }

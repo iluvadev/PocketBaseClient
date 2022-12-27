@@ -37,12 +37,7 @@ namespace PocketBaseClient.DemoTest.Models
         [JsonPropertyName("name")]
         [PocketBaseField(id: "p221scv1", name: "name", required: false, system: false, unique: false, type: "text")]
         [Display(Name = "Name")]
-        public string? Name
-        {
-           get => Get(() => _Name);
-           set => Set(value, ref _Name);
-        }
-
+        public string? Name { get => Get(() => _Name); set => Set(value, ref _Name); }
 
         #endregion Field Properties
 
@@ -62,7 +57,6 @@ namespace PocketBaseClient.DemoTest.Models
         public static CollectionCategories GetCollection() 
             => (CollectionCategories)DataServiceBase.GetCollection<Category>()!;
         #endregion Collection
-
 
         #region GetById
         public static Category? GetById(string id, bool reload = false) 
