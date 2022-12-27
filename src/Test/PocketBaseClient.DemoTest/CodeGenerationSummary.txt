@@ -23,7 +23,7 @@ pocketbase project: https://github.com/pocketbase/pocketbase
 
 Code generated with:
     PocketBaseClient CodeGenerator: pbcodegen v.0.4.0.0
-    At: 2022-12-26T19:47:47.7039158Z
+    At: 2022-12-27T06:23:51.0012722Z
 
 PocketBase Application: 
     Name: demo-test

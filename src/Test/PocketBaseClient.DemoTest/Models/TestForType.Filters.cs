@@ -45,6 +45,16 @@ namespace PocketBaseClient.DemoTest.Models
             public FieldFilterDate DatetimeNoRestrictions => new FieldFilterDate("datetime_no_restrictions");
             /// <summary>Makes a Filter to Query data over the 'datetime_restrictions' field</summary>
             public FieldFilterDate DatetimeRestrictions => new FieldFilterDate("datetime_restrictions");
+            /// <summary>Makes a Filter to Query data over the 'select_single' field</summary>
+            public FieldFilterEnum<SelectSingleEnum> SelectSingle => new FieldFilterEnum<SelectSingleEnum>("select_single");
+            /// <summary>Makes a Filter to Query data over the 'select_multiple' field</summary>
+            public FieldFilterEnumList<SelectMultipleList, SelectMultipleEnum> SelectMultiple => new FieldFilterEnumList<SelectMultipleList, SelectMultipleEnum>("select_multiple");
+            /// <summary>Makes a Filter to Query data over the 'reation_single' field</summary>
+            public FieldFilterItem<TestForRelated> ReationSingle => new FieldFilterItem<TestForRelated>("reation_single");
+            /// <summary>Makes a Filter to Query data over the 'relation_multiple_no_limit' field</summary>
+            public FieldFilterItemList<RelationMultipleNoLimitList, TestForRelated> RelationMultipleNoLimit => new FieldFilterItemList<RelationMultipleNoLimitList, TestForRelated>("relation_multiple_no_limit");
+            /// <summary>Makes a Filter to Query data over the 'relation_multiple_limit' field</summary>
+            public FieldFilterItemList<RelationMultipleLimitList, TestForRelated> RelationMultipleLimit => new FieldFilterItemList<RelationMultipleLimitList, TestForRelated>("relation_multiple_limit");
 
         }
     }

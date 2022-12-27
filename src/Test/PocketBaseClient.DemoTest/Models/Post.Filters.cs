@@ -21,12 +21,20 @@ namespace PocketBaseClient.DemoTest.Models
 
             /// <summary>Makes a Filter to Query data over the 'title' field</summary>
             public FieldFilterText Title => new FieldFilterText("title");
+            /// <summary>Makes a Filter to Query data over the 'author' field</summary>
+            public FieldFilterItem<Author> Author => new FieldFilterItem<Author>("author");
             /// <summary>Makes a Filter to Query data over the 'summary' field</summary>
             public FieldFilterText Summary => new FieldFilterText("summary");
             /// <summary>Makes a Filter to Query data over the 'content' field</summary>
             public FieldFilterText Content => new FieldFilterText("content");
             /// <summary>Makes a Filter to Query data over the 'published' field</summary>
             public FieldFilterDate Published => new FieldFilterDate("published");
+            /// <summary>Makes a Filter to Query data over the 'status' field</summary>
+            public FieldFilterEnum<StatusEnum> Status => new FieldFilterEnum<StatusEnum>("status");
+            /// <summary>Makes a Filter to Query data over the 'categories' field</summary>
+            public FieldFilterItemList<CategoriesList, Category> Categories => new FieldFilterItemList<CategoriesList, Category>("categories");
+            /// <summary>Makes a Filter to Query data over the 'tags' field</summary>
+            public FieldFilterItemList<TagsList, Tag> Tags => new FieldFilterItemList<TagsList, Tag>("tags");
 
         }
     }

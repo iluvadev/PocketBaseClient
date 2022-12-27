@@ -11,7 +11,9 @@
 using pocketbase_csharp_sdk.Models.Collection;
 using PocketBaseClient.CodeGenerator.Helpers;
 using PocketBaseClient.CodeGenerator.Models;
+using PocketBaseClient.Orm.Filters;
 using System.Diagnostics;
+using System.Dynamic;
 using System.Text;
 using System.Text.Json;
 
@@ -705,13 +707,12 @@ namespace {GeneratedNamespaceModels}
             }
             else if (schemaField.Type == "select")
             {
-                //var options = JsonSerializer.Deserialize<PocketBaseFieldOptionsSelect>(JsonSerializer.Serialize(schemaField.Options)) ?? new PocketBaseFieldOptionsSelect();
-                //if (options.IsSinglSelect)
-                //    sb.AppendLine($@"{indent}[JsonConverter(typeof(EnumConverter<{propertyName}Enum>))]");
-                //else if (options.MaxSelect != null)
-                //    sb.AppendLine($@"{indent}[JsonConverter(typeof(EnumListConverter<{propertyName}List, {propertyName}Enum>))]");
-                //else //List
-                //    sb.AppendLine($@"{indent}[JsonConverter(typeof(EnumListConverter<List<{propertyName}Enum>, {propertyName}Enum>))]");
+                sb.AppendLine($@"{indent}/// <summary>Makes a Filter to Query data over the '{schemaField.Name}' field</summary>");
+                var options = JsonSerializer.Deserialize<PocketBaseFieldOptionsSelect>(JsonSerializer.Serialize(schemaField.Options)) ?? new PocketBaseFieldOptionsSelect();
+                if (options.IsSinglSelect)
+                    sb.AppendLine($@"{indent}public FieldFilterEnum<{propertyName}Enum> {propertyName} => new FieldFilterEnum<{propertyName}Enum>(""{schemaField.Name}"");");
+                else //List
+                    sb.AppendLine($@"{indent}public FieldFilterEnumList<{propertyName}List, {propertyName}Enum> {propertyName} => new FieldFilterEnumList<{propertyName}List, {propertyName}Enum>(""{schemaField.Name}"");");
             }
             else if (schemaField.Type == "json")
             {
@@ -721,14 +722,13 @@ namespace {GeneratedNamespaceModels}
             }
             else if (schemaField.Type == "relation")
             {
-                //var options = JsonSerializer.Deserialize<PocketBaseFieldOptionsRelation>(JsonSerializer.Serialize(schemaField.Options)) ?? new PocketBaseFieldOptionsRelation();
-                //var colInfo = _CollectionList.First(c => c.CollectionId == options.CollectionId);
-                //if (options.IsSinglSelect)
-                //    sb.AppendLine($@"{indent}[JsonConverter(typeof(RelationConverter<{colInfo.ItemsClassName}>))]");
-                //else if (options.MaxSelect != null)
-                //    sb.AppendLine($@"{indent}[JsonConverter(typeof(RelationListConverter<{propertyName}List, {colInfo.ItemsClassName}>))]");
-                //else //List
-                //    sb.AppendLine($@"{indent}[JsonConverter(typeof(RelationListConverter<List<{colInfo.ItemsClassName}>, {colInfo.ItemsClassName}>))]");
+                sb.AppendLine($@"{indent}/// <summary>Makes a Filter to Query data over the '{schemaField.Name}' field</summary>");
+                var options = JsonSerializer.Deserialize<PocketBaseFieldOptionsRelation>(JsonSerializer.Serialize(schemaField.Options)) ?? new PocketBaseFieldOptionsRelation();
+                var colInfo = _CollectionList.First(c => c.CollectionId == options.CollectionId);
+                if (options.IsSinglSelect)
+                    sb.AppendLine($@"{indent}public FieldFilterItem<{colInfo.ItemsClassName}> {propertyName} => new FieldFilterItem<{colInfo.ItemsClassName}>(""{schemaField.Name}"");");
+                else //List
+                    sb.AppendLine($@"{indent}public FieldFilterItemList<{propertyName}List, {colInfo.ItemsClassName}> {propertyName} => new FieldFilterItemList<{propertyName}List, {colInfo.ItemsClassName}>(""{schemaField.Name}"");");
             }
         }
 
