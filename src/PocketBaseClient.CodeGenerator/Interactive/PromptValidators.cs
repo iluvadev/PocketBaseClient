@@ -8,6 +8,7 @@
 // pocketbase-csharp-sdk project: https://github.com/PRCV1/pocketbase-csharp-sdk 
 // pocketbase project: https://github.com/pocketbase/pocketbase
 
+using PocketBaseClient.CodeGenerator.Generation;
 using Sharprompt;
 using System.ComponentModel.DataAnnotations;
 
@@ -78,8 +79,8 @@ namespace PocketBaseClient.CodeGenerator.Interactive
                     if (!Directory.Exists(Path.GetDirectoryName(strDir)))
                         return new ValidationResult("Path do not exists");
 
-                    if (!File.Exists(Path.Combine(strDir, CodeGenerator.GeneratedPropertiesFileName)))
-                        return new ValidationResult($"Missing definition file {CodeGenerator.GeneratedPropertiesFileName}");
+                    if (!File.Exists(Path.Combine(strDir, Settings.SchemaFileName)))
+                        return new ValidationResult($"Missing definition file {Settings.SchemaFileName}");
 
                     return ValidationResult.Success!;
                 },

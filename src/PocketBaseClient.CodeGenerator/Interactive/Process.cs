@@ -10,6 +10,7 @@
 
 using PocketBaseClient.CodeGenerator.Helpers;
 using PocketBaseClient.CodeGenerator.Models;
+using PocketBaseClient.CodeGenerator.Generation;
 using Sharprompt;
 
 namespace PocketBaseClient.CodeGenerator.Interactive
@@ -56,7 +57,9 @@ namespace PocketBaseClient.CodeGenerator.Interactive
             ConsoleHelper.WriteStep(3, "Code generation");
             // Generate code
             string projectFolder = Path.Combine(baseDirForProject, schema.ProjectName);
-            CodeGenerator.GenerateCode(schema, projectFolder);
+            var settings = new Settings(schema, projectFolder);
+            var codeGenerator = new Generator();
+            codeGenerator.GenerateCode(settings);
 
             ConsoleHelper.WriteDone();
         }
@@ -68,24 +71,27 @@ namespace PocketBaseClient.CodeGenerator.Interactive
                                                         validators: PromptValidators.GeneratedFolderProject())!;
 
             // Load Schema
-            PocketBaseSchema schema;
-            ConsoleHelper.WriteProcess($"Loading PocketBase Application information from file {CodeGenerator.GeneratedPropertiesFileName}");
-            try { schema = PocketBaseSchema.LoadFromFile(Path.Combine(projectFolder, CodeGenerator.GeneratedPropertiesFileName))!; }
+            Settings settings;
+            ConsoleHelper.WriteProcess($"Loading PocketBase Application information from file {Settings.SchemaFileName}");
+            try { settings = Settings.LoadFromFolder(projectFolder); }
             catch (Exception ex) { ConsoleHelper.WriteFailed(ex.Message); return; }
             ConsoleHelper.WriteDone();
 
-            ConsoleHelper.WriteStep(2, "Updating the PocketBase Application", schema.PocketBaseApplication.Name);
+            ConsoleHelper.WriteStep(2, "Updating the PocketBase Application", settings.ApplicationName);
             // Ask for update Schema with server information
-            ConsoleHelper.WriteCurrentValue("The PocketBase server is", schema.PocketBaseApplication.Url);
-            ConsoleHelper.WriteCurrentValue("The Application schema was last updated on", schema.SchemaDate.ToString("O"));
+            ConsoleHelper.WriteCurrentValue("The PocketBase server is", settings.ApplicationUrl);
+            ConsoleHelper.WriteCurrentValue("The Application schema was last updated on", settings.PocketBaseSchema.SchemaDate.ToString("O"));
             if (Prompt.Confirm($"Do you want to update the schema from server?", true))
-                UpdatePocketBaseSchema(schema);
+                UpdatePocketBaseSchema(settings.PocketBaseSchema);
 
             ConsoleHelper.WriteStep(3, "Code generation");
             // Generate code
             ConsoleHelper.WriteCurrentValue("Folder to overwrite:", projectFolder);
             if (Prompt.Confirm($"Do you want to overwrite all generated code?", true))
-                CodeGenerator.GenerateCode(schema, projectFolder);
+            {
+                var codeGenerator = new Generator();
+                codeGenerator.GenerateCode(settings);
+            }
 
             ConsoleHelper.WriteDone();
         }
