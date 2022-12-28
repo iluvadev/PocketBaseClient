@@ -77,8 +77,13 @@ namespace {settings.NamespaceModels}
         internal {ClassName}(DataServiceBase context) : base(context) {{ }}
 
         /// <summary> Query data at PocketBase, defining a Filter over collection '{CollectionModel.Name}' </summary>
-        public CollectionQuery<{ClassName}, {ItemInfo.ClassName}> Filter(Func<{ItemInfo.FiltersClassName}, FilterCommand> filter)
-            => new CollectionQuery<{ClassName}, {ItemInfo.ClassName}>(this, filter(new {ItemInfo.FiltersClassName}()));
+        public CollectionQuery<{ClassName}, {ItemInfo.SortsClassName}, {ItemInfo.ClassName}> Filter(Func<{ItemInfo.FiltersClassName}, FilterCommand> filter)
+            => new CollectionQuery<{ClassName}, {ItemInfo.SortsClassName}, {ItemInfo.ClassName}>(this, filter(new {ItemInfo.FiltersClassName}()));
+
+        /// <summary> Query all data at PocketBase, over collection '{CollectionModel.Name}' </summary>
+        public CollectionQuery<{ClassName}, {ItemInfo.SortsClassName}, {ItemInfo.ClassName}> All()
+            => new CollectionQuery<{ClassName}, {ItemInfo.SortsClassName}, {ItemInfo.ClassName}>(this, null);
+
     }}
 }}
 ";

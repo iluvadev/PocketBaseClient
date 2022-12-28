@@ -9,11 +9,6 @@
 // pocketbase project: https://github.com/pocketbase/pocketbase
 
 using PocketBaseClient.Orm.Structures;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace PocketBaseClient.Orm.Filters
 {

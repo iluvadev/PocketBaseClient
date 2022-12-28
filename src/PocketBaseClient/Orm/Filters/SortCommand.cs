@@ -10,9 +10,9 @@
 
 namespace PocketBaseClient.Orm.Filters
 {
-    public class FilterCommand
+    public class SortCommand
     {
-        private List<FilterCommandComposed> _InnerFilters = new List<FilterCommandComposed>();
+        private List<SortCommand> _InnerSorts = new List<SortCommand>();
 
         private string InnerCommand { get; }
 
@@ -21,28 +21,23 @@ namespace PocketBaseClient.Orm.Filters
             get
             {
                 var strCommand = InnerCommand;
-                foreach (var innerFilter in _InnerFilters)
-                    strCommand += innerFilter.Command;
+                foreach (var innerSort in _InnerSorts)
+                    strCommand += "," + innerSort.Command;
                 return strCommand;
             }
         }
-        public FilterCommand(string innerCommand)
+
+        public SortCommand(string innerCommand)
         {
             InnerCommand = innerCommand;
         }
 
-
-        public FilterCommand And(FilterCommand filterCommand)
+        public SortCommand Asc() => this;
+        public SortCommand Desc() => new SortCommand("-" + InnerCommand);
+        public SortCommand AndThenBy(SortCommand filterCommand)
         {
-            _InnerFilters.Add(new FilterCommandComposed(FilterCommandComposeOptions.And, filterCommand));
+            _InnerSorts.Add(filterCommand);
             return this;
-        }
-
-        public FilterCommand Or(FilterCommand filterCommand)
-        {
-            _InnerFilters.Add(new FilterCommandComposed(FilterCommandComposeOptions.Or, filterCommand));
-            return this;
-
         }
     }
 }

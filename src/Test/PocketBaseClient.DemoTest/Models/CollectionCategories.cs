@@ -31,7 +31,12 @@ namespace PocketBaseClient.DemoTest.Models
         internal CollectionCategories(DataServiceBase context) : base(context) { }
 
         /// <summary> Query data at PocketBase, defining a Filter over collection 'categories' </summary>
-        public CollectionQuery<CollectionCategories, Category> Filter(Func<Category.Filters, FilterCommand> filter)
-            => new CollectionQuery<CollectionCategories, Category>(this, filter(new Category.Filters()));
+        public CollectionQuery<CollectionCategories, Category.Sorts, Category> Filter(Func<Category.Filters, FilterCommand> filter)
+            => new CollectionQuery<CollectionCategories, Category.Sorts, Category>(this, filter(new Category.Filters()));
+
+        /// <summary> Query all data at PocketBase, over collection 'categories' </summary>
+        public CollectionQuery<CollectionCategories, Category.Sorts, Category> All()
+            => new CollectionQuery<CollectionCategories, Category.Sorts, Category>(this, null);
+
     }
 }

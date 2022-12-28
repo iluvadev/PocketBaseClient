@@ -8,17 +8,17 @@
 // pocketbase-csharp-sdk project: https://github.com/PRCV1/pocketbase-csharp-sdk 
 // pocketbase project: https://github.com/pocketbase/pocketbase
 
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
 namespace PocketBaseClient.Orm.Filters
 {
-    internal enum ComposeFilterOptions
+    public class ItemBaseSorts
     {
-        And = 1,
-        Or = 2,
+        /// <summary>Makes a SortCommand to Order by the 'id' field</summary>
+        public SortCommand Id => new SortCommand("id");
+
+        /// <summary>Makes a SortCommand to Order by the 'created' field</summary>
+        public SortCommand Created => new SortCommand("created");
+
+        /// <summary>Makes a SortCommand to Order by the 'updated' field</summary>
+        public SortCommand Updated => new SortCommand("updated");
     }
 }

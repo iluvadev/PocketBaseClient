@@ -11,6 +11,8 @@ namespace PocketBaseClient.CodeGenerator.Generation
         public string FileName => ClassName + ".cs";
         public string FiltersClassName => ClassName + ".Filters";
         public string FiltersFileName => FiltersClassName + ".cs";
+        public string SortsClassName => ClassName + ".Sorts";
+        public string SortsFileName => SortsClassName + ".cs";
 
         public List<FieldInfo> Fields { get; }
 
@@ -28,7 +30,8 @@ namespace PocketBaseClient.CodeGenerator.Generation
 
             generatedFiles.Add(GetCodeFileForItem(settings));
             generatedFiles.Add(GetCodeFileForFilters(settings));
-
+            generatedFiles.Add(GetCodeFileForSorts(settings));
+            
             foreach (var field in Fields)
                 generatedFiles.AddRange(field.GenerateCode(settings));
 
@@ -116,7 +119,6 @@ namespace {settings.NamespaceModels}
             StringBuilder sb = new StringBuilder();
             sb.AppendLine($@"{settings.CodeHeader}
 using PocketBaseClient.Orm.Filters;
-using System.Net.Mail;
 
 namespace {settings.NamespaceModels}
 {{
@@ -127,6 +129,29 @@ namespace {settings.NamespaceModels}
 ");
             foreach(var field in Fields)
                 sb.AppendLine(field.GenerateCodeForFilter("            "));
+            sb.AppendLine($@"
+        }}
+    }}
+}}");
+            return new GeneratedCodeFile(fileName, sb.ToString());
+        }
+
+        private GeneratedCodeFile GetCodeFileForSorts(Settings settings)
+        {
+            var fileName = Path.Combine(settings.PathModels, SortsFileName);
+            StringBuilder sb = new StringBuilder();
+            sb.AppendLine($@"{settings.CodeHeader}
+using PocketBaseClient.Orm.Filters;
+
+namespace {settings.NamespaceModels}
+{{
+    public partial class {ClassName}
+    {{
+        public class Sorts : ItemBaseSorts
+        {{
+");
+            foreach (var field in Fields)
+                sb.AppendLine(field.GenerateCodeForSort("            "));
             sb.AppendLine($@"
         }}
     }}

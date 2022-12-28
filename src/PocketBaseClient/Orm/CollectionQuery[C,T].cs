@@ -13,22 +13,29 @@ using System.Collections;
 
 namespace PocketBaseClient.Orm
 {
-    public class CollectionQuery<C, T> : IEnumerable<T>
+    public class CollectionQuery<C, S, T> : IEnumerable<T>
         where C : CollectionBase<T>
         where T : ItemBase, new()
+        where S : ItemBaseSorts, new()
     {
-        private FilterCommand Filter { get; set; }
+        private FilterCommand? Filter { get; set; }
+        private SortCommand? Sort { get; set; }
         private C Collection { get; set; }
 
-        public CollectionQuery(C collection, FilterCommand filter)
+        public CollectionQuery(C collection, FilterCommand? filter)
         {
             Collection = collection;
             Filter = filter;
         }
 
+        public void SortBy(Func<S, SortCommand> commandSelector)
+        {
+            Sort = commandSelector.Invoke(new());
+        }
+
         private IEnumerable<T> GetItems()
         {
-            foreach (var item in Collection.GetItemsFromPb(Filter.Command))
+            foreach (var item in Collection.GetItemsFromPb(Filter?.Command, Sort?.Command))
                 yield return item;
         }
 

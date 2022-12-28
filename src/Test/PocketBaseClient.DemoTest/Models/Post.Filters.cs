@@ -10,7 +10,6 @@
 // pocketbase project: https://github.com/pocketbase/pocketbase
 
 using PocketBaseClient.Orm.Filters;
-using System.Net.Mail;
 
 namespace PocketBaseClient.DemoTest.Models
 {

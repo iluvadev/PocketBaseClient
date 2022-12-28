@@ -31,7 +31,12 @@ namespace PocketBaseClient.DemoTest.Models
         internal CollectionAuthors(DataServiceBase context) : base(context) { }
 
         /// <summary> Query data at PocketBase, defining a Filter over collection 'authors' </summary>
-        public CollectionQuery<CollectionAuthors, Author> Filter(Func<Author.Filters, FilterCommand> filter)
-            => new CollectionQuery<CollectionAuthors, Author>(this, filter(new Author.Filters()));
+        public CollectionQuery<CollectionAuthors, Author.Sorts, Author> Filter(Func<Author.Filters, FilterCommand> filter)
+            => new CollectionQuery<CollectionAuthors, Author.Sorts, Author>(this, filter(new Author.Filters()));
+
+        /// <summary> Query all data at PocketBase, over collection 'authors' </summary>
+        public CollectionQuery<CollectionAuthors, Author.Sorts, Author> All()
+            => new CollectionQuery<CollectionAuthors, Author.Sorts, Author>(this, null);
+
     }
 }

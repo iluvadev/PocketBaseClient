@@ -8,29 +8,23 @@
 // pocketbase-csharp-sdk project: https://github.com/PRCV1/pocketbase-csharp-sdk 
 // pocketbase project: https://github.com/pocketbase/pocketbase
 
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
 namespace PocketBaseClient.Orm.Filters
 {
-    internal class ComposedFilterCommand
+    internal class FilterCommandComposed
     {
-        public ComposeFilterOptions ComposeFilterOption { get; }
+        public FilterCommandComposeOptions ComposeFilterOption { get; }
         public FilterCommand FilterCommand { get; }
 
         public string Command
         {
             get
             {
-                var strOperand = (ComposeFilterOption == ComposeFilterOptions.And) ? "&&" : "||";
+                var strOperand = (ComposeFilterOption == FilterCommandComposeOptions.And) ? "&&" : "||";
                 return $" {strOperand}({FilterCommand.Command})";
             }
         }
 
-        public ComposedFilterCommand(ComposeFilterOptions composeFilterOption, FilterCommand filterCommand)
+        public FilterCommandComposed(FilterCommandComposeOptions composeFilterOption, FilterCommand filterCommand)
         {
             ComposeFilterOption = composeFilterOption;
             FilterCommand = filterCommand;

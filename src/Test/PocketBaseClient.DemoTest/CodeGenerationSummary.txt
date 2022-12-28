@@ -26,7 +26,7 @@
 
 Code generated with:
     PocketBaseClient CodeGenerator: pbcodegen v.0.4.0.0
-    At: 2022-12-27T16:17:25.4948278Z
+    At: 2022-12-28T17:47:10.7440679Z
 
 PocketBase Application: 
     Name: demo-test
@@ -37,8 +37,10 @@ Files Generated:
     C:\Dev\iluvadev\projects\PocketBaseClient-csharp\src\Test\PocketBaseClient.DemoTest\DemoTestApplication.cs
     C:\Dev\iluvadev\projects\PocketBaseClient-csharp\src\Test\PocketBaseClient.DemoTest\Models\Author.cs
     C:\Dev\iluvadev\projects\PocketBaseClient-csharp\src\Test\PocketBaseClient.DemoTest\Models\Author.Filters.cs
+    C:\Dev\iluvadev\projects\PocketBaseClient-csharp\src\Test\PocketBaseClient.DemoTest\Models\Author.Sorts.cs
     C:\Dev\iluvadev\projects\PocketBaseClient-csharp\src\Test\PocketBaseClient.DemoTest\Models\Category.cs
     C:\Dev\iluvadev\projects\PocketBaseClient-csharp\src\Test\PocketBaseClient.DemoTest\Models\Category.Filters.cs
+    C:\Dev\iluvadev\projects\PocketBaseClient-csharp\src\Test\PocketBaseClient.DemoTest\Models\Category.Sorts.cs
     C:\Dev\iluvadev\projects\PocketBaseClient-csharp\src\Test\PocketBaseClient.DemoTest\Models\CollectionAuthors.cs
     C:\Dev\iluvadev\projects\PocketBaseClient-csharp\src\Test\PocketBaseClient.DemoTest\Models\CollectionCategories.cs
     C:\Dev\iluvadev\projects\PocketBaseClient-csharp\src\Test\PocketBaseClient.DemoTest\Models\CollectionPosts.cs
@@ -49,12 +51,15 @@ Files Generated:
     C:\Dev\iluvadev\projects\PocketBaseClient-csharp\src\Test\PocketBaseClient.DemoTest\Models\Post.CategoriesList.cs
     C:\Dev\iluvadev\projects\PocketBaseClient-csharp\src\Test\PocketBaseClient.DemoTest\Models\Post.cs
     C:\Dev\iluvadev\projects\PocketBaseClient-csharp\src\Test\PocketBaseClient.DemoTest\Models\Post.Filters.cs
+    C:\Dev\iluvadev\projects\PocketBaseClient-csharp\src\Test\PocketBaseClient.DemoTest\Models\Post.Sorts.cs
     C:\Dev\iluvadev\projects\PocketBaseClient-csharp\src\Test\PocketBaseClient.DemoTest\Models\Post.StatusEnum.cs
     C:\Dev\iluvadev\projects\PocketBaseClient-csharp\src\Test\PocketBaseClient.DemoTest\Models\Post.TagsList.cs
     C:\Dev\iluvadev\projects\PocketBaseClient-csharp\src\Test\PocketBaseClient.DemoTest\Models\Tag.cs
     C:\Dev\iluvadev\projects\PocketBaseClient-csharp\src\Test\PocketBaseClient.DemoTest\Models\Tag.Filters.cs
+    C:\Dev\iluvadev\projects\PocketBaseClient-csharp\src\Test\PocketBaseClient.DemoTest\Models\Tag.Sorts.cs
     C:\Dev\iluvadev\projects\PocketBaseClient-csharp\src\Test\PocketBaseClient.DemoTest\Models\TestForRelated.cs
     C:\Dev\iluvadev\projects\PocketBaseClient-csharp\src\Test\PocketBaseClient.DemoTest\Models\TestForRelated.Filters.cs
+    C:\Dev\iluvadev\projects\PocketBaseClient-csharp\src\Test\PocketBaseClient.DemoTest\Models\TestForRelated.Sorts.cs
     C:\Dev\iluvadev\projects\PocketBaseClient-csharp\src\Test\PocketBaseClient.DemoTest\Models\TestForType.cs
     C:\Dev\iluvadev\projects\PocketBaseClient-csharp\src\Test\PocketBaseClient.DemoTest\Models\TestForType.Filters.cs
     C:\Dev\iluvadev\projects\PocketBaseClient-csharp\src\Test\PocketBaseClient.DemoTest\Models\TestForType.RelationMultipleLimitList.cs
@@ -62,7 +67,9 @@ Files Generated:
     C:\Dev\iluvadev\projects\PocketBaseClient-csharp\src\Test\PocketBaseClient.DemoTest\Models\TestForType.SelectMultipleEnum.cs
     C:\Dev\iluvadev\projects\PocketBaseClient-csharp\src\Test\PocketBaseClient.DemoTest\Models\TestForType.SelectMultipleList.cs
     C:\Dev\iluvadev\projects\PocketBaseClient-csharp\src\Test\PocketBaseClient.DemoTest\Models\TestForType.SelectSingleEnum.cs
+    C:\Dev\iluvadev\projects\PocketBaseClient-csharp\src\Test\PocketBaseClient.DemoTest\Models\TestForType.Sorts.cs
     C:\Dev\iluvadev\projects\PocketBaseClient-csharp\src\Test\PocketBaseClient.DemoTest\Models\User.cs
     C:\Dev\iluvadev\projects\PocketBaseClient-csharp\src\Test\PocketBaseClient.DemoTest\Models\User.Filters.cs
+    C:\Dev\iluvadev\projects\PocketBaseClient-csharp\src\Test\PocketBaseClient.DemoTest\Models\User.Sorts.cs
     C:\Dev\iluvadev\projects\PocketBaseClient-csharp\src\Test\PocketBaseClient.DemoTest\PocketBaseClient.DemoTest.csproj
     C:\Dev\iluvadev\projects\PocketBaseClient-csharp\src\Test\PocketBaseClient.DemoTest\Services\DemoTestDataService.cs

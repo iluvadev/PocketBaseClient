@@ -9,6 +9,7 @@
 // pocketbase project: https://github.com/pocketbase/pocketbase
 
 using pocketbase_csharp_sdk.Models.Collection;
+using PocketBaseClient.Orm.Filters;
 using System.Text;
 
 namespace PocketBaseClient.CodeGenerator.Generation
@@ -32,7 +33,6 @@ namespace PocketBaseClient.CodeGenerator.Generation
         public virtual bool PrivateSetter { get; } = false;
 
         public abstract string FilterType { get; }
-
 
         protected FieldInfo(ItemInfo itemInfo, SchemaFieldModel schemaFieldModel)
         {
@@ -135,6 +135,45 @@ namespace PocketBaseClient.CodeGenerator.Generation
 
             return sb.ToString();
         }
+
+
+        protected virtual List<string> GetLinesForSortAttribute()
+        {
+            return new();
+        }
+        protected virtual List<string> GetLinesForSortComments()
+        {
+            return new()
+            {
+                $"/// <summary>Makes a SortCommand to Order by the '{SchemaField.Name}' field</summary>"
+            };
+        }
+        protected virtual List<string> GetLinesForSortDecorators()
+        {
+            return new();
+        }
+        protected virtual List<string> GetLinesForSortDefinition()
+        {
+            return new()
+            {
+                $@"public SortCommand {PropertyName} => new SortCommand(""{SchemaField.Name}"");"
+            };
+        }
+        public string GenerateCodeForSort(string indent)
+        {
+            var sb = new StringBuilder();
+            foreach (var line in GetLinesForSortAttribute().Where(l => !string.IsNullOrEmpty(l)))
+                sb.AppendLine(indent + line);
+            foreach (var line in GetLinesForSortComments().Where(l => !string.IsNullOrEmpty(l)))
+                sb.AppendLine(indent + line);
+            foreach (var line in GetLinesForSortDecorators().Where(l => !string.IsNullOrEmpty(l)))
+                sb.AppendLine(indent + line);
+            foreach (var line in GetLinesForSortDefinition().Where(l => !string.IsNullOrEmpty(l)))
+                sb.AppendLine(indent + line);
+
+            return sb.ToString();
+        }
+
 
 
         public static FieldInfo NewFieldInfo(ItemInfo itemInfo, SchemaFieldModel schemaField)

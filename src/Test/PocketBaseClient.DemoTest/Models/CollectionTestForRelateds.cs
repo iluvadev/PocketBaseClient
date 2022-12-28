@@ -31,7 +31,12 @@ namespace PocketBaseClient.DemoTest.Models
         internal CollectionTestForRelateds(DataServiceBase context) : base(context) { }
 
         /// <summary> Query data at PocketBase, defining a Filter over collection 'test_for_related' </summary>
-        public CollectionQuery<CollectionTestForRelateds, TestForRelated> Filter(Func<TestForRelated.Filters, FilterCommand> filter)
-            => new CollectionQuery<CollectionTestForRelateds, TestForRelated>(this, filter(new TestForRelated.Filters()));
+        public CollectionQuery<CollectionTestForRelateds, TestForRelated.Sorts, TestForRelated> Filter(Func<TestForRelated.Filters, FilterCommand> filter)
+            => new CollectionQuery<CollectionTestForRelateds, TestForRelated.Sorts, TestForRelated>(this, filter(new TestForRelated.Filters()));
+
+        /// <summary> Query all data at PocketBase, over collection 'test_for_related' </summary>
+        public CollectionQuery<CollectionTestForRelateds, TestForRelated.Sorts, TestForRelated> All()
+            => new CollectionQuery<CollectionTestForRelateds, TestForRelated.Sorts, TestForRelated>(this, null);
+
     }
 }

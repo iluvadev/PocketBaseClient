@@ -31,7 +31,12 @@ namespace PocketBaseClient.DemoTest.Models
         internal CollectionTestForTypes(DataServiceBase context) : base(context) { }
 
         /// <summary> Query data at PocketBase, defining a Filter over collection 'test_for_types' </summary>
-        public CollectionQuery<CollectionTestForTypes, TestForType> Filter(Func<TestForType.Filters, FilterCommand> filter)
-            => new CollectionQuery<CollectionTestForTypes, TestForType>(this, filter(new TestForType.Filters()));
+        public CollectionQuery<CollectionTestForTypes, TestForType.Sorts, TestForType> Filter(Func<TestForType.Filters, FilterCommand> filter)
+            => new CollectionQuery<CollectionTestForTypes, TestForType.Sorts, TestForType>(this, filter(new TestForType.Filters()));
+
+        /// <summary> Query all data at PocketBase, over collection 'test_for_types' </summary>
+        public CollectionQuery<CollectionTestForTypes, TestForType.Sorts, TestForType> All()
+            => new CollectionQuery<CollectionTestForTypes, TestForType.Sorts, TestForType>(this, null);
+
     }
 }

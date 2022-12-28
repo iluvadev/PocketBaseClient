@@ -34,7 +34,13 @@ namespace PocketBaseClient.Test
             res3 = col.Filter(i => i.RelationMultipleLimit.Contains(new DemoTest.Models.TestForRelated()));
          
             res3 = col.Filter(i => i.SelectMultiple.Contains(DemoTest.Models.TestForType.SelectMultipleEnum.Option1));
+            //col.Filter(i => i.TextNoRestrictions.StartsWith("pepe")).SortById(asc).SortBySelectMultipleEnum(desc);
+            //col.Filter(i => i.TextNoRestrictions.StartsWith("pepe")).SortBy(i => i.SelectMultiple);
+            //res3.SortBy(i => i.SelectMultiple(Desc));
+            //res3.SortBy(SortField.Name, SortField.Id);
+            //res3.Sort(i => (i.TextNoRestrictions, i.NumberNoRestrictions));
 
+            col.Filter(i => i.Bool.IsTrue()).SortBy(i => i.Created.Desc().AndThenBy(i.Updated));
         }
     }
 }
