@@ -40,7 +40,11 @@ namespace PocketBaseClient.Test
             //res3.SortBy(SortField.Name, SortField.Id);
             //res3.Sort(i => (i.TextNoRestrictions, i.NumberNoRestrictions));
 
-            col.Filter(i => i.Bool.IsTrue()).SortBy(i => i.Created.Desc().AndThenBy(i.Updated));
+            var res = col.Filter(i => i.Bool.IsTrue()).SortBy(i => i.Created.Desc().AndThenBy(i.Updated));
+            foreach(var item in res)
+            {
+
+            }
         }
     }
 }

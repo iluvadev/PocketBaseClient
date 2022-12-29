@@ -28,9 +28,10 @@ namespace PocketBaseClient.Orm
             Filter = filter;
         }
 
-        public void SortBy(Func<S, SortCommand> commandSelector)
+        public IEnumerable<T> SortBy(Func<S, SortCommand> commandSelector)
         {
             Sort = commandSelector.Invoke(new());
+            return this;
         }
 
         private IEnumerable<T> GetItems()
