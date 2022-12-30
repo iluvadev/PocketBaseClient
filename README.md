@@ -1,5 +1,51 @@
 **Warning**: This project is in active development. Things described bellow could change.
 
+
+
+With **PocketBaseClient** and the code generated for your application with [pbcodegen](doc/pbcodegen.md), you can interact with your PocketBase server without having to worry about communication, APIs, object binding, cache management, etc.
+It is an ORM connected to your PocketBase server with your application.
+
+
+You will be able to do things like:
+
+```csharp
+var myApp = new MyTodoListApplication(); // Binding to PocketBase 'my-todo-list' application
+var myData = myApp.Data; // The data of the application
+            
+var tasks = myData.TasksCollection; // Collection "tasks"
+
+// Iterate over entire collection
+foreach (var task in tasks)
+    Console.WriteLine($"{task.Title} ({task.Status}): {task.Description}");
+
+// Filter your data: Paused tasks updated long time ago
+var oldPausedTasks = tasks.Filter(t => t.Status.Equal(Task.StatusEnum.Paused).And(
+                                            t.Updated.LessThan(DateTime.Now.AddMonths(-1))));
+
+// Find an element
+var users = myData.UsersCollection; // Collection "users"
+var me = users.GetById("qwertyuiop");
+
+// Modify your elements
+foreach (var oldPausedTask in oldPausedTasks)
+{
+    oldPausedTask.Status = Task.StatusEnum.ToDo; // Status is an Enum (type select)
+    oldPausedTask.AssignedTo = me;  // AssignedTo is an User (type relation)
+}
+
+// Create a new element
+var newTask = new Task
+{
+    Title = "A new Task",
+    Description = "Lorem ipsum...",
+    Status = Task.StatusEnum.ToDo,
+};
+
+// Save all changes to PocketBase (also new elements)
+myData.SaveChanges();
+
+```
+
 # PocketBaseClient-csharp
 
 PocketBaseClient-csharp is a Client library in C# for interacting with a particular PocketBase application: It maps all the PocketBase Collections and Registries to Objects and structures to work in c#
