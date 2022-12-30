@@ -4,6 +4,7 @@
 
 With **PocketBaseClient** and the code generated for your application with [pbcodegen](doc/pbcodegen.md), you can interact with your PocketBase server without having to worry about communication, APIs, object binding, cache management, etc.
 
+
 It is an ORM connected to your PocketBase server with your application.
 
 You will be able to do things like:
@@ -11,7 +12,7 @@ You will be able to do things like:
 ```csharp
 var myApp = new MyTodoListApplication(); // Binding to PocketBase 'my-todo-list' application
 var myData = myApp.Data; // The data of the application
-            
+
 var tasks = myData.TasksCollection; // Collection "tasks"
 
 // Iterate over entire collection
@@ -43,7 +44,6 @@ var newTask = new Task
 
 // Save all changes to PocketBase (also new elements)
 myData.SaveChanges();
-
 ```
 
 PocketBaseClient-csharp is a Client library in C# for interacting with a particular PocketBase application: It maps all the PocketBase Collections and Registries to Objects and structures to work in c#
