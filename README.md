@@ -1,6 +1,6 @@
 **Warning**: This project is in active development. Things described bellow could change.
 
-
+# PocketBaseClient-csharp
 
 With **PocketBaseClient** and the code generated for your application with [pbcodegen](doc/pbcodegen.md), you can interact with your PocketBase server without having to worry about communication, APIs, object binding, cache management, etc.
 It is an ORM connected to your PocketBase server with your application.
@@ -45,8 +45,6 @@ var newTask = new Task
 myData.SaveChanges();
 
 ```
-
-# PocketBaseClient-csharp
 
 PocketBaseClient-csharp is a Client library in C# for interacting with a particular PocketBase application: It maps all the PocketBase Collections and Registries to Objects and structures to work in c#
 
