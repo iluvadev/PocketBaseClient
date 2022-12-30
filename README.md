@@ -3,8 +3,8 @@
 
 
 With **PocketBaseClient** and the code generated for your application with [pbcodegen](doc/pbcodegen.md), you can interact with your PocketBase server without having to worry about communication, APIs, object binding, cache management, etc.
-It is an ORM connected to your PocketBase server with your application.
 
+It is an ORM connected to your PocketBase server with your application.
 
 You will be able to do things like:
 
