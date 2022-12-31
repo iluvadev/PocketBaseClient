@@ -27,8 +27,8 @@ namespace PocketBaseClient.DemoTest.Models
             /// <summary> Gets a Filter to Query data over the 'number_no_restrictions' field in PocketBase </summary>
             public FieldFilterNumber NumberNoRestrictions => new FieldFilterNumber("number_no_restrictions");
 
-            /// <summary> Gets a Filter to Query data over the 'number_restrrictions' field in PocketBase </summary>
-            public FieldFilterNumber NumberRestrrictions => new FieldFilterNumber("number_restrrictions");
+            /// <summary> Gets a Filter to Query data over the 'number_restrictions' field in PocketBase </summary>
+            public FieldFilterNumber NumberRestrictions => new FieldFilterNumber("number_restrictions");
 
             /// <summary> Gets a Filter to Query data over the 'bool' field in PocketBase </summary>
             public FieldFilterBool Bool => new FieldFilterBool("bool");

@@ -18,9 +18,9 @@ namespace PocketBaseClient.Orm
         where T : ItemBase, new()
         where S : ItemBaseSorts, new()
     {
-        private FilterCommand? Filter { get; set; }
-        private SortCommand? Sort { get; set; }
-        private C Collection { get; set; }
+        internal FilterCommand? Filter { get; set; }
+        internal SortCommand? Sort { get; set; }
+        internal C Collection { get; set; }
 
         public CollectionQuery(C collection, FilterCommand? filter)
         {

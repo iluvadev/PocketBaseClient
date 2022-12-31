@@ -27,8 +27,8 @@ namespace PocketBaseClient.DemoTest.Models
             /// <summary>Makes a SortCommand to Order by the 'number_no_restrictions' field</summary>
             public SortCommand NumberNoRestrictions => new SortCommand("number_no_restrictions");
 
-            /// <summary>Makes a SortCommand to Order by the 'number_restrrictions' field</summary>
-            public SortCommand NumberRestrrictions => new SortCommand("number_restrrictions");
+            /// <summary>Makes a SortCommand to Order by the 'number_restrictions' field</summary>
+            public SortCommand NumberRestrictions => new SortCommand("number_restrictions");
 
             /// <summary>Makes a SortCommand to Order by the 'bool' field</summary>
             public SortCommand Bool => new SortCommand("bool");

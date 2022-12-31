@@ -55,13 +55,13 @@ namespace PocketBaseClient.DemoTest.Models
         [Display(Name = "Number_no_restrictions")]
         public int? NumberNoRestrictions { get => Get(() => _NumberNoRestrictions); set => Set(value, ref _NumberNoRestrictions); }
 
-        private int? _NumberRestrrictions = null;
-        /// <summary> Maps to 'number_restrrictions' field in PocketBase </summary>
-        [JsonPropertyName("number_restrrictions")]
-        [PocketBaseField(id: "xsz2augn", name: "number_restrrictions", required: false, system: false, unique: false, type: "number")]
-        [Display(Name = "Number_restrrictions")]
+        private int? _NumberRestrictions = null;
+        /// <summary> Maps to 'number_restrictions' field in PocketBase </summary>
+        [JsonPropertyName("number_restrictions")]
+        [PocketBaseField(id: "xsz2augn", name: "number_restrictions", required: false, system: false, unique: false, type: "number")]
+        [Display(Name = "Number_restrictions")]
         [Range(0, 10, ErrorMessage = "Minimum 0, Maximum 10")]
-        public int? NumberRestrrictions { get => Get(() => _NumberRestrrictions); set => Set(value, ref _NumberRestrrictions); }
+        public int? NumberRestrictions { get => Get(() => _NumberRestrictions); set => Set(value, ref _NumberRestrictions); }
 
         private bool? _Bool = null;
         /// <summary> Maps to 'bool' field in PocketBase </summary>
@@ -226,7 +226,7 @@ namespace PocketBaseClient.DemoTest.Models
                 TextNoRestrictions = item.TextNoRestrictions;
                 TextRestrictions = item.TextRestrictions;
                 NumberNoRestrictions = item.NumberNoRestrictions;
-                NumberRestrrictions = item.NumberRestrrictions;
+                NumberRestrictions = item.NumberRestrictions;
                 Bool = item.Bool;
                 EmailNoRestrictions = item.EmailNoRestrictions;
                 EmailRestrictionsExcept = item.EmailRestrictionsExcept;
