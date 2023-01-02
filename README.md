@@ -4,7 +4,6 @@
 
 With **PocketBaseClient** and the code generated for your application with [pbcodegen](doc/pbcodegen.md), you can interact with your PocketBase server without having to worry about communication, APIs, object binding, cache management, etc.
 
-
 It is an ORM connected to your PocketBase server with your application.
 
 You will be able to do things like:
@@ -249,11 +248,13 @@ foreach (var todoList in myData.TodoListsCollection)
    }
 }
 
-// Filter over todo_lists collection in PocketBase
-var myTodoLists = myData.TodoListsCollection.Filter(todo => todo.Name(OperatorText.Like, "my todo list")).GetItems();
+// Filter over tasks collection in PocketBase (filter in server)
+var oldPausedTasks = tasks.Filter(t => t.Status.Equal(Task.StatusEnum.Paused).And(
+                                            t.Updated.LessThan(DateTime.Now.AddMonths(-1))));
 
-// Linq in-memory (using cache, getting all registries from server if needed)
-var myTodoLists2 = myData.TodoListsCollection.Where(t => t.Name.Contains("my todo list"));
+
+// Use Linq (in-memory: intenal cache or get registries from server if needed)
+var myTodoLists = myData.TodoListsCollection.Where(t => t.Name.Contains("my todo list"));
 
 var allPriorities = myData.PrioritiesCollection;
 
