@@ -29,7 +29,7 @@
   </PropertyGroup>
 
 	<ItemGroup>
-		<PackageReference Include="pocketbase-csharp-sdk" Version="1.0.0-prerelease" />
+		<PackageReference Include="pocketbase-csharp-sdk" Version="1.1.0-prerelease" />
 	</ItemGroup>
 
 </Project>
