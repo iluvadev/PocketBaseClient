@@ -10,6 +10,9 @@
 
 namespace PocketBaseClient.Orm.Filters
 {
+    /// <summary>
+    /// Definition for Sort options to sort filtered data in PocketBase
+    /// </summary>
     public class ItemBaseSorts
     {
         /// <summary>Makes a SortCommand to Order by the 'id' field</summary>

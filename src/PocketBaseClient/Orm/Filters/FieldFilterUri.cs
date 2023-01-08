@@ -10,6 +10,9 @@
 
 namespace PocketBaseClient.Orm.Filters
 {
+    /// <summary>
+    /// Filter definitions for Fields of type Url
+    /// </summary>
     public class FieldFilterUri : FieldFilterText
     {
         /// <summary>
@@ -20,15 +23,35 @@ namespace PocketBaseClient.Orm.Filters
         {
         }
 
+        /// <summary>
+        /// The Field is Equal to <paramref name="value"/>
+        /// </summary>
+        /// <param name="value">The value to compare</param>
+        /// <returns></returns>
         public FilterCommand Equal(Uri value)
             => Equal(value.ToString());
 
+        /// <summary>
+        /// The Field is NOT Equal to <paramref name="value"/>
+        /// </summary>
+        /// <param name="value">The value to compare</param>
+        /// <returns></returns>
         public FilterCommand NotEqual(Uri value)
             => NotEqual(value.ToString());
 
+        /// <summary>
+        /// The Field Starts With <paramref name="value"/>
+        /// </summary>
+        /// <param name="value">The value to compare</param>
+        /// <returns></returns>
         public FilterCommand StartsWith(Uri value)
             => StartsWith(value.ToString());
 
+        /// <summary>
+        /// The Field do NOT Starts With <paramref name="value"/>
+        /// </summary>
+        /// <param name="value">The value to compare</param>
+        /// <returns></returns>
         public FilterCommand NotStartsWith(Uri value)
             => NotStartsWith(value.ToString());
     }

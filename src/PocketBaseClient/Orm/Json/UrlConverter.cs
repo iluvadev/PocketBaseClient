@@ -13,8 +13,12 @@ using System.Text.Json.Serialization;
 
 namespace PocketBaseClient.Orm.Json
 {
+    /// <summary>
+    /// Converter for url types
+    /// </summary>
     public class UrlConverter : JsonConverter<Uri?>
     {
+        /// <inheritdoc />
         public override Uri? Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
         {
             var value = reader.GetString();
@@ -23,6 +27,7 @@ namespace PocketBaseClient.Orm.Json
             return new Uri(value);
         }
 
+        /// <inheritdoc />
         public override void Write(Utf8JsonWriter writer, Uri? value, JsonSerializerOptions options)
         {
             if (value is null)

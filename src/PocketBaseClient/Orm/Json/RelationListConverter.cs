@@ -15,10 +15,16 @@ using System.Text.Json.Serialization;
 
 namespace PocketBaseClient.Orm.Json
 {
+    /// <summary>
+    /// Converter for list of relations type
+    /// </summary>
+    /// <typeparam name="L">The type of the list</typeparam>
+    /// <typeparam name="T">The mapped related type</typeparam>
     public class RelationListConverter<L, T> : JsonConverter<L?>
         where L : IBasicList<T>, new()
         where T : ItemBase, new()
     {
+        /// <inheritdoc />
         public override L? Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
         {
             L valueList = new();
@@ -33,6 +39,7 @@ namespace PocketBaseClient.Orm.Json
             return valueList;
         }
 
+        /// <inheritdoc />
         public override void Write(Utf8JsonWriter writer, L? value, JsonSerializerOptions options)
         {
             if (value is null)

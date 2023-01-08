@@ -13,6 +13,12 @@ using System.Collections;
 
 namespace PocketBaseClient.Orm
 {
+    /// <summary>
+    /// Class that maps a Query to be executed over a Collection in PocketBase
+    /// </summary>
+    /// <typeparam name="C">The type of the collection</typeparam>
+    /// <typeparam name="S">The type that defines the sorting options for the collection</typeparam>
+    /// <typeparam name="T">The type mapped to registries in the collection</typeparam>
     public class CollectionQuery<C, S, T> : IEnumerable<T>
         where C : CollectionBase<T>
         where T : ItemBase, new()
@@ -22,12 +28,22 @@ namespace PocketBaseClient.Orm
         internal SortCommand? Sort { get; set; }
         internal C Collection { get; set; }
 
+        /// <summary>
+        /// Ctor
+        /// </summary>
+        /// <param name="collection"></param>
+        /// <param name="filter"></param>
         public CollectionQuery(C collection, FilterCommand? filter)
         {
             Collection = collection;
             Filter = filter;
         }
 
+        /// <summary>
+        /// Sorts the Filter in server by the selector
+        /// </summary>
+        /// <param name="commandSelector">Selector for the sort</param>
+        /// <returns></returns>
         public IEnumerable<T> SortBy(Func<S, SortCommand> commandSelector)
         {
             Sort = commandSelector.Invoke(new());
@@ -40,9 +56,11 @@ namespace PocketBaseClient.Orm
                 yield return item;
         }
 
+        /// <inheritdoc />
         public IEnumerator<T> GetEnumerator()
             => GetItems().GetEnumerator();
 
+        /// <inheritdoc />
         IEnumerator IEnumerable.GetEnumerator()
             => GetEnumerator();
     }

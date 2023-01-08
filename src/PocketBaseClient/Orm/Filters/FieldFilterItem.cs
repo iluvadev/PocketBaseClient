@@ -10,6 +10,10 @@
 
 namespace PocketBaseClient.Orm.Filters
 {
+    /// <summary>
+    /// Filter definitions for Fields of type Relation
+    /// </summary>
+    /// <typeparam name="T">The related type</typeparam>
     public class FieldFilterItem<T> : FieldFilter
         where T : ItemBase
     {
@@ -21,15 +25,35 @@ namespace PocketBaseClient.Orm.Filters
         {
         }
 
+        /// <summary>
+        /// The Field is related to Id Equal to <paramref name="value"/>
+        /// </summary>
+        /// <param name="value">The value to compare</param>
+        /// <returns></returns>
         public FilterCommand EqualId(string value)
             => new($"{FieldName}='{value}'");
 
+        /// <summary>
+        /// The Field is related to Id NOT Equal to <paramref name="value"/>
+        /// </summary>
+        /// <param name="value">The value to compare</param>
+        /// <returns></returns>
         public FilterCommand NotEqualId(string value)
             => new($"{FieldName}!='{value}'");
 
+        /// <summary>
+        /// The Field is Equal to <paramref name="value"/>
+        /// </summary>
+        /// <param name="value">The value to compare</param>
+        /// <returns></returns>
         public FilterCommand Equal(T value)
             => EqualId(value.Id!);
 
+        /// <summary>
+        /// The Field is NOT Equal to <paramref name="value"/>
+        /// </summary>
+        /// <param name="value">The value to compare</param>
+        /// <returns></returns>
         public FilterCommand NotEqual(T value)
             => NotEqualId(value.Id!);
     }

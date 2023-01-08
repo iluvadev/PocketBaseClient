@@ -10,6 +10,9 @@
 
 namespace PocketBaseClient.Orm.Filters
 {
+    /// <summary>
+    /// Filter definitions for Fields of type Bool
+    /// </summary>
     public class FieldFilterBool : FieldFilter
     {
         /// <summary>
@@ -20,15 +23,33 @@ namespace PocketBaseClient.Orm.Filters
         {
         }
 
+        /// <summary>
+        /// The Field is Equal to <paramref name="value"/>
+        /// </summary>
+        /// <param name="value">The value to compare</param>
+        /// <returns></returns>
         public FilterCommand Equal(bool value)
             => new($"{FieldName}={value}");
 
+        /// <summary>
+        /// The Field is NOT Equal to <paramref name="value"/>
+        /// </summary>
+        /// <param name="value">The value to compare</param>
+        /// <returns></returns>
         public FilterCommand NotEqual(bool value)
             => new($"{FieldName}!={value}");
 
+        /// <summary>
+        /// The Field is TRUE
+        /// </summary>
+        /// <returns></returns>
         public FilterCommand IsTrue()
             => Equal(true);
 
+        /// <summary>
+        /// The Field is FALSE
+        /// </summary>
+        /// <returns></returns>
         public FilterCommand IsFalse()
             => Equal(false);
     }

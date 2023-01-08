@@ -12,6 +12,11 @@ using PocketBaseClient.Orm.Structures;
 
 namespace PocketBaseClient.Orm.Filters
 {
+    /// <summary>
+    /// Filter definitions for Fields of type List of Relations
+    /// </summary>
+    /// <typeparam name="L">The type for the list</typeparam>
+    /// <typeparam name="T">The Related type</typeparam>
     public class FieldFilterItemList<L, T> : FieldFilter
         where L : FieldItemList<T>
         where T : ItemBase, new()
@@ -24,15 +29,35 @@ namespace PocketBaseClient.Orm.Filters
         {
         }
 
+        /// <summary>
+        /// The Field Contains a relation to Id <paramref name="value"/>
+        /// </summary>
+        /// <param name="value">The value to compare</param>
+        /// <returns></returns>
         public FilterCommand ContainsId(string value)
             => new($"{FieldName}~'%{value}%'");
 
+        /// <summary>
+        /// The Field NOT Contains a relation to Id <paramref name="value"/>
+        /// </summary>
+        /// <param name="value">The value to compare</param>
+        /// <returns></returns>
         public FilterCommand NotContainsId(string value)
             => new($"{FieldName}!~'%{value}%'");
 
+        /// <summary>
+        /// The Field Contains a relation to <paramref name="value"/>
+        /// </summary>
+        /// <param name="value">The value to compare</param>
+        /// <returns></returns>
         public FilterCommand Contains(T value)
             => ContainsId(value.Id!);
 
+        /// <summary>
+        /// The Field NOT Contains a relation to <paramref name="value"/>
+        /// </summary>
+        /// <param name="value">The value to compare</param>
+        /// <returns></returns>
         public FilterCommand NotContainsl(T value)
             => NotContainsId(value.Id!);
     }

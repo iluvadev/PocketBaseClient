@@ -14,9 +14,14 @@ using System.Text.Json.Serialization;
 
 namespace PocketBaseClient.Orm.Json
 {
+    /// <summary>
+    /// Converter for relation types
+    /// </summary>
+    /// <typeparam name="T">The mapped related type</typeparam>
     public class RelationConverter<T> : JsonConverter<T?>
         where T : ItemBase, new()
     {
+        /// <inheritdoc />
         public override T? Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
         {
             var value = reader.GetString();
@@ -25,6 +30,7 @@ namespace PocketBaseClient.Orm.Json
             return DataServiceBase.GetCollection<T>()!.AddIdFromPb(value);
         }
 
+        /// <inheritdoc />
         public override void Write(Utf8JsonWriter writer, T? value, JsonSerializerOptions options)
         {
             if (value is null)

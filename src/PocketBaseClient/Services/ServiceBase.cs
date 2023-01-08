@@ -10,10 +10,17 @@
 
 namespace PocketBaseClient.Services
 {
+    /// <summary>
+    /// Base class for a Service
+    /// </summary>
     public abstract class ServiceBase
     {
         internal PocketBaseClientApplication App { get; }
 
+        /// <summary>
+        /// Ctor
+        /// </summary>
+        /// <param name="app"></param>
         public ServiceBase(PocketBaseClientApplication app)
         {
             App = app;

@@ -16,6 +16,9 @@ using System.Text.Json.Serialization;
 
 namespace PocketBaseClient.Orm
 {
+    /// <summary>
+    /// Base class for a mapped registry
+    /// </summary>
     public abstract class ItemBase : BaseModel
     {
         #region Field Properties

@@ -13,16 +13,28 @@ using System.Net.Mail;
 
 namespace PocketBaseClient.Orm.Validators
 {
+    /// <summary>
+    /// Validator for the "only domains" restriction
+    /// </summary>
     [AttributeUsage(AttributeTargets.Property | AttributeTargets.Field, AllowMultiple = false)]
     sealed public class OnlyDomainsAttribute : ValidationAttribute
     {
+        /// <summary>
+        /// The "only domains" defined in server
+        /// </summary>
         public string OnlyDomainsValues { get; }
         private List<string> OnlyDomainsList => OnlyDomainsValues?.Split(',').ToList() ?? new List<string>();
 
+        /// <summary>
+        /// Ctor
+        /// </summary>
+        /// <param name="exceptDomainsValues"></param>
         public OnlyDomainsAttribute(string exceptDomainsValues)
         {
             OnlyDomainsValues = exceptDomainsValues;
         }
+
+        /// <inheritdoc />
         public override bool IsValid(object? value)
         {
             if (value == null) return false;

@@ -12,6 +12,10 @@ using System.Collections;
 
 namespace PocketBaseClient.Orm.Structures
 {
+    /// <summary>
+    /// Class Definition for field types of Lists 
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
     public class FieldBasicList<T> : IFieldBasicList<T>
     {
         /// <inheritdoc />
@@ -83,6 +87,8 @@ namespace PocketBaseClient.Orm.Structures
         /// <inheritdoc />
         public T? Remove(T? element)
         {
+            if (element == null) return default;
+
             bool bRet = InnerList.Remove(element);
             if (!bRet) return default;
 

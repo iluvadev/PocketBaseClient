@@ -10,6 +10,9 @@
 
 namespace PocketBaseClient.Orm.Filters
 {
+    /// <summary>
+    /// Base class for a Filter over a Field
+    /// </summary>
     public abstract class FieldFilter
     {
         /// <summary>

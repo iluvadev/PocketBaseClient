@@ -10,6 +10,9 @@
 
 namespace PocketBaseClient.Orm.Structures
 {
+    /// <summary>
+    /// Save or Discard modes
+    /// </summary>
     public enum ListSaveDiscardModes
     {
         /// <summary>

@@ -14,8 +14,12 @@ using System.Text.Json.Serialization;
 
 namespace PocketBaseClient.Orm.Json
 {
+    /// <summary>
+    /// Converter for email types
+    /// </summary>
     public class EmailConverter : JsonConverter<MailAddress?>
     {
+        /// <inheritdoc />
         public override MailAddress? Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
         {
             var value = reader.GetString();
@@ -24,6 +28,7 @@ namespace PocketBaseClient.Orm.Json
             return new MailAddress(value);
         }
 
+        /// <inheritdoc />
         public override void Write(Utf8JsonWriter writer, MailAddress? value, JsonSerializerOptions options)
         {
             if (value is null)

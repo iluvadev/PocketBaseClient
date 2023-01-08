@@ -11,10 +11,12 @@
 using pocketbase_csharp_sdk;
 using PocketBaseClient.Orm.Structures;
 using PocketBaseClient.Services;
-using System.Collections;
 
 namespace PocketBaseClient.Orm
 {
+    /// <summary>
+    /// Base class for a Collection in PocketBase
+    /// </summary>
     public abstract partial class CollectionBase : IBasicList
     {
         /// <summary>
@@ -41,7 +43,14 @@ namespace PocketBaseClient.Orm
         //public string? DeleteRule { get; set; }
         //public IEnumerable<SchemaFieldModel>? Schema { get; set; }
 
+        /// <summary>
+        /// The Context for Data access
+        /// </summary>
         protected DataServiceBase Context { get; }
+
+        /// <summary>
+        /// Access to the PocketBase Sdk 
+        /// </summary>
         protected PocketBase PocketBase => Context.App.Sdk;
 
 

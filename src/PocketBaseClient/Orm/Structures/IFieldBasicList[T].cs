@@ -27,7 +27,5 @@ namespace PocketBaseClient.Orm.Structures
         void NotifyModificationToOwner()
             //=> Owner?.SetPropertyModified(Name);
             => Owner?.SetModified();
-
-        //IEPA!!!
     }
 }

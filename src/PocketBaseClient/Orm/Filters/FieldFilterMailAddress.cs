@@ -12,6 +12,9 @@ using System.Net.Mail;
 
 namespace PocketBaseClient.Orm.Filters
 {
+    /// <summary>
+    /// Filter definitions for Fields of type eMail
+    /// </summary>
     public class FieldFilterMailAddress : FieldFilterText
     {
         /// <summary>
@@ -22,9 +25,19 @@ namespace PocketBaseClient.Orm.Filters
         {
         }
 
+        /// <summary>
+        /// The Field is Equal to <paramref name="value"/>
+        /// </summary>
+        /// <param name="value">The value to compare</param>
+        /// <returns></returns>
         public FilterCommand Equal(MailAddress value)
             => Equal(value.Address);
 
+        /// <summary>
+        /// The Field is NOT Equal to <paramref name="value"/>
+        /// </summary>
+        /// <param name="value">The value to compare</param>
+        /// <returns></returns>
         public FilterCommand NotEqual(MailAddress value)
             => NotEqual(value.Address);
     }

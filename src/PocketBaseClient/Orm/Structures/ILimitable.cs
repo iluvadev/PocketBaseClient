@@ -10,6 +10,9 @@
 
 namespace PocketBaseClient.Orm.Structures
 {
+    /// <summary>
+    /// Definition for types with Limit in size
+    /// </summary>
     public interface ILimitable
     {
         /// <summary>

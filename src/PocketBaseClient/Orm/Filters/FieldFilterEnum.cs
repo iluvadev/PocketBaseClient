@@ -10,6 +10,10 @@
 
 namespace PocketBaseClient.Orm.Filters
 {
+    /// <summary>
+    /// Filter definitions for Fields of type Date
+    /// </summary>
+    /// <typeparam name="T">The enum type</typeparam>
     public class FieldFilterEnum<T> : FieldFilterText
         where T : struct, IConvertible
     {
@@ -21,9 +25,19 @@ namespace PocketBaseClient.Orm.Filters
         {
         }
 
+        /// <summary>
+        /// The Field is Equal to <paramref name="value"/>
+        /// </summary>
+        /// <param name="value">The value to compare</param>
+        /// <returns></returns>
         public FilterCommand Equal(T value)
             => Equal(value.GetDescription() ?? value.ToString()!);
 
+        /// <summary>
+        /// The Field is NOT Equal to <paramref name="value"/>
+        /// </summary>
+        /// <param name="value">The value to compare</param>
+        /// <returns></returns>
         public FilterCommand NotEqual(T value)
             => NotEqual(value.GetDescription() ?? value.ToString()!);
     }

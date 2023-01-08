@@ -13,8 +13,13 @@ using System.Text.Json.Serialization;
 
 namespace PocketBaseClient.Orm.Json
 {
+    /// <summary>
+    /// Converter for select types (enums)
+    /// </summary>
+    /// <typeparam name="T">The enum type</typeparam>
     public class EnumConverter<T> : JsonConverter<T?> where T : struct, IConvertible
     {
+        /// <inheritdoc />
         public override T? Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
         {
             var value = reader.GetString();
@@ -23,6 +28,7 @@ namespace PocketBaseClient.Orm.Json
             return valuesDesc?.FirstOrDefault(kvp => kvp.Value == value).Key;
         }
 
+        /// <inheritdoc />
         public override void Write(Utf8JsonWriter writer, T? value, JsonSerializerOptions options)
         {
             if (value is null)
