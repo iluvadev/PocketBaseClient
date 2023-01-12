@@ -33,8 +33,11 @@ namespace PocketBaseClient.CodeGenerator.Models
 
 
         public DateTime SchemaDate { get; set; } = DateTime.UtcNow;
+        
+        public bool SingularizeAndPluralize { get; set; } = false;
 
         public List<CollectionModel> Collections { get; set; } = new List<CollectionModel>();
+
 
 
 

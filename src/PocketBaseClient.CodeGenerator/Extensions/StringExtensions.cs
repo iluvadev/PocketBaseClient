@@ -20,6 +20,8 @@ namespace PocketBaseClient.CodeGenerator
         private static PluralizationService? _PluralizationService = null;
         private static PluralizationService PluralizationService => _PluralizationService ??= PluralizationService.CreateService(new CultureInfo("en"));
 
+        public static bool SingularizeAndPluralize = false;
+        
         public static string ToPascalCaseForNamespace(this string s)
         {
             var splitted = s.Split('.');
@@ -86,9 +88,9 @@ namespace PocketBaseClient.CodeGenerator
         }
 
         public static string Singularize(this string the_string)
-            => PluralizationService.Singularize(the_string);
+            => SingularizeAndPluralize ? PluralizationService.Singularize(the_string) : the_string;
 
         public static string Pluralize(this string the_string)
-            => PluralizationService.Pluralize(the_string);
+            => SingularizeAndPluralize ? PluralizationService.Pluralize(the_string) : the_string;
     }
 }

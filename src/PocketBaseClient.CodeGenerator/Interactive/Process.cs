@@ -53,6 +53,9 @@ namespace PocketBaseClient.CodeGenerator.Interactive
             
             // Ask for the Namespace
             AskNamespace(schema);
+            
+            // Ask for whether to enable singularize and pluralize feature
+            AskSingularizeAndPluralize(schema);
 
             ConsoleHelper.WriteStep(3, "Code generation");
             // Generate code
@@ -141,6 +144,19 @@ namespace PocketBaseClient.CodeGenerator.Interactive
                     schema.Namespace = Prompt.Input<string>("Enter the correct Namespace",
                         validators: PromptValidators.NameForProjectOrNamespace());
             }
+        }
+
+        private static void AskSingularizeAndPluralize(PocketBaseSchema schema)
+        {
+            ConsoleHelper.WriteEmphasis(@"
+  This feature may be useful if your collections' name are plural.
+  i.e. If you have a collection named ""posts"", 
+       name of class and data service of collection will use pluralized name ""posts"" and
+       name of class of item will use singularized name ""post"".
+       Disabling using this feature, both of it will use ""posts"".
+");
+            schema.SingularizeAndPluralize =
+                Prompt.Confirm("Do you want to enable singularize and pluralize feature?", false);
         }
 
         
