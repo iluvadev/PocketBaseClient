@@ -125,7 +125,7 @@ namespace PocketBaseClient.CodeGenerator.Interactive
 
             while (!isOk)
             {
-                ConsoleHelper.WriteCurrentValue("The namespace for generated code will be:", schema.ProjectName);
+                ConsoleHelper.WriteCurrentValue("The namespace for generated code will be:", schema.Namespace);
                 isOk = !Prompt.Confirm("Do you want to change this namespace?", false);
                 if (!isOk)
                     schema.Namespace = (Prompt.Input<string>("Enter the correct Namespace",
