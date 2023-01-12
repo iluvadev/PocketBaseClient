@@ -44,19 +44,21 @@ namespace PocketBaseClient.CodeGenerator.Interactive
 
 
             ConsoleHelper.WriteStep(2, "Defining the code to generate");
-            // Ask for Directory Base where generate code
-            string baseDirForProject = Prompt.Input<string>("Enter the Directory where create the Project folder with code",
-                                                            validators: PromptValidators.BaseDirForProject())!;
 
             // Ask for the Project name
-            AskProjectName(schema, baseDirForProject);
+            AskProjectName(schema);
 
+            // Ask for Directory Base where generate code
+            string projectFolder = AskProjectFolder();
+            
             // Ask for the Namespace
             AskNamespace(schema);
+            
+            // Ask for whether to enable singularize and pluralize feature
+            AskSingularizeAndPluralize(schema);
 
             ConsoleHelper.WriteStep(3, "Code generation");
             // Generate code
-            string projectFolder = Path.Combine(baseDirForProject, schema.ProjectName);
             var settings = new Settings(schema, projectFolder);
             var codeGenerator = new Generator();
             codeGenerator.GenerateCode(settings);
@@ -96,7 +98,7 @@ namespace PocketBaseClient.CodeGenerator.Interactive
             ConsoleHelper.WriteDone();
         }
 
-        private static void AskProjectName(PocketBaseSchema schema, string baseDirForProject)
+        private static void AskProjectName(PocketBaseSchema schema)
         {
             bool isOk = false;
 
@@ -105,18 +107,26 @@ namespace PocketBaseClient.CodeGenerator.Interactive
                 ConsoleHelper.WriteCurrentValue("The name for your Project will be:", schema.ProjectName);
                 isOk = !Prompt.Confirm("Do you want to change this project name?", false);
                 if (!isOk)
-                    schema.ProjectName = (Prompt.Input<string>("Enter the Project Name",
-                                                               validators: PromptValidators.NameForProjectOrNamespace())!)
-                                                              .ToPascalCaseForNamespace();
-                else
-                {
-                    // Confirm overwrite if exists a folder
-                    var dirInfo = new DirectoryInfo(Path.Combine(baseDirForProject, schema.ProjectName));
-                    ConsoleHelper.WriteCurrentValue("The project folder will be:", dirInfo.FullName);
-                    if (dirInfo.Exists)
-                        isOk = Prompt.Confirm("The project folder already exists, do you want to overwrite this?", false);
-                }
+                    schema.ProjectName = Prompt.Input<string>("Enter the Project Name",
+                        validators: PromptValidators.NameForProjectOrNamespace()).Trim();
             }
+        }
+
+        private static string AskProjectFolder()
+        {
+            string folder = "";
+            bool isOk = false;
+
+            while (!isOk)
+            {
+                folder = Prompt.Input<string>("Enter the Directory where create the Project with code",
+                    validators: PromptValidators.ProjectFolder());
+                var dirInfo = new DirectoryInfo(folder);
+                isOk = !dirInfo.Exists || 
+                       Prompt.Confirm("The directory already exists, do you want to overwrite this?", false);
+            }
+
+            return folder;
         }
 
         private static void AskNamespace(PocketBaseSchema schema)
@@ -125,15 +135,28 @@ namespace PocketBaseClient.CodeGenerator.Interactive
 
             while (!isOk)
             {
-                ConsoleHelper.WriteCurrentValue("The namespace for generated code will be:", schema.ProjectName);
+                ConsoleHelper.WriteCurrentValue("The namespace for generated code will be:", schema.Namespace);
                 isOk = !Prompt.Confirm("Do you want to change this namespace?", false);
                 if (!isOk)
-                    schema.Namespace = (Prompt.Input<string>("Enter the correct Namespace",
-                                                             validators: PromptValidators.NameForProjectOrNamespace())!)
-                                                            .ToPascalCaseForNamespace();
+                    schema.Namespace = Prompt.Input<string>("Enter the correct Namespace",
+                        validators: PromptValidators.NameForProjectOrNamespace()).ToNamespace();
             }
         }
 
+        private static void AskSingularizeAndPluralize(PocketBaseSchema schema)
+        {
+            ConsoleHelper.WriteEmphasis(@"
+  This feature may be useful if your collections' name are plural.
+  i.e. If you have a collection named ""posts"", 
+       name of class and data service of collection will use pluralized name ""Posts"" and
+       name of class of item will use singularized name ""Post"".
+       Disabling using this feature, both of it will use ""Posts"".
+");
+            schema.SingularizeAndPluralize =
+                Prompt.Confirm("Do you want to enable singularize and pluralize feature?", true);
+        }
+
+        
         private static void UpdatePocketBaseSchema(PocketBaseSchema schema)
         {
             var pocketBaseUri = new Uri(schema.PocketBaseApplication.Url!);

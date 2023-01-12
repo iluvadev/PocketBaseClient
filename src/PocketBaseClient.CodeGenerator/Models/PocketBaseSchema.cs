@@ -25,7 +25,7 @@ namespace PocketBaseClient.CodeGenerator.Models
         private string? _Namespace = null;
         public string Namespace
         {
-            get => _Namespace ?? ProjectName;
+            get => _Namespace ?? ProjectName.ToNamespace();
             set => _Namespace = value;
         }
 
@@ -33,8 +33,11 @@ namespace PocketBaseClient.CodeGenerator.Models
 
 
         public DateTime SchemaDate { get; set; } = DateTime.UtcNow;
+        
+        public bool SingularizeAndPluralize { get; set; } = true;
 
         public List<CollectionModel> Collections { get; set; } = new List<CollectionModel>();
+
 
 
 

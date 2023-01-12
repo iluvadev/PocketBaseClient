@@ -20,11 +20,20 @@ namespace PocketBaseClient.CodeGenerator
         private static PluralizationService? _PluralizationService = null;
         private static PluralizationService PluralizationService => _PluralizationService ??= PluralizationService.CreateService(new CultureInfo("en"));
 
+        public static bool SingularizeAndPluralize = false;
+        
         public static string ToPascalCaseForNamespace(this string s)
         {
             var splitted = s.Split('.');
             return string.Join(".", splitted.Select(n => n.ToPascalCase()));
         }
+        public static string ToNamespace(this string s)
+        {
+            var nonWordChars = new Regex(@"[^a-zA-Z0-9]+");
+            var tokens = nonWordChars.Split(s.Trim());
+            return string.Join(".", tokens);
+        }
+
         public static string ToPascalCase(this string s)
         {
             var result = new StringBuilder();
@@ -86,9 +95,9 @@ namespace PocketBaseClient.CodeGenerator
         }
 
         public static string Singularize(this string the_string)
-            => PluralizationService.Singularize(the_string);
+            => SingularizeAndPluralize ? PluralizationService.Singularize(the_string) : the_string;
 
         public static string Pluralize(this string the_string)
-            => PluralizationService.Pluralize(the_string);
+            => SingularizeAndPluralize ? PluralizationService.Pluralize(the_string) : the_string;
     }
 }
