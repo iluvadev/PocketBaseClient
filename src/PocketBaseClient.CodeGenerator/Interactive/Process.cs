@@ -108,7 +108,7 @@ namespace PocketBaseClient.CodeGenerator.Interactive
                 isOk = !Prompt.Confirm("Do you want to change this project name?", false);
                 if (!isOk)
                     schema.ProjectName = Prompt.Input<string>("Enter the Project Name",
-                        validators: PromptValidators.NameForProjectOrNamespace());
+                        validators: PromptValidators.NameForProjectOrNamespace()).Trim();
             }
         }
 
@@ -119,14 +119,11 @@ namespace PocketBaseClient.CodeGenerator.Interactive
 
             while (!isOk)
             {
-                folder = Prompt.Input<string>("Enter the Directory where create the Project folder with code",
+                folder = Prompt.Input<string>("Enter the Directory where create the Project with code",
                     validators: PromptValidators.ProjectFolder());
                 var dirInfo = new DirectoryInfo(folder);
-                isOk = !dirInfo.Exists;
-                if (!isOk)
-                {
-                    isOk = Prompt.Confirm("The directory already exists, do you want to overwrite this?", false);
-                }
+                isOk = !dirInfo.Exists || 
+                       Prompt.Confirm("The directory already exists, do you want to overwrite this?", false);
             }
 
             return folder;
@@ -142,7 +139,7 @@ namespace PocketBaseClient.CodeGenerator.Interactive
                 isOk = !Prompt.Confirm("Do you want to change this namespace?", false);
                 if (!isOk)
                     schema.Namespace = Prompt.Input<string>("Enter the correct Namespace",
-                        validators: PromptValidators.NameForProjectOrNamespace());
+                        validators: PromptValidators.NameForProjectOrNamespace()).ToNamespace();
             }
         }
 
@@ -151,12 +148,12 @@ namespace PocketBaseClient.CodeGenerator.Interactive
             ConsoleHelper.WriteEmphasis(@"
   This feature may be useful if your collections' name are plural.
   i.e. If you have a collection named ""posts"", 
-       name of class and data service of collection will use pluralized name ""posts"" and
-       name of class of item will use singularized name ""post"".
-       Disabling using this feature, both of it will use ""posts"".
+       name of class and data service of collection will use pluralized name ""Posts"" and
+       name of class of item will use singularized name ""Post"".
+       Disabling using this feature, both of it will use ""Posts"".
 ");
             schema.SingularizeAndPluralize =
-                Prompt.Confirm("Do you want to enable singularize and pluralize feature?", false);
+                Prompt.Confirm("Do you want to enable singularize and pluralize feature?", true);
         }
 
         

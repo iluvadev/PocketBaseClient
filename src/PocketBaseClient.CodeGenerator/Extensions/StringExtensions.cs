@@ -27,6 +27,13 @@ namespace PocketBaseClient.CodeGenerator
             var splitted = s.Split('.');
             return string.Join(".", splitted.Select(n => n.ToPascalCase()));
         }
+        public static string ToNamespace(this string s)
+        {
+            var nonWordChars = new Regex(@"[^a-zA-Z0-9]+");
+            var tokens = nonWordChars.Split(s.Trim());
+            return string.Join(".", tokens);
+        }
+
         public static string ToPascalCase(this string s)
         {
             var result = new StringBuilder();
