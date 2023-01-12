@@ -40,7 +40,7 @@ namespace PocketBaseClient.CodeGenerator.Interactive
             };
         }
 
-        public static List<Func<object, ValidationResult>> BaseDirForProject()
+        public static List<Func<object, ValidationResult>> ProjectFolder()
         {
             return new List<Func<object, ValidationResult>>()
             {
@@ -53,9 +53,6 @@ namespace PocketBaseClient.CodeGenerator.Interactive
                     string strDir = (value as string??string.Empty).Trim();
                     if(string.IsNullOrEmpty(strDir))
                         return new ValidationResult("Value is null or empty");
-
-                    if (!Directory.Exists(Path.GetDirectoryName(strDir)))
-                        return new ValidationResult("Path do not exists");
 
                     return ValidationResult.Success!;
                 },

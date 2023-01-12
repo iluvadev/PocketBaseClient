@@ -44,19 +44,18 @@ namespace PocketBaseClient.CodeGenerator.Interactive
 
 
             ConsoleHelper.WriteStep(2, "Defining the code to generate");
-            // Ask for Directory Base where generate code
-            string baseDirForProject = Prompt.Input<string>("Enter the Directory where create the Project folder with code",
-                                                            validators: PromptValidators.BaseDirForProject())!;
 
             // Ask for the Project name
-            AskProjectName(schema, baseDirForProject);
+            AskProjectName(schema);
 
+            // Ask for Directory Base where generate code
+            string projectFolder = AskProjectFolder();
+            
             // Ask for the Namespace
             AskNamespace(schema);
 
             ConsoleHelper.WriteStep(3, "Code generation");
             // Generate code
-            string projectFolder = Path.Combine(baseDirForProject, schema.ProjectName);
             var settings = new Settings(schema, projectFolder);
             var codeGenerator = new Generator();
             codeGenerator.GenerateCode(settings);
@@ -96,7 +95,7 @@ namespace PocketBaseClient.CodeGenerator.Interactive
             ConsoleHelper.WriteDone();
         }
 
-        private static void AskProjectName(PocketBaseSchema schema, string baseDirForProject)
+        private static void AskProjectName(PocketBaseSchema schema)
         {
             bool isOk = false;
 
@@ -105,18 +104,29 @@ namespace PocketBaseClient.CodeGenerator.Interactive
                 ConsoleHelper.WriteCurrentValue("The name for your Project will be:", schema.ProjectName);
                 isOk = !Prompt.Confirm("Do you want to change this project name?", false);
                 if (!isOk)
-                    schema.ProjectName = (Prompt.Input<string>("Enter the Project Name",
-                                                               validators: PromptValidators.NameForProjectOrNamespace())!)
-                                                              .ToPascalCaseForNamespace();
-                else
+                    schema.ProjectName = Prompt.Input<string>("Enter the Project Name",
+                        validators: PromptValidators.NameForProjectOrNamespace());
+            }
+        }
+
+        private static string AskProjectFolder()
+        {
+            string folder = "";
+            bool isOk = false;
+
+            while (!isOk)
+            {
+                folder = Prompt.Input<string>("Enter the Directory where create the Project folder with code",
+                    validators: PromptValidators.ProjectFolder());
+                var dirInfo = new DirectoryInfo(folder);
+                isOk = !dirInfo.Exists;
+                if (!isOk)
                 {
-                    // Confirm overwrite if exists a folder
-                    var dirInfo = new DirectoryInfo(Path.Combine(baseDirForProject, schema.ProjectName));
-                    ConsoleHelper.WriteCurrentValue("The project folder will be:", dirInfo.FullName);
-                    if (dirInfo.Exists)
-                        isOk = Prompt.Confirm("The project folder already exists, do you want to overwrite this?", false);
+                    isOk = Prompt.Confirm("The directory already exists, do you want to overwrite this?", false);
                 }
             }
+
+            return folder;
         }
 
         private static void AskNamespace(PocketBaseSchema schema)
@@ -128,12 +138,12 @@ namespace PocketBaseClient.CodeGenerator.Interactive
                 ConsoleHelper.WriteCurrentValue("The namespace for generated code will be:", schema.Namespace);
                 isOk = !Prompt.Confirm("Do you want to change this namespace?", false);
                 if (!isOk)
-                    schema.Namespace = (Prompt.Input<string>("Enter the correct Namespace",
-                                                             validators: PromptValidators.NameForProjectOrNamespace())!)
-                                                            .ToPascalCaseForNamespace();
+                    schema.Namespace = Prompt.Input<string>("Enter the correct Namespace",
+                        validators: PromptValidators.NameForProjectOrNamespace());
             }
         }
 
+        
         private static void UpdatePocketBaseSchema(PocketBaseSchema schema)
         {
             var pocketBaseUri = new Uri(schema.PocketBaseApplication.Url!);
