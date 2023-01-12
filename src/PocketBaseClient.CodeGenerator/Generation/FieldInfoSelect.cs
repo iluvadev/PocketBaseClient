@@ -64,7 +64,7 @@ namespace {settings.NamespaceModels}
             foreach (var value in Options.Values ?? new List<string>())
             {
                 sb.AppendLine(@$"{indent}[Description(""{value}"")]");
-                sb.AppendLine(@$"{indent}{value.Singularize().ToPascalCase()},");
+                sb.AppendLine(@$"{indent}{value},");
                 sb.AppendLine();
             }
             sb.Append($@"
