@@ -65,7 +65,7 @@ namespace PocketBaseClient.Orm.Structures
 
         /// <inheritdoc />
         bool IBasicList.Contains(object? element)
-            => false;
+            => element is T item && Contains(item);
 
         /// <inheritdoc />
         public T? Add(T? element)
