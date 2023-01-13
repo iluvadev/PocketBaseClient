@@ -152,6 +152,7 @@ namespace PocketBaseClient.DemoTest.Models
         [JsonPropertyName("select_multiple")]
         [PocketBaseField(id: "8dks1xfy", name: "select_multiple", required: false, system: false, unique: false, type: "select")]
         [Display(Name = "Select_multiple")]
+        [JsonInclude]
         [JsonConverter(typeof(EnumListConverter<SelectMultipleList, SelectMultipleEnum>))]
         public SelectMultipleList SelectMultiple { get => Get(() => _SelectMultiple ??= new SelectMultipleList(this)); private set => Set(value, ref _SelectMultiple); }
 
@@ -203,6 +204,7 @@ namespace PocketBaseClient.DemoTest.Models
         [JsonPropertyName("relation_multiple_no_limit")]
         [PocketBaseField(id: "a4chtr6c", name: "relation_multiple_no_limit", required: false, system: false, unique: false, type: "relation")]
         [Display(Name = "Relation_multiple_no_limit")]
+        [JsonInclude]
         [JsonConverter(typeof(RelationListConverter<RelationMultipleNoLimitList, TestForRelated>))]
         public RelationMultipleNoLimitList RelationMultipleNoLimit { get => Get(() => _RelationMultipleNoLimit ??= new RelationMultipleNoLimitList(this)); private set => Set(value, ref _RelationMultipleNoLimit); }
 
@@ -211,6 +213,7 @@ namespace PocketBaseClient.DemoTest.Models
         [JsonPropertyName("relation_multiple_limit")]
         [PocketBaseField(id: "otxwaoam", name: "relation_multiple_limit", required: false, system: false, unique: false, type: "relation")]
         [Display(Name = "Relation_multiple_limit")]
+        [JsonInclude]
         [JsonConverter(typeof(RelationListConverter<RelationMultipleLimitList, TestForRelated>))]
         public RelationMultipleLimitList RelationMultipleLimit { get => Get(() => _RelationMultipleLimit ??= new RelationMultipleLimitList(this)); private set => Set(value, ref _RelationMultipleLimit); }
 

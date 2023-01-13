@@ -102,7 +102,10 @@ namespace {settings.NamespaceModels}
             var list = base.GetLinesForPropertyDecorators();
 
             if (IsMultiple)
+            {
+                list.Add("[JsonInclude]");
                 list.Add($@"[JsonConverter(typeof(EnumListConverter<{ListClassName}, {EnumName}>))]");
+            }
             else
                 list.Add($@"[JsonConverter(typeof(EnumConverter<{EnumName}>))]");
 

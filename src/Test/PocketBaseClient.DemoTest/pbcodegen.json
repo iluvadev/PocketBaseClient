@@ -6,6 +6,7 @@
     "appUrl": "https://orm-csharp-test.pockethost.io"
   },
   "SchemaDate": "2022-12-26T09:39:06.2230519Z",
+  "SingularizeAndPluralize": true,
   "Collections": [
     {
       "Id": "_pb_users_auth_",

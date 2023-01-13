@@ -85,6 +85,7 @@ namespace PocketBaseClient.DemoTest.Models
         [JsonPropertyName("categories")]
         [PocketBaseField(id: "2ftkqyzs", name: "categories", required: false, system: false, unique: false, type: "relation")]
         [Display(Name = "Categories")]
+        [JsonInclude]
         [JsonConverter(typeof(RelationListConverter<CategoriesList, Category>))]
         public CategoriesList Categories { get => Get(() => _Categories ??= new CategoriesList(this)); private set => Set(value, ref _Categories); }
 
@@ -93,6 +94,7 @@ namespace PocketBaseClient.DemoTest.Models
         [JsonPropertyName("tags")]
         [PocketBaseField(id: "vqnnjaiq", name: "tags", required: false, system: false, unique: false, type: "relation")]
         [Display(Name = "Tags")]
+        [JsonInclude]
         [JsonConverter(typeof(RelationListConverter<TagsList, Tag>))]
         public TagsList Tags { get => Get(() => _Tags ??= new TagsList(this)); private set => Set(value, ref _Tags); }
 
