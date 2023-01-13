@@ -79,7 +79,10 @@ namespace {settings.NamespaceModels}
             var list = base.GetLinesForPropertyDecorators();
 
             if (IsMultiple)
+            {
+                list.Add("[JsonInclude]");
                 list.Add($@"[JsonConverter(typeof(RelationListConverter<{ListClassName}, {ReferencedClassName}>))]");
+            } 
             else
                 list.Add($@"[JsonConverter(typeof(RelationConverter<{ReferencedClassName}>))]");
 

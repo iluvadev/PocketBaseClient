@@ -82,7 +82,10 @@ namespace PocketBaseClient.Orm.Structures
 
         /// <inheritdoc />
         object? IBasicList.Add(object? element)
-            => null;
+        {
+            return element is T item ? Add(item) : default;
+        }
+
 
         /// <inheritdoc />
         public T? Remove(T? element)
@@ -98,7 +101,9 @@ namespace PocketBaseClient.Orm.Structures
 
         /// <inheritdoc />
         object? IBasicList.Remove(object? element)
-            => null;
+        {
+            return element is T item ? Remove(item) : default;
+        }
 
         /// <inheritdoc />
         public void DiscardChanges(ListSaveDiscardModes mode)
