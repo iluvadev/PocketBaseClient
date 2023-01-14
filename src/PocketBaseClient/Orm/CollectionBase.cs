@@ -46,12 +46,12 @@ namespace PocketBaseClient.Orm
         /// <summary>
         /// The Context for Data access
         /// </summary>
-        protected DataServiceBase Context { get; }
+        protected internal DataServiceBase Context { get; }
 
         /// <summary>
         /// Access to the PocketBase Sdk 
         /// </summary>
-        protected PocketBase PocketBase => Context.App.Sdk;
+        protected internal PocketBase PocketBase => Context.App.Sdk;
 
 
         /// <summary>
