@@ -36,6 +36,8 @@ namespace PocketBaseClient.CodeGenerator.Generation
         }
         private void GenerateCodeInternal(Settings settings)
         {
+            StringExtensions.SingularizeAndPluralize = settings.PocketBaseSchema.SingularizeAndPluralize;
+            
             ResetGenerationData();
             foreach (var collectionModel in settings.PocketBaseSchema.Collections)
                 Collections.Add(new CollectionInfo(collectionModel, () => Collections));

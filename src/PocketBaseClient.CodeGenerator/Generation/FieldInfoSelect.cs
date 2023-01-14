@@ -64,7 +64,7 @@ namespace {settings.NamespaceModels}
             foreach (var value in Options.Values ?? new List<string>())
             {
                 sb.AppendLine(@$"{indent}[Description(""{value}"")]");
-                sb.AppendLine(@$"{indent}{value.Singularize().ToPascalCase()},");
+                sb.AppendLine(@$"{indent}{value.ToPascalCase()},");
                 sb.AppendLine();
             }
             sb.Append($@"
@@ -102,7 +102,10 @@ namespace {settings.NamespaceModels}
             var list = base.GetLinesForPropertyDecorators();
 
             if (IsMultiple)
+            {
+                list.Add("[JsonInclude]");
                 list.Add($@"[JsonConverter(typeof(EnumListConverter<{ListClassName}, {EnumName}>))]");
+            }
             else
                 list.Add($@"[JsonConverter(typeof(EnumConverter<{EnumName}>))]");
 
