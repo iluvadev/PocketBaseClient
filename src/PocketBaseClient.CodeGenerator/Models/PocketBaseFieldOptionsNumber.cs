@@ -12,11 +12,20 @@ using System.Text.Json.Serialization;
 
 namespace PocketBaseClient.CodeGenerator.Models
 {
+    /// <summary>
+    /// Model to map PocketBase Options for fields of type Number
+    /// </summary>
     public class PocketBaseFieldOptionsNumber
     {
+        /// <summary>
+        /// Max number
+        /// </summary>
         [JsonPropertyName("max")]
         public int? Max { get; set; }
 
+        /// <summary>
+        /// Min number
+        /// </summary>
         [JsonPropertyName("min")]
         public int? Min { get; set; }
     }

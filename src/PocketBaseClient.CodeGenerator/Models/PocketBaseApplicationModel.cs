@@ -12,11 +12,20 @@ using System.Text.Json.Serialization;
 
 namespace PocketBaseClient.CodeGenerator.Models
 {
+    /// <summary>
+    /// Model to map the PocketBase application information
+    /// </summary>
     public class PocketBaseApplicationModel
     {
+        /// <summary>
+        /// The name of the PocketBase application
+        /// </summary>
         [JsonPropertyName("appName")]
         public string? Name { get; set; }
 
+        /// <summary>
+        /// The Url of the PocketBase application (the server)
+        /// </summary>
         [JsonPropertyName("appUrl")]
         public string? Url { get; set; }
     }
