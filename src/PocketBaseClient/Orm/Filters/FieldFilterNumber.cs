@@ -8,6 +8,8 @@
 // pocketbase-csharp-sdk project: https://github.com/PRCV1/pocketbase-csharp-sdk 
 // pocketbase project: https://github.com/pocketbase/pocketbase
 
+using System.Runtime.InteropServices;
+
 namespace PocketBaseClient.Orm.Filters
 {
     /// <summary>
@@ -28,7 +30,7 @@ namespace PocketBaseClient.Orm.Filters
         /// </summary>
         /// <param name="value">The value to compare</param>
         /// <returns></returns>
-        public FilterCommand Equal(int value)
+        public FilterCommand Equal(float value)
             => new($"{FieldName}={value}");
 
         /// <summary>
@@ -36,7 +38,7 @@ namespace PocketBaseClient.Orm.Filters
         /// </summary>
         /// <param name="value">The value to compare</param>
         /// <returns></returns>
-        public FilterCommand NotEqual(int value)
+        public FilterCommand NotEqual(float value)
             => new($"{FieldName}!={value}");
 
         /// <summary>
@@ -44,7 +46,7 @@ namespace PocketBaseClient.Orm.Filters
         /// </summary>
         /// <param name="value">The value to compare</param>
         /// <returns></returns>
-        public FilterCommand GreaterThan(int value)
+        public FilterCommand GreaterThan(float value)
             => new($"{FieldName}>{value}");
 
         /// <summary>
@@ -52,7 +54,7 @@ namespace PocketBaseClient.Orm.Filters
         /// </summary>
         /// <param name="value">The value to compare</param>
         /// <returns></returns>
-        public FilterCommand GreaterThanOrEqual(int value)
+        public FilterCommand GreaterThanOrEqual(float value)
             => new($"{FieldName}>={value}");
 
         /// <summary>
@@ -60,7 +62,7 @@ namespace PocketBaseClient.Orm.Filters
         /// </summary>
         /// <param name="value">The value to compare</param>
         /// <returns></returns>
-        public FilterCommand LessThan(int value)
+        public FilterCommand LessThan(float value)
             => new($"{FieldName}<{value}");
 
         /// <summary>
@@ -68,7 +70,7 @@ namespace PocketBaseClient.Orm.Filters
         /// </summary>
         /// <param name="value">The value to compare</param>
         /// <returns></returns>
-        public FilterCommand LessThanOrEqual(int value)
+        public FilterCommand LessThanOrEqual(float value)
             => new($"{FieldName}<={value}");
 
         /// <summary>
@@ -78,7 +80,7 @@ namespace PocketBaseClient.Orm.Filters
         /// <param name="minValue">The min value to compare</param>
         /// <param name="maxValue">The max value to compare</param>
         /// <returns></returns>
-        public FilterCommand Between(int minValue, int maxValue)
+        public FilterCommand Between(float minValue, float maxValue)
             => new($"{FieldName}>{minValue} && {FieldName}<{maxValue}");
     }
 }

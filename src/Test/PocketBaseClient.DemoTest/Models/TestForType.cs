@@ -48,20 +48,20 @@ namespace PocketBaseClient.DemoTest.Models
         [RegularExpression(@"^\w+$", ErrorMessage = @"Pattern '^\w+$' not match")]
         public string? TextRestrictions { get => Get(() => _TextRestrictions); set => Set(value, ref _TextRestrictions); }
 
-        private int? _NumberNoRestrictions = null;
+        private float? _NumberNoRestrictions = null;
         /// <summary> Maps to 'number_no_restrictions' field in PocketBase </summary>
         [JsonPropertyName("number_no_restrictions")]
         [PocketBaseField(id: "zasulmy0", name: "number_no_restrictions", required: false, system: false, unique: false, type: "number")]
         [Display(Name = "Number no restrictions")]
-        public int? NumberNoRestrictions { get => Get(() => _NumberNoRestrictions); set => Set(value, ref _NumberNoRestrictions); }
+        public float? NumberNoRestrictions { get => Get(() => _NumberNoRestrictions); set => Set(value, ref _NumberNoRestrictions); }
 
-        private int? _NumberRestrictions = null;
+        private float? _NumberRestrictions = null;
         /// <summary> Maps to 'number_restrictions' field in PocketBase </summary>
         [JsonPropertyName("number_restrictions")]
         [PocketBaseField(id: "xsz2augn", name: "number_restrictions", required: false, system: false, unique: false, type: "number")]
         [Display(Name = "Number restrictions")]
         [Range(0, 10, ErrorMessage = "Minimum 0, Maximum 10")]
-        public int? NumberRestrictions { get => Get(() => _NumberRestrictions); set => Set(value, ref _NumberRestrictions); }
+        public float? NumberRestrictions { get => Get(() => _NumberRestrictions); set => Set(value, ref _NumberRestrictions); }
 
         private bool? _Bool = null;
         /// <summary> Maps to 'bool' field in PocketBase </summary>
