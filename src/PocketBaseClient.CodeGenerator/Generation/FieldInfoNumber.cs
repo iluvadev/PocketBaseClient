@@ -10,26 +10,37 @@
 
 using pocketbase_csharp_sdk.Models.Collection;
 using PocketBaseClient.CodeGenerator.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Text.Json;
-using System.Threading.Tasks;
 
 namespace PocketBaseClient.CodeGenerator.Generation
 {
+    /// <summary>
+    /// Information about a Field of type Json of an Item in a Collection, for the code generation
+    /// </summary>
     internal class FieldInfoNumber : FieldInfo
     {
+        /// <summary>
+        /// Options of the field defined in PocketBase
+        /// </summary>
         private PocketBaseFieldOptionsNumber Options { get; }
+        
+        /// <inheritdoc />
         public override string TypeName => "int?";
+
+        /// <inheritdoc />
         public override string FilterType => "FieldFilterNumber";
 
-        public FieldInfoNumber(ItemInfo itemInfo, SchemaFieldModel schemaField): base(itemInfo, schemaField) 
+        /// <summary>
+        /// Ctor
+        /// </summary>
+        /// <param name="itemInfo"></param>
+        /// <param name="schemaField"></param>
+        public FieldInfoNumber(ItemInfo itemInfo, SchemaFieldModel schemaField) : base(itemInfo, schemaField)
         {
             Options = JsonSerializer.Deserialize<PocketBaseFieldOptionsNumber>(JsonSerializer.Serialize(schemaField.Options)) ?? new PocketBaseFieldOptionsNumber();
         }
 
+        /// <inheritdoc />
         protected override List<string> GetLinesForPropertyDecorators()
         {
             var list = base.GetLinesForPropertyDecorators();

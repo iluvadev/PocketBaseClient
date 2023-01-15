@@ -14,18 +14,33 @@ using System.Text.Json;
 
 namespace PocketBaseClient.CodeGenerator.Generation
 {
+    /// <summary>
+    /// Information about a Field of type Email of an Item in a Collection, for the code generation
+    /// </summary>
     internal class FieldInfoEmail : FieldInfo
     {
+        /// <summary>
+        /// Options of the field defined in PocketBase
+        /// </summary>
         private PocketBaseFieldOptionsEmailUrl Options { get; }
 
+        /// <inheritdoc />
         public override string TypeName => "MailAddress?";
+
+        /// <inheritdoc />
         public override string FilterType => "FieldFilterMailAddress";
 
+        /// <summary>
+        /// Ctor
+        /// </summary>
+        /// <param name="itemInfo"></param>
+        /// <param name="schemaField"></param>
         public FieldInfoEmail(ItemInfo itemInfo, SchemaFieldModel schemaField) : base(itemInfo, schemaField)
         {
             Options = JsonSerializer.Deserialize<PocketBaseFieldOptionsEmailUrl>(JsonSerializer.Serialize(schemaField.Options)) ?? new PocketBaseFieldOptionsEmailUrl();
         }
 
+        /// <inheritdoc />
         protected override List<string> GetLinesForPropertyDecorators()
         {
             var list = base.GetLinesForPropertyDecorators();
