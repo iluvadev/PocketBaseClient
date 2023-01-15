@@ -15,18 +15,35 @@ using System.Text.RegularExpressions;
 
 namespace PocketBaseClient.CodeGenerator
 {
+    /// <summary>
+    /// Extensions for String
+    /// </summary>
     internal static class StringExtensions
     {
         private static PluralizationService? _PluralizationService = null;
         private static PluralizationService PluralizationService => _PluralizationService ??= PluralizationService.CreateService(new CultureInfo("en"));
 
-        public static bool SingularizeAndPluralize = false;
+        /// <summary>
+        /// Flag to define the Singularize and Pluralize behaviour
+        /// </summary>
+        public static bool SingularizeAndPluralize { get; set; } = false;
         
+        /// <summary>
+        /// Converts the string to PascalCase to be used as Namespace
+        /// </summary>
+        /// <param name="s"></param>
+        /// <returns></returns>
         public static string ToPascalCaseForNamespace(this string s)
         {
             var splitted = s.Split('.');
             return string.Join(".", splitted.Select(n => n.ToPascalCase()));
         }
+
+        /// <summary>
+        /// Converts the string to Namespace, with '.' as separators and maintaining capitalization
+        /// </summary>
+        /// <param name="s"></param>
+        /// <returns></returns>
         public static string ToNamespace(this string s)
         {
             var nonWordChars = new Regex(@"[^a-zA-Z0-9]+");
@@ -34,6 +51,11 @@ namespace PocketBaseClient.CodeGenerator
             return string.Join(".", tokens);
         }
 
+        /// <summary>
+        /// Convers the string to PascalCase
+        /// </summary>
+        /// <param name="s"></param>
+        /// <returns></returns>
         public static string ToPascalCase(this string s)
         {
             var result = new StringBuilder();
@@ -61,43 +83,63 @@ namespace PocketBaseClient.CodeGenerator
             return result.ToString();
         }
 
-        // Convert the string to camel case.
-        public static string ToCamelCase(this string the_string)
+        /// <summary>
+        /// Converts the sting to camelCase
+        /// </summary>
+        /// <param name="s"></param>
+        /// <returns></returns>
+        public static string ToCamelCase(this string s)
         {
             // If there are 0 or 1 characters, just return the string.
             //if (the_string == null || the_string.Length < 2)
-            if (the_string.Length < 2)
-                return the_string;
+            if (s.Length < 2)
+                return s;
 
-            string result = the_string.ToPascalCase();
+            string result = s.ToPascalCase();
             return result[..1].ToLower() + result[1..];
         }
 
-        // Capitalize the first character and add a space before
-        // each capitalized letter (except the first character).
-        public static string ToProperCase(this string the_string)
+        /// <summary>
+        /// Capitalize the first character and add a space before 
+        /// each capitalized letter (except the first character).
+        /// </summary>
+        /// <param name="s"></param>
+        /// <returns></returns>
+        public static string ToProperCase(this string s)
         {
             // If there are 0 or 1 characters, just return the string.
             //if (the_string == null) return the_string;
-            if (the_string.Length < 2) return the_string.ToUpper();
+            if (s.Length < 2) return s.ToUpper();
 
             // Start with the first character.
-            string result = the_string[..1].ToUpper();
+            string result = s[..1].ToUpper();
 
             // Add the remaining characters.
-            for (int i = 1; i < the_string.Length; i++)
+            for (int i = 1; i < s.Length; i++)
             {
-                if (char.IsUpper(the_string[i])) result += " ";
-                result += the_string[i];
+                if (char.IsUpper(s[i])) result += " ";
+                result += s[i];
             }
 
             return result;
         }
 
-        public static string Singularize(this string the_string)
-            => SingularizeAndPluralize ? PluralizationService.Singularize(the_string) : the_string;
+        /// <summary>
+        /// Converts the string to Singular (in english), if <see cref="SingularizeAndPluralize"/> is true
+        /// </summary>
+        /// <remarks>The behaviour can be modified changing <see cref="SingularizeAndPluralize"/></remarks>
+        /// <param name="s"></param>
+        /// <returns></returns>
+        public static string Singularize(this string s)
+            => SingularizeAndPluralize ? PluralizationService.Singularize(s) : s;
 
-        public static string Pluralize(this string the_string)
-            => SingularizeAndPluralize ? PluralizationService.Pluralize(the_string) : the_string;
+        /// <summary>
+        /// Converts the string to Plural (in english), if <see cref="SingularizeAndPluralize"/> is true
+        /// </summary>
+        /// <remarks>The behaviour can be modified changing <see cref="SingularizeAndPluralize"/></remarks>
+        /// <param name="s"></param>
+        /// <returns></returns>
+        public static string Pluralize(this string s)
+            => SingularizeAndPluralize ? PluralizationService.Pluralize(s) : s;
     }
 }

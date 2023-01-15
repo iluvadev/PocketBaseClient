@@ -12,24 +12,65 @@ using pocketbase_csharp_sdk.Models.Collection;
 
 namespace PocketBaseClient.CodeGenerator.Generation
 {
+
+    /// <summary>
+    /// Information about a Collection, for the code generation
+    /// </summary>
     internal class CollectionInfo
     {
+        /// <summary>
+        /// The PocketBase Collection model
+        /// </summary>
         public CollectionModel CollectionModel { get; }
+
+        /// <summary>
+        /// Id of the Collection
+        /// </summary>
         public string Id => CollectionModel.Id!;
 
+        /// <summary>
+        /// Name of the Collection as a natural name, with spaces between words
+        /// </summary>
         private string NaturalName => CollectionModel.Name!.Replace("_", " ");
 
+        /// <summary>
+        /// Name of the collection in the DataService class, in the generated code
+        /// </summary>
         public string NameInDataService => NaturalName.Pluralize().ToPascalCase() + "Collection";
+
+        /// <summary>
+        /// Name of the Class that maps the Collection, in the generated code
+        /// </summary>
         public string ClassName => "Collection" + NaturalName.Pluralize().ToPascalCase();
+
+        /// <summary>
+        /// Filename where save the Collection class, in the generated code
+        /// </summary>
         public string FileName => ClassName + ".cs";
 
+        /// <summary>
+        /// Name of the Class that represents the items of the collection, in the generated code
+        /// </summary>
         private string ItemsClassName => NaturalName.Singularize().ToPascalCase();
 
+        /// <summary>
+        /// Information about the Items of the Collection
+        /// </summary>
         public ItemInfo ItemInfo { get; }
 
+        /// <summary>
+        /// Function to get all Collections from the PocketBase schema, 
+        /// used to obtain information about related Collections
+        /// </summary>
         public Func<List<CollectionInfo>> AllCollectionsGetter { get; }
 
 
+        /// <summary>
+        /// Ctor
+        /// </summary>
+        /// <param name="collectionModel"></param>
+        /// <param name="allCollectionsGetter"></param>
+        /// <exception cref="Exception"></exception>
         public CollectionInfo(CollectionModel collectionModel, Func<List<CollectionInfo>> allCollectionsGetter)
         {
             if (collectionModel.Name == null) throw new Exception("Collection name is empty");
@@ -41,6 +82,11 @@ namespace PocketBaseClient.CodeGenerator.Generation
             AllCollectionsGetter = allCollectionsGetter;
         }
 
+        /// <summary>
+        /// Generates code for the Collection and its items
+        /// </summary>
+        /// <param name="settings">Generation code settings</param>
+        /// <returns></returns>
         public List<GeneratedCodeFile> GenerateCode(Settings settings)
         {
             var generatedFiles = new List<GeneratedCodeFile>();
@@ -51,6 +97,11 @@ namespace PocketBaseClient.CodeGenerator.Generation
             return generatedFiles;
         }
 
+        /// <summary>
+        /// Generates the code for the Collection
+        /// </summary>
+        /// <param name="settings">Generation code settings</param>
+        /// <returns></returns>
         private GeneratedCodeFile GetCodeFileForCollection(Settings settings)
         {
             var fileName = Path.Combine(settings.PathModels, FileName);
