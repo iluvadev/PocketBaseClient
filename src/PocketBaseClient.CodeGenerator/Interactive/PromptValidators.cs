@@ -14,8 +14,15 @@ using System.ComponentModel.DataAnnotations;
 
 namespace PocketBaseClient.CodeGenerator.Interactive
 {
+    /// <summary>
+    /// Class with Validators for prompt values from Console input
+    /// </summary>
     internal static class PromptValidators
     {
+        /// <summary>
+        /// Validators for PocketBase url inputs
+        /// </summary>
+        /// <returns></returns>
         public static List<Func<object, ValidationResult>> PocketBaseUrl()
         {
             return new List<Func<object, ValidationResult>>()
@@ -40,6 +47,10 @@ namespace PocketBaseClient.CodeGenerator.Interactive
             };
         }
 
+        /// <summary>
+        /// Validators for Project folder inputs
+        /// </summary>
+        /// <returns></returns>
         public static List<Func<object, ValidationResult>> ProjectFolder()
         {
             return new List<Func<object, ValidationResult>>()
@@ -59,6 +70,10 @@ namespace PocketBaseClient.CodeGenerator.Interactive
             };
         }
 
+        /// <summary>
+        /// Validators for Generated Project folder inputs
+        /// </summary>
+        /// <returns></returns>
         public static List<Func<object, ValidationResult>> GeneratedFolderProject()
         {
             return new List<Func<object, ValidationResult>>()
@@ -84,7 +99,10 @@ namespace PocketBaseClient.CodeGenerator.Interactive
             };
         }
 
-
+        /// <summary>
+        /// Validators for names for Project or for Namespaces inputs
+        /// </summary>
+        /// <returns></returns>
         public static List<Func<object, ValidationResult>> NameForProjectOrNamespace()
         {
             return new List<Func<object, ValidationResult>>()

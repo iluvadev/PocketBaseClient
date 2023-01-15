@@ -15,8 +15,14 @@ using Sharprompt;
 
 namespace PocketBaseClient.CodeGenerator.Interactive
 {
+    /// <summary>
+    /// Class with all Interactive process management
+    /// </summary>
     internal static class Process
     {
+        /// <summary>
+        /// Starts the interactive process of code generation
+        /// </summary>
         public static void Start()
         {
             //Console.OutputEncoding = Encoding.UTF8;
@@ -31,6 +37,9 @@ namespace PocketBaseClient.CodeGenerator.Interactive
             }
         }
 
+        /// <summary>
+        /// Generate code for first time
+        /// </summary>
         private static void GenerateNew()
         {
             ConsoleHelper.WriteStep(1, "Setting the PocketBase Application");
@@ -65,6 +74,11 @@ namespace PocketBaseClient.CodeGenerator.Interactive
 
             ConsoleHelper.WriteDone();
         }
+        
+
+        /// <summary>
+        /// Regenerate existant code
+        /// </summary>
         private static void Regenerate()
         {
             ConsoleHelper.WriteStep(1, "Getting the generated code");
@@ -98,6 +112,10 @@ namespace PocketBaseClient.CodeGenerator.Interactive
             ConsoleHelper.WriteDone();
         }
 
+        /// <summary>
+        /// Ask for the project name to be generated
+        /// </summary>
+        /// <param name="schema">The PocketBase schema</param>
         private static void AskProjectName(PocketBaseSchema schema)
         {
             bool isOk = false;
@@ -112,6 +130,10 @@ namespace PocketBaseClient.CodeGenerator.Interactive
             }
         }
 
+        /// <summary>
+        /// Ask for the project folder where generate the code
+        /// </summary>
+        /// <returns></returns>
         private static string AskProjectFolder()
         {
             string folder = "";
@@ -129,6 +151,10 @@ namespace PocketBaseClient.CodeGenerator.Interactive
             return folder;
         }
 
+        /// <summary>
+        /// Ask for the namespace to use in the code to be generated
+        /// </summary>
+        /// <param name="schema">The PocketBase schema</param>
         private static void AskNamespace(PocketBaseSchema schema)
         {
             bool isOk = false;
@@ -143,6 +169,10 @@ namespace PocketBaseClient.CodeGenerator.Interactive
             }
         }
 
+        /// <summary>
+        /// Ask for the option of Singularize and Plurarize generated class names
+        /// </summary>
+        /// <param name="schema">The PocketBase schema</param>
         private static void AskSingularizeAndPluralize(PocketBaseSchema schema)
         {
             ConsoleHelper.WriteEmphasis(@"
@@ -156,7 +186,10 @@ namespace PocketBaseClient.CodeGenerator.Interactive
                 Prompt.Confirm("Do you want to enable singularize and pluralize feature?", true);
         }
 
-        
+        /// <summary>
+        /// Updates the PocketBase schema downloading from PocketBase server
+        /// </summary>
+        /// <param name="schema">The PocketBase schema</param>
         private static void UpdatePocketBaseSchema(PocketBaseSchema schema)
         {
             var pocketBaseUri = new Uri(schema.PocketBaseApplication.Url!);
@@ -165,6 +198,11 @@ namespace PocketBaseClient.CodeGenerator.Interactive
             schema.Collections = downloadedSchema.Collections;
         }
 
+        /// <summary>
+        /// Downloads the PocketBase schema from server
+        /// </summary>
+        /// <param name="pocketBaseUri">The url of the server</param>
+        /// <returns></returns>
         private static PocketBaseSchema DownloadPocketBaseSchema(Uri pocketBaseUri)
         {
             PocketBaseCredentials? pocketBaseCredentials;
@@ -175,7 +213,7 @@ namespace PocketBaseClient.CodeGenerator.Interactive
                 pocketBaseCredentials = Prompt.Bind<PocketBaseCredentials>();
                 try
                 {
-                    schema = SchemaDownloader.GetSchemaAsync(pocketBaseUri, pocketBaseCredentials.Email ?? "", pocketBaseCredentials.Password ?? "").Result;
+                    schema = SchemaDownloader.DownloadSchemaAsync(pocketBaseUri, pocketBaseCredentials.Email ?? "", pocketBaseCredentials.Password ?? "").Result;
                 }
                 catch (Exception ex)
                 {

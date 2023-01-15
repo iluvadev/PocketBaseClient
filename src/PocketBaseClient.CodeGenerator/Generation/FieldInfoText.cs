@@ -15,19 +15,34 @@ using System.Text.Json;
 
 namespace PocketBaseClient.CodeGenerator.Generation
 {
+    /// <summary>
+    /// Information about a Field of type Text of an Item in a Collection, for the code generation
+    /// </summary>
     internal class FieldInfoText : FieldInfo
     {
+        /// <summary>
+        /// Options of the field defined in PocketBase
+        /// </summary>
         private PocketBaseFieldOptionsText Options { get; }
 
+        /// <inheritdoc />
         public override string TypeName => "string?";
+
+        /// <inheritdoc />
         public override string FilterType => "FieldFilterText";
 
 
+        /// <summary>
+        /// Ctor
+        /// </summary>
+        /// <param name="itemInfo"></param>
+        /// <param name="schemaField"></param>
         public FieldInfoText(ItemInfo itemInfo, SchemaFieldModel schemaField) : base(itemInfo, schemaField)
         {
             Options = JsonSerializer.Deserialize<PocketBaseFieldOptionsText>(JsonSerializer.Serialize(schemaField.Options)) ?? new PocketBaseFieldOptionsText();
         }
 
+        /// <inheritdoc />
         protected override List<string> GetLinesForPropertyDecorators()
         {
             var list = base.GetLinesForPropertyDecorators();

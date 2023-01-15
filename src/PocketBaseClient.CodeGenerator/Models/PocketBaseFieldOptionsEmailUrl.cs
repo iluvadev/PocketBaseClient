@@ -12,10 +12,20 @@ using System.Text.Json.Serialization;
 
 namespace PocketBaseClient.CodeGenerator.Models
 {
+    /// <summary>
+    /// Model to map PocketBase Options for fields of type Email or Url
+    /// </summary>
     public class PocketBaseFieldOptionsEmailUrl
     {
+        /// <summary>
+        /// Exepted domains
+        /// </summary>
         [JsonPropertyName("exceptDomains")]
         public List<string>? ExceptDomains { get; set; }
+
+        /// <summary>
+        /// Excepted domains as string joined by ','
+        /// </summary>
         public string ExceptDomainsJoined
         {
             get
@@ -25,9 +35,15 @@ namespace PocketBaseClient.CodeGenerator.Models
             }
         }
 
+        /// <summary>
+        /// Only domains accepted
+        /// </summary>
         [JsonPropertyName("onlyDomains")]
         public List<string>? OnlyDomains { get; set; }
 
+        /// <summary>
+        /// Only domains accepted as string joined by ','
+        /// </summary>
         public string OnlyDomainsJoined
         {
             get

@@ -14,17 +14,33 @@ using System.Text.Json;
 
 namespace PocketBaseClient.CodeGenerator.Generation
 {
+    /// <summary>
+    /// Information about a Field of type Date of an Item in a Collection, for the code generation
+    /// </summary>
     internal class FieldInfoDate : FieldInfo
     {
+        /// <summary>
+        /// Options of the field defined in PocketBase
+        /// </summary>
         private PocketBaseFieldOptionsDatetime Options { get; }
+
+        /// <inheritdoc />
         public override string TypeName => "DateTime?";
+
+        /// <inheritdoc />
         public override string FilterType => "FieldFilterDate";
 
+        /// <summary>
+        /// Ctor
+        /// </summary>
+        /// <param name="itemInfo"></param>
+        /// <param name="schemaField"></param>
         public FieldInfoDate(ItemInfo itemInfo, SchemaFieldModel schemaField) : base(itemInfo, schemaField)
         {
             Options = JsonSerializer.Deserialize<PocketBaseFieldOptionsDatetime>(JsonSerializer.Serialize(schemaField.Options)) ?? new PocketBaseFieldOptionsDatetime();
         }
 
+        /// <inheritdoc />
         protected override List<string> GetLinesForPropertyDecorators()
         {
             var list = base.GetLinesForPropertyDecorators();

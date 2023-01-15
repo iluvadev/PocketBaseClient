@@ -1,25 +1,54 @@
-﻿using pocketbase_csharp_sdk.Models.Collection;
+﻿// Project site: https://github.com/iluvadev/PocketBaseClient-csharp
+//
+// Issues: https://github.com/iluvadev/PocketBaseClient-csharp/issues
+// License (MIT): https://github.com/iluvadev/PocketBaseClient-csharp/blob/main/LICENSE
+//
+// Copyright (c) 2022, iluvadev, and released under MIT License.
+//
+// pocketbase-csharp-sdk project: https://github.com/PRCV1/pocketbase-csharp-sdk 
+// pocketbase project: https://github.com/pocketbase/pocketbase
+
 using PocketBaseClient.CodeGenerator.Helpers;
 using System.Diagnostics;
 using System.Text;
 
 namespace PocketBaseClient.CodeGenerator.Generation
 {
+    /// <summary>
+    /// Class with all generation code process
+    /// </summary>
     internal class Generator
     {
+        /// <summary>
+        /// List of the Collections
+        /// </summary>
         private List<CollectionInfo> Collections { get; } = new List<CollectionInfo>();
+
+        /// <summary>
+        /// List of Generated files with its content
+        /// </summary>
         private List<GeneratedCodeFile> GeneratedFiles { get; } = new List<GeneratedCodeFile>();
 
+        /// <summary>
+        /// Ctor
+        /// </summary>
         public Generator()
         {
         }
 
+        /// <summary>
+        /// Clears Generation code information
+        /// </summary>
         private void ResetGenerationData()
         {
             Collections.Clear();
             GeneratedFiles.Clear();
         }
 
+        /// <summary>
+        /// Starts the Generation code process
+        /// </summary>
+        /// <param name="settings">Generation code settings</param>
         public void GenerateCode(Settings settings)
         {
             ConsoleHelper.WriteProcess($"Generating code for {settings.ApplicationName} in {settings.BasePath}");
@@ -34,10 +63,15 @@ namespace PocketBaseClient.CodeGenerator.Generation
                 }
             }.Start();
         }
+
+        /// <summary>
+        /// Generates the code for the PocketBase schema
+        /// </summary>
+        /// <param name="settings">Generation code settings</param>
         private void GenerateCodeInternal(Settings settings)
         {
             StringExtensions.SingularizeAndPluralize = settings.PocketBaseSchema.SingularizeAndPluralize;
-            
+
             ResetGenerationData();
             foreach (var collectionModel in settings.PocketBaseSchema.Collections)
                 Collections.Add(new CollectionInfo(collectionModel, () => Collections));
@@ -60,6 +94,11 @@ namespace PocketBaseClient.CodeGenerator.Generation
             settings.PocketBaseSchema.SaveToFile(Path.Combine(settings.BasePath, Settings.SchemaFileName));
         }
 
+        /// <summary>
+        /// Generates the code for the class that represents the PocketBase application
+        /// </summary>
+        /// <param name="settings">Generation code settings</param>
+        /// <returns></returns>
         private GeneratedCodeFile GetCodeFileForApplication(Settings settings)
         {
             string appClassName = (settings.ApplicationName ?? "MyPocketBase").ToPascalCase() + "Application";
@@ -88,6 +127,11 @@ namespace {settings.BaseNamespace}
             return new GeneratedCodeFile(fileName, content);
         }
 
+        /// <summary>
+        /// Generates the code for the class with Service Data
+        /// </summary>
+        /// <param name="settings">Generation code settings</param>
+        /// <returns></returns>
         private GeneratedCodeFile GetCodeFileForService(Settings settings)
         {
             string serviceClassName = (settings.ApplicationName ?? "MyPocketBase").ToPascalCase() + "DataService";
@@ -139,6 +183,11 @@ namespace {settings.NamespaceServices}
             return new GeneratedCodeFile(fileName, sb.ToString());
         }
 
+        /// <summary>
+        /// Generates the c# Project 
+        /// </summary>
+        /// <param name="settings">Generation code settings</param>
+        /// <returns></returns>
         private GeneratedCodeFile GetCodeFileForProject(Settings settings)
         {
             var fileName = Path.Combine(settings.BasePath, settings.ProjectFileName);
@@ -160,6 +209,11 @@ namespace {settings.NamespaceServices}
             return new GeneratedCodeFile(fileName, content);
         }
 
+        /// <summary>
+        /// Generates the file with the generation code Summary report 
+        /// </summary>
+        /// <param name="settings">Generation code settings</param>
+        /// <returns></returns>
         private GeneratedCodeFile GetCodeFileForSummary(Settings settings)
         {
             var fileName = Path.Combine(settings.BasePath, settings.SummaryFileName);

@@ -9,19 +9,25 @@
 // pocketbase project: https://github.com/pocketbase/pocketbase
 
 using pocketbase_csharp_sdk.Models.Collection;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace PocketBaseClient.CodeGenerator.Generation
 {
+    /// <summary>
+    /// Information about a Field of type Json of an Item in a Collection, for the code generation
+    /// </summary>
     internal class FieldInfoJson : FieldInfo
     {
+        /// <inheritdoc />
         public override string TypeName => "dynamic?";
+
+        /// <inheritdoc />
         public override string FilterType => "FieldFilterText";
 
-        public FieldInfoJson(ItemInfo itemInfo, SchemaFieldModel schemaFieldModel): base(itemInfo, schemaFieldModel) { }
+        /// <summary>
+        /// Ctor
+        /// </summary>
+        /// <param name="itemInfo"></param>
+        /// <param name="schemaFieldModel"></param>
+        public FieldInfoJson(ItemInfo itemInfo, SchemaFieldModel schemaFieldModel) : base(itemInfo, schemaFieldModel) { }
     }
 }
