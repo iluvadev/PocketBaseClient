@@ -21,12 +21,12 @@ namespace PocketBaseClient.CodeGenerator.Models
         /// Max number
         /// </summary>
         [JsonPropertyName("max")]
-        public int? Max { get; set; }
+        public float? Max { get; set; }
 
         /// <summary>
         /// Min number
         /// </summary>
         [JsonPropertyName("min")]
-        public int? Min { get; set; }
+        public float? Min { get; set; }
     }
 }

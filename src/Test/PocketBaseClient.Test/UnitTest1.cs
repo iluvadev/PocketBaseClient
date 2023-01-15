@@ -42,8 +42,10 @@ namespace PocketBaseClient.Test
             var res = col.Filter(i => i.Bool.IsTrue()).SortBy(i => i.Created.Desc().AndThenBy(i.Updated));
             foreach(var item in res)
             {
-
+                item.NumberNoRestrictions = 2;
+                item.NumberRestrictions = 0.1f;
             }
+            
         }
     }
 }

@@ -25,7 +25,7 @@ namespace PocketBaseClient.CodeGenerator.Generation
         private PocketBaseFieldOptionsNumber Options { get; }
         
         /// <inheritdoc />
-        public override string TypeName => "int?";
+        public override string TypeName => "float?";
 
         /// <inheritdoc />
         public override string FilterType => "FieldFilterNumber";
@@ -47,8 +47,8 @@ namespace PocketBaseClient.CodeGenerator.Generation
 
             if (Options.Max != null || Options.Min != null)
             {
-                var min = Options.Min ?? int.MinValue;
-                var max = Options.Max ?? int.MaxValue;
+                var min = Options.Min ?? float.MinValue;
+                var max = Options.Max ?? float.MaxValue;
                 list.Add($@"[Range({min}, {max}, ErrorMessage = ""Minimum {min}, Maximum {max}"")]");
             }
 
