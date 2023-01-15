@@ -9,19 +9,25 @@
 // pocketbase project: https://github.com/pocketbase/pocketbase
 
 using pocketbase_csharp_sdk.Models.Collection;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace PocketBaseClient.CodeGenerator.Generation
 {
+    /// <summary>
+    /// Information about a Field of type Bool of an Item in a Collection, for the code generation
+    /// </summary>
     internal class FieldInfoBool : FieldInfo
     {
+        /// <inheritdoc />
         public override string TypeName => "bool?";
+
+        /// <inheritdoc />
         public override string FilterType => "FieldFilterBool";
 
-        public FieldInfoBool(ItemInfo itemInfo, SchemaFieldModel schemaFieldModel): base(itemInfo, schemaFieldModel) { }
+        /// <summary>
+        /// Ctor
+        /// </summary>
+        /// <param name="itemInfo"></param>
+        /// <param name="schemaFieldModel"></param>
+        public FieldInfoBool(ItemInfo itemInfo, SchemaFieldModel schemaFieldModel) : base(itemInfo, schemaFieldModel) { }
     }
 }

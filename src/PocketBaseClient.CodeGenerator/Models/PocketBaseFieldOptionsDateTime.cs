@@ -13,12 +13,21 @@ using System.Text.Json.Serialization;
 
 namespace PocketBaseClient.CodeGenerator.Models
 {
+    /// <summary>
+    /// Model to map PocketBase Options for fields of type Datetime
+    /// </summary>
     public class PocketBaseFieldOptionsDatetime
     {
+        /// <summary>
+        /// The max date
+        /// </summary>
         [JsonPropertyName("max")]
         [JsonConverter(typeof(DateTimeConverter))]
         public DateTime? Max { get; set; }
 
+        /// <summary>
+        /// The min date
+        /// </summary>
         [JsonPropertyName("min")]
         [JsonConverter(typeof(DateTimeConverter))]
         public DateTime? Min { get; set; }

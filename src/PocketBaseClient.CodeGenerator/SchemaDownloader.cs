@@ -14,9 +14,19 @@ using PocketBaseClient.CodeGenerator.Models;
 
 namespace PocketBaseClient.CodeGenerator
 {
+    /// <summary>
+    /// Downloader Schema from PocketBase server
+    /// </summary>
     internal class SchemaDownloader
     {
-        public static async Task<PocketBaseSchema?> GetSchemaAsync(Uri url, string email, string pwd)
+        /// <summary>
+        /// Downloads the Schema from PocketBase server
+        /// </summary>
+        /// <param name="url">Url of the PocketBase server</param>
+        /// <param name="email">email of an admin account</param>
+        /// <param name="pwd">password for the admin account</param>
+        /// <returns></returns>
+        public static async Task<PocketBaseSchema?> DownloadSchemaAsync(Uri url, string email, string pwd)
         {
             var app = new PocketBaseClientApplication(url.ToString());
 
@@ -32,7 +42,7 @@ namespace PocketBaseClient.CodeGenerator
             var schema = new PocketBaseSchema();
 
             ConsoleHelper.WriteProcess($"Getting PocketBase Application Settings");
-            schema.SetSettingsAsync(await app.Sdk.Settings.GetAllAsync());
+            schema.SetPocketBaseApplicationAsync(await app.Sdk.Settings.GetAllAsync());
             ConsoleHelper.WriteDone();
 
             ConsoleHelper.WriteProcess($"Getting PocketBase Application Collections");
@@ -50,17 +60,6 @@ namespace PocketBaseClient.CodeGenerator
             ConsoleHelper.WriteDone();
 
             return schema;
-        }
-        public static async Task DownloadSchemaAsync(Uri url, string email, string pwd, FileInfo file)
-        {
-            var schema = await GetSchemaAsync(url, email, pwd);
-
-            if (schema != null)
-            {
-                ConsoleHelper.WriteProcess($"Saving PocketBase Application information to file {file.FullName}");
-                schema.SaveToFile(file.FullName);
-                ConsoleHelper.WriteDone();
-            }
         }
     }
 }

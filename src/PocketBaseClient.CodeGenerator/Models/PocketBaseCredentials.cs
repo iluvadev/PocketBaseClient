@@ -12,14 +12,23 @@ using System.ComponentModel.DataAnnotations;
 
 namespace PocketBaseClient.CodeGenerator.Models
 {
+    /// <summary>
+    /// Model to map PocketBase credentials
+    /// </summary>
     internal class PocketBaseCredentials
     {
+        /// <summary>
+        /// The credentials email
+        /// </summary>
         [Display(Name = "Type an Admin email")]
         [DataType(DataType.EmailAddress)]
         [Required]
         [MinLength(5)]
         public string? Email { get; set; }
 
+        /// <summary>
+        /// The password
+        /// </summary>
         [Display(Name = "Type the password")]
         [DataType(DataType.Password)]
         [Required]

@@ -12,10 +12,14 @@ using System.ComponentModel.DataAnnotations;
 
 namespace PocketBaseClient.CodeGenerator.Interactive
 {
+    /// <summary>
+    /// Main actions to do in interactive mode
+    /// </summary>
     internal enum MainActions
     {
         [Display(Name = "Generate code for first time")]
         GenerateNew,
+
         [Display(Name = "Regenerate code")]
         Regenerate,
     }
