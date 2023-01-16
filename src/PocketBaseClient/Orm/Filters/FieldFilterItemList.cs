@@ -30,6 +30,20 @@ namespace PocketBaseClient.Orm.Filters
         }
 
         /// <summary>
+        /// The Field is Null 
+        /// </summary>
+        /// <returns></returns>
+        public FilterCommand IsNull()
+            => new($"{FieldName}=null");
+
+        /// <summary>
+        /// The Field is NOT Null 
+        /// </summary>
+        /// <returns></returns>
+        public FilterCommand IsNotNull()
+            => new($"{FieldName}!=null");
+
+        /// <summary>
         /// The Field Contains a relation to Id <paramref name="value"/>
         /// </summary>
         /// <param name="value">The value to compare</param>
@@ -58,7 +72,7 @@ namespace PocketBaseClient.Orm.Filters
         /// </summary>
         /// <param name="value">The value to compare</param>
         /// <returns></returns>
-        public FilterCommand NotContainsl(T value)
+        public FilterCommand NotContains(T value)
             => NotContainsId(value.Id!);
     }
 }
