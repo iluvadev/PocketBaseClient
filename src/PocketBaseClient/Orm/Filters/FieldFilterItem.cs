@@ -24,6 +24,20 @@ namespace PocketBaseClient.Orm.Filters
         public FieldFilterItem(string fieldName) : base(fieldName)
         {
         }
+        
+        /// <summary>
+        /// The Field is Null 
+        /// </summary>
+        /// <returns></returns>
+        public FilterCommand IsNull()
+            => new($"{FieldName}=null");
+
+        /// <summary>
+        /// The Field is NOT Null 
+        /// </summary>
+        /// <returns></returns>
+        public FilterCommand IsNotNull()
+            => new($"{FieldName}!=null");
 
         /// <summary>
         /// The Field is related to Id Equal to <paramref name="value"/>

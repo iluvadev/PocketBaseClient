@@ -24,6 +24,20 @@ namespace PocketBaseClient.Orm.Filters
         }
 
         /// <summary>
+        /// The Field is Null 
+        /// </summary>
+        /// <returns></returns>
+        public FilterCommand IsNull()
+            => new($"{FieldName}=null");
+
+        /// <summary>
+        /// The Field is NOT Null 
+        /// </summary>
+        /// <returns></returns>
+        public FilterCommand IsNotNull()
+            => new($"{FieldName}!=null");
+
+        /// <summary>
         /// The Field is Equal to <paramref name="value"/>
         /// </summary>
         /// <param name="value">The value to compare</param>
