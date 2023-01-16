@@ -9,6 +9,8 @@
 // pocketbase project: https://github.com/pocketbase/pocketbase
 
 using pocketbase_csharp_sdk.Models.Collection;
+using PocketBaseClient.CodeGenerator.Models;
+using System.Text.Json;
 
 namespace PocketBaseClient.CodeGenerator.Generation
 {
@@ -17,8 +19,13 @@ namespace PocketBaseClient.CodeGenerator.Generation
     /// </summary>
     internal class FieldInfoFile : FieldInfo
     {
+        /// <summary>
+        /// Options of the field defined in PocketBase
+        /// </summary>
+        private PocketBaseFieldOptionsFile Options { get; }
+
         /// <inheritdoc />
-        public override string TypeName => "object?";
+        public override string TypeName => "FieldFile?";
 
         /// <inheritdoc />
         public override string FilterType => "FieldFilterText";
@@ -27,7 +34,22 @@ namespace PocketBaseClient.CodeGenerator.Generation
         /// Ctor
         /// </summary>
         /// <param name="itemInfo"></param>
-        /// <param name="schemaFieldModel"></param>
-        public FieldInfoFile(ItemInfo itemInfo, SchemaFieldModel schemaFieldModel) : base(itemInfo, schemaFieldModel) { }
+        /// <param name="schemaField"></param>
+        public FieldInfoFile(ItemInfo itemInfo, SchemaFieldModel schemaField) : base(itemInfo, schemaField)
+        {
+            Options = JsonSerializer.Deserialize<PocketBaseFieldOptionsFile>(JsonSerializer.Serialize(schemaField.Options)) ?? new PocketBaseFieldOptionsFile();
+        }
+
+        /// <inheritdoc />
+        protected override List<string> GetLinesForPropertyDecorators()
+        {
+            var list = base.GetLinesForPropertyDecorators();
+
+            if (Options.MimeTypes?.Any() ?? false)
+                list.Add($@"[MimeTypes(""{Options.MimeTypesJoined}"", ErrorMessage = ""Only MIME Types accepted: '{Options.MimeTypesJoined}'"")]");
+
+            list.Add("[JsonConverter(typeof(FileConverter))]");
+            return list;
+        }
     }
 }
