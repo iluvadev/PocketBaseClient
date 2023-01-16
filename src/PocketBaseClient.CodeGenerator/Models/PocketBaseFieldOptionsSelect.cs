@@ -25,6 +25,7 @@ namespace PocketBaseClient.CodeGenerator.Models
         /// <summary>
         /// Says if the field has only one element
         /// </summary>
+        [JsonIgnore]
         public bool IsSinglSelect => (MaxSelect ?? 1) == 1;
 
         /// <summary>

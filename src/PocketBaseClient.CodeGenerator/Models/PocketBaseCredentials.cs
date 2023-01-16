@@ -9,6 +9,7 @@
 // pocketbase project: https://github.com/pocketbase/pocketbase
 
 using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
 
 namespace PocketBaseClient.CodeGenerator.Models
 {
@@ -33,6 +34,7 @@ namespace PocketBaseClient.CodeGenerator.Models
         [DataType(DataType.Password)]
         [Required]
         [MinLength(5)]
+        [JsonIgnore]
         public string? Password { get; set; }
     }
 
