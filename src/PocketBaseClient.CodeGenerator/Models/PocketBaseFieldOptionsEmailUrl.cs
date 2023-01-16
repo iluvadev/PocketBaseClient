@@ -26,14 +26,8 @@ namespace PocketBaseClient.CodeGenerator.Models
         /// <summary>
         /// Excepted domains as string joined by ','
         /// </summary>
-        public string ExceptDomainsJoined
-        {
-            get
-            {
-                if (!(ExceptDomains?.Any() ?? false)) return string.Empty;
-                return string.Join(',', ExceptDomains);
-            }
-        }
+        [JsonIgnore]
+        public string ExceptDomainsJoined => (ExceptDomains?.Any() ?? false) ? string.Join(',', ExceptDomains) : string.Empty;
 
         /// <summary>
         /// Only domains accepted
@@ -44,14 +38,8 @@ namespace PocketBaseClient.CodeGenerator.Models
         /// <summary>
         /// Only domains accepted as string joined by ','
         /// </summary>
-        public string OnlyDomainsJoined
-        {
-            get
-            {
-                if (!(OnlyDomains?.Any() ?? false)) return string.Empty;
-                return string.Join(',', OnlyDomains);
-            }
-        }
+        [JsonIgnore]
+        public string OnlyDomainsJoined => (OnlyDomains?.Any() ?? false) ? string.Join(',', OnlyDomains) : string.Empty;
 
     }
 }
