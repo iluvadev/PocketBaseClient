@@ -216,8 +216,8 @@ namespace PocketBaseClient.Orm
         /// </summary>
         /// <param name="item"></param>
         /// <returns></returns>
-        public bool IsSame(ItemBase item)
-            => item.CollectionId == CollectionId && item.Id == Id;
+        public bool IsSame(BaseModel? item)
+            => item != null && item.CollectionId == CollectionId && item.Id == Id;
 
         protected internal virtual IEnumerable<ItemBase?> RelatedItems
             => Enumerable.Empty<ItemBase>();

@@ -277,6 +277,10 @@ namespace PocketBaseClient.Orm
            
             if (!await PocketBase.HttpDeleteAsync(UrlRecord(item))) return false;
 
+            // If is the Auth registry, delete it
+            if (item.IsSame(PocketBase.AuthStore.Model))
+                PocketBase.AuthStore.Clear();
+
             //Remove from Cache
             Cache.Remove(item.Id);
             item.Metadata_.IsTrash = true;
