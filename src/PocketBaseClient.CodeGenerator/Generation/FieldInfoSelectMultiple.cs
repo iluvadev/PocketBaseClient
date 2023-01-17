@@ -11,41 +11,35 @@
 using pocketbase_csharp_sdk.Models.Collection;
 using PocketBaseClient.CodeGenerator.Models;
 using System.Text;
-using System.Text.Json;
 
 namespace PocketBaseClient.CodeGenerator.Generation
 {
     /// <summary>
-    /// Information about a Field of type Select of an Item in a Collection, for the code generation
+    /// Information about a Field of type Select with Multiple values of an Item in a Collection, for the code generation
     /// </summary>
-    internal class FieldInfoSelect : FieldInfo
+    internal class FieldInfoSelectMultiple : FieldInfo
     {
         /// <summary>
         /// Options of the field defined in PocketBase
         /// </summary>
-        private PocketBaseFieldOptionsSelect Options { get; }
-
-        /// <summary>
-        /// Says if the field can contain multiple values
-        /// </summary>
-        private bool IsMultiple => Options.MaxSelect == null || Options.MaxSelect > 1;
+        protected PocketBaseFieldOptionsSelect Options { get; }
 
         /// <inheritdoc />
-        public override bool PrivateSetter => IsMultiple;
-        
-        /// <inheritdoc />
-        public override string TypeName => IsMultiple ? ListClassName : EnumName + "?";
+        public override bool PrivateSetter => true;
 
         /// <inheritdoc />
-        public override string InitialValueForProperty => IsMultiple ? $"new {ListClassName}(this)" : base.InitialValueForProperty;
+        public override string TypeName => ListClassName;
 
         /// <inheritdoc />
-        public override string InitialValueForAttribute => IsMultiple ? $"new {ListClassName}()" : base.InitialValueForAttribute;
+        public override string InitialValueForProperty => $"new {ListClassName}(this)";
+
+        /// <inheritdoc />
+        public override bool IsTypeNullableInProperty => false;
 
         /// <summary>
         /// The name of the generated Enum
         /// </summary>
-        private string EnumName => PropertyName + "Enum";
+        public string EnumName => PropertyName + "Enum";
 
         /// <summary>
         /// The file name where to save the generated enum
@@ -55,24 +49,25 @@ namespace PocketBaseClient.CodeGenerator.Generation
         /// <summary>
         /// The Class name of the type List if is multiple
         /// </summary>
-        private string ListClassName => PropertyName + "List";
+        public string ListClassName => PropertyName + "List";
 
         /// <summary>
         /// The filename to the class for the list when is multiple
         /// </summary>
         private string ListFileName => ItemInfo.ClassName + "." + ListClassName + ".cs";
-        
+
         /// <inheritdoc />
-        public override string FilterType => IsMultiple ? $"FieldFilterEnumList<{ListClassName}, {EnumName}>" : $"FieldFilterEnum<{EnumName}>";
-        
+        public override string FilterType => $"FieldFilterEnumList<{ListClassName}, {EnumName}>";
+
         /// <summary>
         /// Ctor
         /// </summary>
         /// <param name="itemInfo"></param>
         /// <param name="schemaField"></param>
-        public FieldInfoSelect(ItemInfo itemInfo, SchemaFieldModel schemaField) : base(itemInfo, schemaField)
+        /// <param name="options"></param>
+        public FieldInfoSelectMultiple(ItemInfo itemInfo, SchemaFieldModel schemaField, PocketBaseFieldOptionsSelect options) : base(itemInfo, schemaField)
         {
-            Options = JsonSerializer.Deserialize<PocketBaseFieldOptionsSelect>(JsonSerializer.Serialize(schemaField.Options)) ?? new PocketBaseFieldOptionsSelect();
+            Options = options;
         }
 
         /// <inheritdoc />
@@ -81,8 +76,7 @@ namespace PocketBaseClient.CodeGenerator.Generation
             var list = base.GenerateCode(settings);
             list.Add(GetCodeFileForEnum(settings));
 
-            if (IsMultiple)
-                list.Add(GetCodeFileForList(settings));
+            list.Add(GetCodeFileForList(settings));
 
             return list;
         }
@@ -153,10 +147,7 @@ namespace {settings.NamespaceModels}
         {
             var list = base.GetLinesForPropertyDecorators();
 
-            if (IsMultiple)
-                list.Add($@"[JsonConverter(typeof(EnumListConverter<{ListClassName}, {EnumName}>))]");
-            else
-                list.Add($@"[JsonConverter(typeof(EnumConverter<{EnumName}>))]");
+            list.Add($@"[JsonConverter(typeof(EnumListConverter<{ListClassName}, {EnumName}>))]");
 
             return list;
         }

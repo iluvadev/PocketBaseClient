@@ -109,7 +109,6 @@ using pocketbase_csharp_sdk.Json;
 using PocketBaseClient.Orm;
 using PocketBaseClient.Orm.Attributes;
 using PocketBaseClient.Orm.Json;
-using PocketBaseClient.Orm.Structures;
 using PocketBaseClient.Orm.Validators;
 using PocketBaseClient.Services;
 using System.ComponentModel.DataAnnotations;

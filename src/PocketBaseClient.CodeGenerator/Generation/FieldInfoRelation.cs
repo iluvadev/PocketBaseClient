@@ -33,7 +33,13 @@ namespace PocketBaseClient.CodeGenerator.Generation
         public override bool PrivateSetter => IsMultiple;
 
         /// <inheritdoc />
-        public override string TypeName => IsMultiple ? ListClassName : ReferencedClassName + "?";
+        public override string TypeName => IsMultiple ? ListClassName : ReferencedClassName;
+
+        /// <inheritdoc />
+        public override bool IsTypeNullableInAttribute => !IsMultiple;
+
+        /// <inheritdoc />
+        public override bool IsTypeNullableInProperty => !IsMultiple;
 
         /// <inheritdoc />
         public override string InitialValueForProperty => IsMultiple ? $"new {ListClassName}(this)" : base.InitialValueForProperty;

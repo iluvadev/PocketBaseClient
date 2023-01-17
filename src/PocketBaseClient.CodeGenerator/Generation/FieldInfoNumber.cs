@@ -23,9 +23,9 @@ namespace PocketBaseClient.CodeGenerator.Generation
         /// Options of the field defined in PocketBase
         /// </summary>
         private PocketBaseFieldOptionsNumber Options { get; }
-        
+
         /// <inheritdoc />
-        public override string TypeName => "float?";
+        public override string TypeName => "float";
 
         /// <inheritdoc />
         public override string FilterType => "FieldFilterNumber";

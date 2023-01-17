@@ -8,16 +8,16 @@
 // pocketbase-csharp-sdk project: https://github.com/PRCV1/pocketbase-csharp-sdk 
 // pocketbase project: https://github.com/pocketbase/pocketbase
 
-using pocketbase_csharp_sdk;
+using PocketBaseClient.Orm.Structures;
 using System.Text.Json.Serialization;
 
-namespace PocketBaseClient.Orm.Structures
+namespace PocketBaseClient.Orm
 {
 
     /// <summary>
     /// Class definition for a field of type File
     /// </summary>
-    public class FieldFile : IOwnedByItem
+    public class FieldFileBase : IOwnedByItem
     {
         /// <inheritdoc />
         public ItemBase? Owner { get; set; }
@@ -25,7 +25,7 @@ namespace PocketBaseClient.Orm.Structures
         /// <summary>
         /// The File Name
         /// </summary>
-        public string? FileName { get; set; }
+        public string? FileName { get; private set; }
 
         #region Metadata
         private FieldFileMetadata? _Metadata_ = null;
@@ -45,9 +45,18 @@ namespace PocketBaseClient.Orm.Structures
         /// Ctor
         /// </summary>
         /// <param name="filename"></param>
-        public FieldFile(string filename)
+        internal FieldFileBase(string filename)
         {
             FileName = filename;
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="owner"></param>
+        public FieldFileBase(ItemBase owner) 
+        { 
+            Owner = owner;
         }
     }
 }

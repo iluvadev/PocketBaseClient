@@ -10,7 +10,6 @@
 
 using pocketbase_csharp_sdk.Models.Collection;
 using PocketBaseClient.CodeGenerator.Models;
-using System;
 using System.Text.Json;
 
 namespace PocketBaseClient.CodeGenerator.Generation
@@ -26,10 +25,13 @@ namespace PocketBaseClient.CodeGenerator.Generation
         private PocketBaseFieldOptionsText Options { get; }
 
         /// <inheritdoc />
-        public override string TypeName => "string?";
+        public override string TypeName => "string";
 
         /// <inheritdoc />
         public override string FilterType => "FieldFilterText";
+
+        /// <inheritdoc />
+        public override string InitialValueForProperty => IsRequired ? "string.Empty" : base.InitialValueForProperty;
 
 
         /// <summary>

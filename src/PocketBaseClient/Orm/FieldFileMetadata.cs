@@ -8,10 +8,9 @@
 // pocketbase-csharp-sdk project: https://github.com/PRCV1/pocketbase-csharp-sdk 
 // pocketbase project: https://github.com/pocketbase/pocketbase
 
-
 using System.Text.Json.Serialization;
 
-namespace PocketBaseClient.Orm.Structures
+namespace PocketBaseClient.Orm
 {
     /// <summary>
     /// Metadata about a File
@@ -20,10 +19,10 @@ namespace PocketBaseClient.Orm.Structures
     {
         /// <summary> The Field </summary>
         [JsonIgnore]
-        internal FieldFile Field { get; private init; }
+        internal FieldFileBase Field { get; private init; }
 
 
-        internal FieldFileMetadata(FieldFile field)
+        internal FieldFileMetadata(FieldFileBase field)
         {
             Field = field;
         }

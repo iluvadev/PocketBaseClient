@@ -25,7 +25,7 @@ namespace PocketBaseClient.CodeGenerator.Generation
         private PocketBaseFieldOptionsEmailUrl Options { get; }
 
         /// <inheritdoc />
-        public override string TypeName => "Uri?";
+        public override string TypeName => "Uri";
 
         /// <inheritdoc />
         public override string FilterType => "FieldFilterUri";

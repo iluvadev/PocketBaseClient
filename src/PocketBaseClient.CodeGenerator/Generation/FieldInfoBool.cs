@@ -18,7 +18,7 @@ namespace PocketBaseClient.CodeGenerator.Generation
     internal class FieldInfoBool : FieldInfo
     {
         /// <inheritdoc />
-        public override string TypeName => "bool?";
+        public override string TypeName => "bool";
 
         /// <inheritdoc />
         public override string FilterType => "FieldFilterBool";
@@ -27,7 +27,7 @@ namespace PocketBaseClient.CodeGenerator.Generation
         /// Ctor
         /// </summary>
         /// <param name="itemInfo"></param>
-        /// <param name="schemaFieldModel"></param>
-        public FieldInfoBool(ItemInfo itemInfo, SchemaFieldModel schemaFieldModel) : base(itemInfo, schemaFieldModel) { }
+        /// <param name="schemaField"></param>
+        public FieldInfoBool(ItemInfo itemInfo, SchemaFieldModel schemaField) : base(itemInfo, schemaField) { }
     }
 }

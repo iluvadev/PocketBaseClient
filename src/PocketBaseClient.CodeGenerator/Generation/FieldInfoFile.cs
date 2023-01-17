@@ -24,11 +24,27 @@ namespace PocketBaseClient.CodeGenerator.Generation
         /// </summary>
         private PocketBaseFieldOptionsFile Options { get; }
 
+        /// <summary>
+        /// Says if the field can contain multiple values
+        /// </summary>
+        private bool IsMultiple => Options.MaxSelect == null || Options.MaxSelect > 1;
+
         /// <inheritdoc />
-        public override string TypeName => "FieldFile?";
+        public override string TypeName => "FieldFileBase";
+
+        /// <inheritdoc />
+        public override bool IsTypeNullableInProperty => false;
 
         /// <inheritdoc />
         public override string FilterType => "FieldFilterText";
+
+        /// <inheritdoc />
+        public override string InitialValueForProperty => $"new {TypeName}(this)";
+        //public override string InitialValueForProperty => IsMultiple ? $"new {ListClassName}(this)" : base.InitialValueForProperty;
+
+        ///// <inheritdoc />
+        //public override string InitialValueForAttribute => IsMultiple ? $"new {ListClassName}()" : base.InitialValueForAttribute;
+
 
         /// <summary>
         /// Ctor
