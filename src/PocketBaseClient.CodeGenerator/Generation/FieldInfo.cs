@@ -353,19 +353,13 @@ namespace PocketBaseClient.CodeGenerator.Generation
             else if (schemaField.Type == "date")
                 return new FieldInfoDate(itemInfo, schemaField);
             else if (schemaField.Type == "select")
-            {
-                var options = JsonSerializer.Deserialize<PocketBaseFieldOptionsSelect>(JsonSerializer.Serialize(schemaField.Options)) ?? new PocketBaseFieldOptionsSelect();
-                if (options.IsMultiple)
-                    return new FieldInfoSelectMultiple(itemInfo, schemaField, options);
-                else
-                    return new FieldInfoSelectOne(itemInfo, schemaField, options);
-            }
+                return FieldInfoSelect.NewFieldInfoSelect(itemInfo, schemaField);
             else if (schemaField.Type == "json")
                 return new FieldInfoJson(itemInfo, schemaField);
             else if (schemaField.Type == "file")
                 return new FieldInfoFile(itemInfo, schemaField);
             else if (schemaField.Type == "relation")
-                return new FieldInfoRelation(itemInfo, schemaField);
+                return FieldInfoRelation.NewFieldInfoRelation(itemInfo, schemaField);
 
             throw new Exception($"Field type '{schemaField.Type}' not supported for field '{schemaField.Name}'");
         }

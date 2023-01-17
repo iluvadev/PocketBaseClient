@@ -10,14 +10,10 @@
 
 using pocketbase_csharp_sdk.Models.Collection;
 using PocketBaseClient.CodeGenerator.Models;
-using System.Text;
 
 namespace PocketBaseClient.CodeGenerator.Generation
 {
-    /// <summary>
-    /// Information about a Field of type Select with Multiple values of an Item in a Collection, for the code generation
-    /// </summary>
-    internal class FieldInfoSelectMultiple : FieldInfoSelect
+    internal class FieldInfoRelationMultiple : FieldInfoRelation
     {
         /// <inheritdoc />
         public override bool PrivateSetter => true;
@@ -26,15 +22,15 @@ namespace PocketBaseClient.CodeGenerator.Generation
         public override string TypeName => ListClassName;
 
         /// <inheritdoc />
-        public override string InitialValueForProperty => $"new {ListClassName}(this)";
+        public override bool IsTypeNullableInProperty => false;
 
         /// <inheritdoc />
-        public override bool IsTypeNullableInProperty => false;
+        public override string InitialValueForProperty => $"new {ListClassName}(this)";
 
         /// <summary>
         /// The Class name of the type List if is multiple
         /// </summary>
-        public string ListClassName => PropertyName + "List";
+        private string ListClassName => PropertyName + "List";
 
         /// <summary>
         /// The filename to the class for the list when is multiple
@@ -42,7 +38,7 @@ namespace PocketBaseClient.CodeGenerator.Generation
         private string ListFileName => ItemInfo.ClassName + "." + ListClassName + ".cs";
 
         /// <inheritdoc />
-        public override string FilterType => $"FieldFilterEnumList<{ListClassName}, {EnumName}>";
+        public override string FilterType => $"FieldFilterItemList<{ListClassName}, {ReferencedClassName}>";
 
         /// <summary>
         /// Ctor
@@ -50,13 +46,16 @@ namespace PocketBaseClient.CodeGenerator.Generation
         /// <param name="itemInfo"></param>
         /// <param name="schemaField"></param>
         /// <param name="options"></param>
-        public FieldInfoSelectMultiple(ItemInfo itemInfo, SchemaFieldModel schemaField, PocketBaseFieldOptionsSelect options) : base(itemInfo, schemaField, options) { }
+        public FieldInfoRelationMultiple(ItemInfo itemInfo, SchemaFieldModel schemaField, PocketBaseFieldOptionsRelation options) : base(itemInfo, schemaField, options)
+        {
+            RelatedItems.Add(@$".Union({PropertyName})");
+        }
 
         /// <inheritdoc />
         public override List<GeneratedCodeFile> GenerateCode(Settings settings)
         {
             var list = base.GenerateCode(settings);
-            
+
             list.Add(GetCodeFileForList(settings));
 
             return list;
@@ -77,7 +76,7 @@ namespace {settings.NamespaceModels}
 {{
     public partial class {ItemInfo.ClassName}
     {{
-        public class {ListClassName} : FieldBasicList<{EnumName}>
+        public class {ListClassName} : FieldItemList<{ReferencedClassName}>
         {{
             public {ListClassName}() : this(null) {{ }}
 
@@ -94,9 +93,10 @@ namespace {settings.NamespaceModels}
         {
             var list = base.GetLinesForPropertyDecorators();
 
-            list.Add($@"[JsonConverter(typeof(EnumListConverter<{ListClassName}, {EnumName}>))]");
+            list.Add($@"[JsonConverter(typeof(RelationListConverter<{ListClassName}, {ReferencedClassName}>))]");
 
             return list;
         }
+
     }
 }

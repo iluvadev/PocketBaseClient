@@ -10,19 +10,25 @@
 
 using pocketbase_csharp_sdk.Models.Collection;
 using PocketBaseClient.CodeGenerator.Models;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace PocketBaseClient.CodeGenerator.Generation
 {
-    /// <summary>
-    /// Information about a Field of type Select with only One value of an Item in a Collection, for the code generation
-    /// </summary>
-    internal class FieldInfoSelectOne : FieldInfoSelect
+    internal class FieldInfoRelationOne : FieldInfoRelation
     {
-        /// <inheritdoc />
-        public override string TypeName => EnumName;
 
         /// <inheritdoc />
-        public override string FilterType => $"FieldFilterEnum<{EnumName}>";
+        public override string TypeName => ReferencedClassName;
+
+        /// <inheritdoc />
+        public override bool IsTypeNullableInProperty => true;
+
+        /// <inheritdoc />
+        public override string FilterType => $"FieldFilterItem<{ReferencedClassName}>";
 
         /// <summary>
         /// Ctor
@@ -30,15 +36,17 @@ namespace PocketBaseClient.CodeGenerator.Generation
         /// <param name="itemInfo"></param>
         /// <param name="schemaField"></param>
         /// <param name="options"></param>
-        public FieldInfoSelectOne(ItemInfo itemInfo, SchemaFieldModel schemaField, PocketBaseFieldOptionsSelect options) : base(itemInfo, schemaField, options) { }
-
+        public FieldInfoRelationOne(ItemInfo itemInfo, SchemaFieldModel schemaField, PocketBaseFieldOptionsRelation options) : base(itemInfo, schemaField, options) 
+        {
+            RelatedItems.Add(@$".Union(new List<ItemBase?>() {{ {PropertyName} }})");
+        }
 
         /// <inheritdoc />
         protected override List<string> GetLinesForPropertyDecorators()
         {
             var list = base.GetLinesForPropertyDecorators();
 
-            list.Add($@"[JsonConverter(typeof(EnumConverter<{EnumName}>))]");
+            list.Add($@"[JsonConverter(typeof(RelationConverter<{ReferencedClassName}>))]");
 
             return list;
         }
