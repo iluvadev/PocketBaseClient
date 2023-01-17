@@ -10,6 +10,8 @@
 
 using pocketbase_csharp_sdk;
 using pocketbase_csharp_sdk.Models;
+using pocketbase_csharp_sdk.Models.Files;
+using PocketBaseClient.Orm;
 using System.Text.Json;
 
 namespace PocketBaseClient
@@ -48,20 +50,20 @@ namespace PocketBaseClient
             return true;
         }
 
-        internal static async Task<T?> HttpPostAsync<T>(this PocketBase pocketBase, string url, T element)
+        internal static async Task<T?> HttpPostAsync<T>(this PocketBase pocketBase, string url, T element, IEnumerable<FieldFileBase>? files = null)
         {
             // Convert Serialized element to Dictionary<string, object>
             var body = JsonSerializer.Deserialize<Dictionary<string, object>>(JsonSerializer.Serialize(element));
 
-            return await pocketBase.SendAsync<T>(url, HttpMethod.Post, body: body);
+            return await pocketBase.SendAsync<T>(url, HttpMethod.Post, body: body, files: files);
         }
 
-        internal static async Task<T?> HttpPatchAsync<T>(this PocketBase pocketBase, string url, T element)
+        internal static async Task<T?> HttpPatchAsync<T>(this PocketBase pocketBase, string url, T element, IEnumerable<FieldFileBase>? files = null)
         {
             // Convert Serialized element to Dictionary<string, object>
             var body = JsonSerializer.Deserialize<Dictionary<string, object>>(JsonSerializer.Serialize(element));
 
-            return await pocketBase.SendAsync<T>(url, HttpMethod.Patch, body: body);
+            return await pocketBase.SendAsync<T>(url, HttpMethod.Patch, body: body, files: files);
         }
 
     }
