@@ -357,7 +357,7 @@ namespace PocketBaseClient.CodeGenerator.Generation
             else if (schemaField.Type == "json")
                 return new FieldInfoJson(itemInfo, schemaField);
             else if (schemaField.Type == "file")
-                return new FieldInfoFile(itemInfo, schemaField);
+                return FieldInfoFile.NewFieldInfoFile(itemInfo, schemaField);
             else if (schemaField.Type == "relation")
                 return FieldInfoRelation.NewFieldInfoRelation(itemInfo, schemaField);
 

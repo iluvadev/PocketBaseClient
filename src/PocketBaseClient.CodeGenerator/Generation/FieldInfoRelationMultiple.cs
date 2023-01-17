@@ -25,7 +25,7 @@ namespace PocketBaseClient.CodeGenerator.Generation
         public override bool IsTypeNullableInProperty => false;
 
         /// <inheritdoc />
-        public override string InitialValueForProperty => $"new {ListClassName}(this)";
+        public override string InitialValueForProperty => $"new {TypeName}(this)";
 
         /// <summary>
         /// The Class name of the type List if is multiple

@@ -42,6 +42,8 @@ namespace PocketBaseClient.Orm.Validators
             if (value is FieldFileBase fieldFile)
                 return MimeTypesList.Contains(MimeUtility.GetMimeMapping(fieldFile.FileName));
 
+            //TODO: List of Files
+
             return false;
         }
     }

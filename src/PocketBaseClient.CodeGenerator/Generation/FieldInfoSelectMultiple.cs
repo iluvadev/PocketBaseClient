@@ -26,7 +26,7 @@ namespace PocketBaseClient.CodeGenerator.Generation
         public override string TypeName => ListClassName;
 
         /// <inheritdoc />
-        public override string InitialValueForProperty => $"new {ListClassName}(this)";
+        public override string InitialValueForProperty => $"new {TypeName}(this)";
 
         /// <inheritdoc />
         public override bool IsTypeNullableInProperty => false;

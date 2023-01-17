@@ -16,19 +16,21 @@ namespace PocketBaseClient.Orm.Json
     /// <summary>
     /// Converter for File types
     /// </summary>
-    public class FileConverter : JsonConverter<FieldFileBase?>
+    /// <typeparam name="T">The FieldFile type</typeparam>
+    public class FileConverter<T> : JsonConverter<T?> where T: FieldFileBase, new()
     {
         /// <inheritdoc />
-        public override FieldFileBase? Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
+        public override T? Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
         {
             var value = reader.GetString();
             if (value == null)
                 return null;
-            return new FieldFileBase(value);
+
+            return new T() { FileName = value };
         }
 
         /// <inheritdoc />
-        public override void Write(Utf8JsonWriter writer, FieldFileBase? value, JsonSerializerOptions options)
+        public override void Write(Utf8JsonWriter writer, T? value, JsonSerializerOptions options)
         {
             if (value is null)
                 writer.WriteNullValue();

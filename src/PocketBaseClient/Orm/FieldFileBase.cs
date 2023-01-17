@@ -23,9 +23,14 @@ namespace PocketBaseClient.Orm
         public ItemBase? Owner { get; set; }
 
         /// <summary>
+        /// The Column name in the PocketBase field
+        /// </summary>
+        internal string? FieldName { get; private set; }
+
+        /// <summary>
         /// The File Name
         /// </summary>
-        public string? FileName { get; private set; }
+        public string? FileName { get; internal set; }
 
         #region Metadata
         private FieldFileMetadata? _Metadata_ = null;
@@ -51,12 +56,14 @@ namespace PocketBaseClient.Orm
         }
 
         /// <summary>
-        /// 
+        /// Ctor
         /// </summary>
         /// <param name="owner"></param>
-        public FieldFileBase(ItemBase owner) 
+        /// <param name="fieldName"></param>
+        public FieldFileBase(ItemBase? owner, string fieldName) 
         { 
             Owner = owner;
+            FieldName = fieldName;
         }
     }
 }

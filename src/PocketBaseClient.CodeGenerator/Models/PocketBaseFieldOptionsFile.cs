@@ -24,10 +24,10 @@ namespace PocketBaseClient.CodeGenerator.Models
         public int? MaxSelect { get; set; }
 
         /// <summary>
-        /// Says if the field has only one element
+        /// Says if the field can contain multiple values
         /// </summary>
         [JsonIgnore]
-        public bool IsSinglSelect => (MaxSelect ?? 1) == 1;
+        public bool IsMultiple => MaxSelect == null || MaxSelect > 1;
 
         /// <summary>
         /// Max size of the files (in Bytes)

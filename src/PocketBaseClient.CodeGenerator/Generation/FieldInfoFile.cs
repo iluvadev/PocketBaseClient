@@ -10,6 +10,7 @@
 
 using pocketbase_csharp_sdk.Models.Collection;
 using PocketBaseClient.CodeGenerator.Models;
+using System.Text;
 using System.Text.Json;
 
 namespace PocketBaseClient.CodeGenerator.Generation
@@ -17,44 +18,78 @@ namespace PocketBaseClient.CodeGenerator.Generation
     /// <summary>
     /// Information about a Field of type File of an Item in a Collection, for the code generation
     /// </summary>
-    internal class FieldInfoFile : FieldInfo
+    internal abstract class FieldInfoFile : FieldInfo
     {
         /// <summary>
         /// Options of the field defined in PocketBase
         /// </summary>
-        private PocketBaseFieldOptionsFile Options { get; }
-
-        /// <summary>
-        /// Says if the field can contain multiple values
-        /// </summary>
-        private bool IsMultiple => Options.MaxSelect == null || Options.MaxSelect > 1;
-
-        /// <inheritdoc />
-        public override string TypeName => "FieldFileBase";
+        protected PocketBaseFieldOptionsFile Options { get; }
 
         /// <inheritdoc />
         public override bool IsTypeNullableInProperty => false;
 
         /// <inheritdoc />
-        public override string FilterType => "FieldFilterText";
+        public override bool PrivateSetter => true;
 
-        /// <inheritdoc />
-        public override string InitialValueForProperty => $"new {TypeName}(this)";
-        //public override string InitialValueForProperty => IsMultiple ? $"new {ListClassName}(this)" : base.InitialValueForProperty;
+        /// <summary>
+        /// The name of the generated Type for the File
+        /// </summary>
+        protected string TypeFileName => PropertyName + "File";
 
-        ///// <inheritdoc />
-        //public override string InitialValueForAttribute => IsMultiple ? $"new {ListClassName}()" : base.InitialValueForAttribute;
-
+        /// <summary>
+        /// The file name where to save the generated Type for the File
+        /// </summary>
+        private string TypeFileFileName => ItemInfo.ClassName + "." + TypeFileName + ".cs";
 
         /// <summary>
         /// Ctor
         /// </summary>
         /// <param name="itemInfo"></param>
         /// <param name="schemaField"></param>
-        public FieldInfoFile(ItemInfo itemInfo, SchemaFieldModel schemaField) : base(itemInfo, schemaField)
+        /// <param name="options"></param>
+        public FieldInfoFile(ItemInfo itemInfo, SchemaFieldModel schemaField, PocketBaseFieldOptionsFile options) : base(itemInfo, schemaField)
         {
-            Options = JsonSerializer.Deserialize<PocketBaseFieldOptionsFile>(JsonSerializer.Serialize(schemaField.Options)) ?? new PocketBaseFieldOptionsFile();
+            Options = options;
         }
+
+        /// <inheritdoc />
+        public override List<GeneratedCodeFile> GenerateCode(Settings settings)
+        {
+            var list = base.GenerateCode(settings);
+
+            list.Add(GetCodeFileForFile(settings));
+
+            return list;
+        }
+
+        /// <summary>
+        /// Generates the code for the File class
+        /// </summary>
+        /// <param name="settings">Generation code settings</param>
+        /// <returns></returns>
+        private GeneratedCodeFile GetCodeFileForFile(Settings settings)
+        {
+            var fileName = Path.Combine(settings.PathModels, TypeFileFileName);
+            StringBuilder sb = new();
+            sb.Append($@"{settings.CodeHeader}
+using PocketBaseClient.Orm;
+
+namespace {settings.NamespaceModels}
+{{
+    public partial class {ItemInfo.ClassName}
+    {{
+        public class {TypeFileName} : FieldFileBase
+        {{
+            public {TypeFileName}() : this(null) {{ }}
+
+            internal {TypeFileName}(ItemBase? owner) : base(owner, ""{SchemaField.Name}"") {{ }}
+        }}
+    }}
+}}
+");
+            return new GeneratedCodeFile(fileName, sb.ToString());
+        }
+
 
         /// <inheritdoc />
         protected override List<string> GetLinesForPropertyDecorators()
@@ -64,8 +99,27 @@ namespace PocketBaseClient.CodeGenerator.Generation
             if (Options.MimeTypes?.Any() ?? false)
                 list.Add($@"[MimeTypes(""{Options.MimeTypesJoined}"", ErrorMessage = ""Only MIME Types accepted: '{Options.MimeTypesJoined}'"")]");
 
-            list.Add("[JsonConverter(typeof(FileConverter))]");
             return list;
+        }
+
+
+        /// <summary>
+        /// Factory for a Field info of type file
+        /// </summary>
+        /// <param name="itemInfo"></param>
+        /// <param name="schemaField"></param>
+        /// <returns></returns>
+        /// <exception cref="Exception"></exception>
+        public static FieldInfoFile NewFieldInfoFile(ItemInfo itemInfo, SchemaFieldModel schemaField)
+        {
+            if (schemaField.Type != "file")
+                throw new Exception($"Field type '{schemaField.Type}' not expected for field '{schemaField.Name}' (expecting 'file')");
+
+            var options = JsonSerializer.Deserialize<PocketBaseFieldOptionsFile>(JsonSerializer.Serialize(schemaField.Options)) ?? new PocketBaseFieldOptionsFile();
+            //if (options.IsMultiple)
+            //    return new FieldInfoFileMultiple(itemInfo, schemaField, options);
+            //else
+                return new FieldInfoFileOne(itemInfo, schemaField, options);
         }
     }
 }
