@@ -25,12 +25,6 @@ namespace PocketBaseClient.CodeGenerator.Generation
         /// </summary>
         protected PocketBaseFieldOptionsFile Options { get; }
 
-        /// <inheritdoc />
-        public override bool IsTypeNullableInProperty => false;
-
-        /// <inheritdoc />
-        public override bool PrivateSetter => true;
-
         /// <summary>
         /// The name of the generated Type for the File
         /// </summary>
@@ -80,9 +74,15 @@ namespace {settings.NamespaceModels}
     {{
         public class {TypeFileName} : FieldFileBase
         {{
-            public {TypeFileName}() : this(null) {{ }}
+            internal {TypeFileName}(ItemBase? owner) : base(""{SchemaField.Name}"", owner) {{ }}
 
-            internal {TypeFileName}(ItemBase? owner) : base(owner, ""{SchemaField.Name}"") {{ }}
+            public {TypeFileName}() : base(""{SchemaField.Name}"", owner: null) {{ }}
+
+            public {TypeFileName}(string fileName, Func<Stream> streamGetter) : base(""{SchemaField.Name}"", fileName, streamGetter) {{ }}
+
+            public {TypeFileName}(string fileName, Func<Task<Stream>> streamGetterAsync) : base(""{SchemaField.Name}"", fileName, streamGetterAsync) {{ }}
+
+            public {TypeFileName}(string localPathFile) : base(""{SchemaField.Name}"", localPathFile) {{ }}
         }}
     }}
 }}

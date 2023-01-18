@@ -24,8 +24,9 @@ namespace PocketBaseClient.Orm.Structures
         /// <inheritdoc />
         public string? Id { get; }
 
+        private ItemBase? _Owner = null;
         /// <inheritdoc />
-        public ItemBase? Owner { get; set; }
+        ItemBase? IOwnedByItem.Owner { get => _Owner; set => _Owner = value; }
 
         /// <inheritdoc />
         public int? MaxSize { get; }
@@ -44,7 +45,7 @@ namespace PocketBaseClient.Orm.Structures
         /// <param name="maxSize"></param>
         public FieldBasicList(ItemBase? owner, string propertyName, string propertyId, int? maxSize = null)
         {
-            Owner = owner;
+            _Owner = owner;
             Name = propertyName;
             Id = propertyId;
             MaxSize = maxSize;
