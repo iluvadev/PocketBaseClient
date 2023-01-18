@@ -16,7 +16,7 @@ namespace PocketBaseClient
     /// <summary>
     /// Class for a Client of a concrete PocketBase application
     /// </summary>
-    public class PocketBaseClientApplication
+    public partial class PocketBaseClientApplication
     {
         /// <summary>
         /// The Application Name

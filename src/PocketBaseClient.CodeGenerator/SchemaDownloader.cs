@@ -50,7 +50,7 @@ namespace PocketBaseClient.CodeGenerator
             int currentPage = 1;
             while (totalItems == null || schema.Collections.Count < totalItems)
             {
-                var collections = await app.Sdk.HttpGetListAsync<CollectionModel>("/api/collections", page: currentPage);
+                var collections = await app.HttpGetListAsync<CollectionModel>("/api/collections", page: currentPage);
                 //var collections = await app.Sdk.Collections.ListAsync();
                 totalItems = collections!.TotalItems;
                 schema.Collections.AddRange(collections.Items ?? Enumerable.Empty<CollectionModel>());

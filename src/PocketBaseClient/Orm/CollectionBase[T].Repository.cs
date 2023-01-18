@@ -46,7 +46,7 @@ namespace PocketBaseClient.Orm
         }
         internal async Task<PagedCollectionModel<T>?> GetPageFromPbAsync(int? pageNumber = null, int? perPage = null, string? filter = null, string? sort = null)
         {
-            var page = await PocketBase.HttpGetListAsync<T>(UrlRecords, pageNumber, perPage, filter, sort);
+            var page = await App.HttpGetListAsync<T>(UrlRecords, pageNumber, perPage, filter, sort);
             // Cache all items in the page automatically at creation
             foreach (var itemFromPb in page?.Items ?? Enumerable.Empty<T>())
                 itemFromPb.Metadata_.SetLoaded();
@@ -111,7 +111,7 @@ namespace PocketBaseClient.Orm
         {
             if (item.Id == null) return false;
 
-            var loadedItem = await PocketBase.HttpGetAsync<T>(UrlRecord(item));
+            var loadedItem = await App.HttpGetAsync<T>(UrlRecord(item));
             if (loadedItem == null) return false;
             loadedItem.Metadata_.SetLoaded();
 
@@ -250,7 +250,7 @@ namespace PocketBaseClient.Orm
 
         private async Task<bool> CreateInternalAsync(T item)
         {
-            var savedItem = await PocketBase.HttpPostAsync(UrlRecords, item);
+            var savedItem = await App.HttpPostAsync(UrlRecords, item);
             if (savedItem == null) return false;
 
             item.UpdateWith(savedItem);
@@ -263,7 +263,7 @@ namespace PocketBaseClient.Orm
             if (item.Id == null) return false;
             if (onlyIfChanges && !item.Metadata_.HasLocalChanges) return true;
 
-            var savedItem = await PocketBase.HttpPatchAsync(UrlRecord(item), item);
+            var savedItem = await App.HttpPatchAsync(UrlRecord(item), item);
             if (savedItem == null) return false;
 
             item.UpdateWith(savedItem);
@@ -275,11 +275,11 @@ namespace PocketBaseClient.Orm
         {
             if (item.Id == null) return false;
            
-            if (!await PocketBase.HttpDeleteAsync(UrlRecord(item))) return false;
+            if (!await App.HttpDeleteAsync(UrlRecord(item))) return false;
 
             // If is the Auth registry, delete it
-            if (item.IsSame(PocketBase.AuthStore.Model))
-                PocketBase.AuthStore.Clear();
+            if (item.IsSame(App.Auth.AuthStore.Model))
+                App.Auth.AuthStore.Clear();
 
             //Remove from Cache
             Cache.Remove(item.Id);
