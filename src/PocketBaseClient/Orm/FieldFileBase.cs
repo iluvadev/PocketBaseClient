@@ -10,6 +10,7 @@
 
 using pocketbase_csharp_sdk.Models.Files;
 using PocketBaseClient.Orm.Structures;
+using System.Web;
 
 namespace PocketBaseClient.Orm
 {
@@ -23,6 +24,16 @@ namespace PocketBaseClient.Orm
         /// <inheritdoc />
         ItemBase? IOwnedByItem.Owner { get => _Owner; set => _Owner = value; }
 
+        internal string? UrlFile
+        {
+            get
+            {
+                if (_Owner == null) return null;
+                if (FileName == null) return null;
+                return $"/api/collections/{HttpUtility.UrlEncode(_Owner.CollectionId)}/records/{HttpUtility.UrlEncode(_Owner.Id)}/{FileName}";
+            }
+        }
+
         /// <summary>
         /// The Column name in the PocketBase field
         /// </summary>
@@ -35,11 +46,16 @@ namespace PocketBaseClient.Orm
         public string? FileName { get; internal set; }
         string? IFile.FileName { get => FileName; set => FileName = value; }
 
+        internal protected bool IsFromServer { get; private set; } = true;
 
-        internal protected bool IsFromServer { get; private set; }
+        private Func<string?, Task<Stream>>? _StreamGetter = null;
+        internal Func<string?, Task<Stream>> StreamGetterAsync
+        {
+            get => _StreamGetter ?? (IsFromServer ? (thumb) => GetStreamFromPb(thumb) : (_) => Task.Run(() => Stream.Null));
+            private set => _StreamGetter = value;
+        }
 
-        internal Func<Task<Stream>>? StreamGetterAsync { get; private set; }
-
+        #region Ctor
         /// <summary>
         /// Ctor
         /// </summary>
@@ -47,32 +63,9 @@ namespace PocketBaseClient.Orm
         /// <param name="owner"></param>
         protected internal FieldFileBase(string fieldName, ItemBase? owner)
         {
-            IsFromServer = true;
             _Owner = owner;
             FieldName = fieldName;
-        }
-
-        /// <summary>
-        /// Ctor
-        /// </summary>
-        /// <param name="fieldName"></param>
-        /// <param name="fileName"></param>
-        /// <param name="streamGetter"></param>
-        protected internal FieldFileBase(string fieldName, string fileName, Func<Stream> streamGetter)
-            : this(fieldName, fileName, async () => await Task.Run(() => streamGetter())) { }
-
-        /// <summary>
-        /// Ctor
-        /// </summary>
-        /// <param name="fieldName"></param>
-        /// <param name="fileName"></param>
-        /// <param name="streamGetterAsync"></param>
-        protected internal FieldFileBase(string fieldName, string fileName, Func<Task<Stream>> streamGetterAsync)
-        {
             IsFromServer = false;
-            FieldName = fieldName;
-            FileName = fileName;
-            StreamGetterAsync = streamGetterAsync;
         }
 
         /// <summary>
@@ -80,36 +73,61 @@ namespace PocketBaseClient.Orm
         /// </summary>
         /// <param name="fieldName"></param>
         /// <param name="localPathFile"></param>
-        protected internal FieldFileBase(string fieldName, string localPathFile)
-            : this(fieldName, Path.GetFileName(localPathFile), () => new FileStream(localPathFile, FileMode.Open)) { }
-
-
-        public async Task<Stream?> GetStreamAsync()
+        /// <param name="owner"></param>
+        protected internal FieldFileBase(string fieldName, string localPathFile, ItemBase? owner) : this(fieldName, owner)
         {
-            if (StreamGetterAsync != null)
-                return await StreamGetterAsync.Invoke();
-            return null;
+            LoadFromFile(localPathFile);
         }
 
-        public Stream? GetStream()
+        #endregion Ctor
+
+        /// <summary>
+        /// Gets the Stream of the file from PocketBase server
+        /// </summary>
+        /// <param name="thumb">The optional Thumb options to ask for</param>
+        /// <returns></returns>
+        internal async Task<Stream> GetStreamFromPb(string? thumb = null)
+        {
+            var urlFile = UrlFile;
+            if (_Owner == null || urlFile == null)
+                return Stream.Null;
+
+            return await _Owner.Collection.App.GetStreamAsync(urlFile, thumb);
+        }
+
+        /// <summary>
+        /// Gets the Stream of the File with thumb option (async)
+        /// </summary>
+        /// <param name="thumb">The optional Thumb options to ask for</param>
+        /// <returns></returns>
+        protected async Task<Stream> GetStreamAsync(string? thumb)
+            => await StreamGetterAsync.Invoke(thumb);
+
+        /// <summary>
+        /// Gets the Stream of the File (async)
+        /// </summary>
+        /// <returns></returns>
+        public async Task<Stream> GetStreamAsync()
+            => await GetStreamAsync(null);
+
+        /// <summary>
+        /// Gets the Stream of the File 
+        /// </summary>
+        /// <returns></returns>
+        public Stream GetStream()
             => GetStreamAsync().Result;
 
+
+        /// <summary>
+        /// Loads the Field with a local File
+        /// </summary>
+        /// <param name="localPathFile"></param>
         public void LoadFromFile(string localPathFile)
         {
             IsFromServer = false;
-            StreamGetterAsync = async () => await Task.Run(() => new FileStream(localPathFile, FileMode.Open));
+            FileName = Path.GetFileName(localPathFile);
+            StreamGetterAsync = (_) => Task.Run(() => new FileStream(localPathFile, FileMode.Open) as Stream);
         }
 
-        //etc
-
-        /*
-         * Mantenir info de si el fitxer és local o server
-         *  Si és local, retornar Stream local
-         *  Si és server, fer un GetStreamAsync de App
-         *  
-         *  A constructor: marcer que és local (quan no és local? -> Constructor buit)
-         *  
-         *  És local si té StreamGetter definit? (ctor buit és public)
-         */
     }
 }

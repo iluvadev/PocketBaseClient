@@ -9,14 +9,10 @@
 // pocketbase project: https://github.com/pocketbase/pocketbase
 
 
-using pocketbase_csharp_sdk.Models;
 using pocketbase_csharp_sdk;
+using pocketbase_csharp_sdk.Models;
 using PocketBaseClient.Orm;
-using static System.Net.Mime.MediaTypeNames;
 using System.Text.Json;
-using System.IO;
-using System.Net.Http;
-using System.Threading;
 
 namespace PocketBaseClient
 {
@@ -65,10 +61,10 @@ namespace PocketBaseClient
             return await Sdk.SendAsync<T>(url, HttpMethod.Patch, body: body, files: files);
         }
 
-        public async Task<Stream> GetStreamAsync(string url)
+        public async Task<Stream> GetStreamAsync(string url, string? paramaters = null)
         {
             // TODO: REMOVE When: sdk project PR merged and published in NuGet
-            Uri finalUrl = BuildUrl(url);
+            Uri finalUrl = BuildUrl(url, paramaters);
             try
             {
                 var httpClient = new HttpClient();
@@ -82,13 +78,16 @@ namespace PocketBaseClient
             }
         }
 
-        private Uri BuildUrl(string path)
+        private Uri BuildUrl(string path, string? parameters = null)
         {
             // TODO: REMOVE When: sdk project PR merged and published in NuGet
             var url = AppUrl + (AppUrl.EndsWith("/") ? "" : "/");
 
             if (!string.IsNullOrWhiteSpace(path))
                 url += path.StartsWith("/") ? path.Substring(1) : path;
+
+            if (!string.IsNullOrWhiteSpace(parameters))
+                url += "?" + parameters;
 
             return new Uri(url, UriKind.RelativeOrAbsolute);
         }

@@ -78,11 +78,28 @@ namespace {settings.NamespaceModels}
 
             public {TypeFileName}() : base(""{SchemaField.Name}"", owner: null) {{ }}
 
-            public {TypeFileName}(string fileName, Func<Stream> streamGetter) : base(""{SchemaField.Name}"", fileName, streamGetter) {{ }}
+            public {TypeFileName}(string localPathFile) : base(""{SchemaField.Name}"", localPathFile, owner: null) {{ }}
+");
+            if(Options.HasThumbs)
+            {
+                sb.Append(@"
+            #region Thumbs");
+                foreach (var thumb in Options.Thumbs!)
+                    sb.Append($@"
+            public async Task<Stream> Thumb{thumb}Async() => await GetStreamAsync(""{thumb}"");
+            public Stream Thumb{thumb}() => Thumb{thumb}Async().Result;
+");
+                sb.Append(@"
+            #endregion Thumbs");
+            }
 
-            public {TypeFileName}(string fileName, Func<Task<Stream>> streamGetterAsync) : base(""{SchemaField.Name}"", fileName, streamGetterAsync) {{ }}
-
-            public {TypeFileName}(string localPathFile) : base(""{SchemaField.Name}"", localPathFile) {{ }}
+            sb.Append($@"
+            public static {TypeFileName} FromLocalFile(string localPathFile)
+            {{
+                var pbFile = new {TypeFileName}();
+                pbFile.LoadFromFile(localPathFile);
+                return pbFile;
+            }}
         }}
     }}
 }}

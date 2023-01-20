@@ -158,7 +158,7 @@ namespace PocketBaseClient.CodeGenerator.Generation
         {
             return new()
             {
-                @$"[JsonPropertyName(""{SchemaField.Name}"")]",
+                $@"[JsonPropertyName(""{SchemaField.Name}"")]",
                 $@"[PocketBaseField(id: ""{SchemaField.Id}"", name: ""{SchemaField.Name}"", required: {(SchemaField.Required ?? false).ToString().ToLower()}, system: {(SchemaField.System ?? false).ToString().ToLower()}, unique: {(SchemaField.Unique ?? false).ToString().ToLower()}, type: ""{SchemaField.Type}"")]",
                 $@"[Display(Name = ""{DisplayName}"")]",
                 (SchemaField.Required ?? false) ? $@"[Required(ErrorMessage = @""{PropertyName} is required"")]" : "",
