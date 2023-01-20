@@ -48,11 +48,14 @@ namespace PocketBaseClient.Orm
 
         internal protected bool IsFromServer { get; private set; } = true;
 
-        private Func<string?, Task<Stream>>? _StreamGetter = null;
+        public bool HasChanges { get; private set; } = false;
+        public bool IsEmpty => string.IsNullOrEmpty(FileName);
+
+        private Func<string?, Task<Stream>>? _StreamGetterAsync = null;
         internal Func<string?, Task<Stream>> StreamGetterAsync
         {
-            get => _StreamGetter ?? (IsFromServer ? (thumb) => GetStreamFromPb(thumb) : (_) => Task.Run(() => Stream.Null));
-            private set => _StreamGetter = value;
+            get => _StreamGetterAsync ?? (IsFromServer ? (thumb) => GetStreamFromPb(thumb) : (_) => Task.Run(() => Stream.Null));
+            private set => _StreamGetterAsync = value;
         }
 
         #region Ctor
@@ -61,22 +64,11 @@ namespace PocketBaseClient.Orm
         /// </summary>
         /// <param name="fieldName"></param>
         /// <param name="owner"></param>
-        protected internal FieldFileBase(string fieldName, ItemBase? owner)
+        protected FieldFileBase(string fieldName, ItemBase? owner)
         {
             _Owner = owner;
             FieldName = fieldName;
             IsFromServer = false;
-        }
-
-        /// <summary>
-        /// Ctor
-        /// </summary>
-        /// <param name="fieldName"></param>
-        /// <param name="localPathFile"></param>
-        /// <param name="owner"></param>
-        protected internal FieldFileBase(string fieldName, string localPathFile, ItemBase? owner) : this(fieldName, owner)
-        {
-            LoadFromFile(localPathFile);
         }
 
         #endregion Ctor
@@ -125,9 +117,29 @@ namespace PocketBaseClient.Orm
         public void LoadFromFile(string localPathFile)
         {
             IsFromServer = false;
+            HasChanges = true;
             FileName = Path.GetFileName(localPathFile);
             StreamGetterAsync = (_) => Task.Run(() => new FileStream(localPathFile, FileMode.Open) as Stream);
         }
 
+
+        public void Remove()
+        {
+            HasChanges |= !IsEmpty;
+            FileName = null;
+            IsFromServer = false;
+            _StreamGetterAsync = null;
+        }
+
+
+        /*
+         * IEPA!!
+         * Fer que sigui No nullable i set privat
+         * Afegir mètode/propietat:
+         *      IsEmpty
+         *      Remove()
+         *      
+         * Fer constructor dels mapejos internal
+         */ 
     }
 }

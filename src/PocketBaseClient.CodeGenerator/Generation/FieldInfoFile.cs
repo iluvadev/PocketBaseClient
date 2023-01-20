@@ -35,6 +35,12 @@ namespace PocketBaseClient.CodeGenerator.Generation
         /// </summary>
         private string TypeFileFileName => ItemInfo.ClassName + "." + TypeFileName + ".cs";
 
+        /// <inheritdoc />
+        public override bool PrivateSetter => true;
+
+        /// <inheritdoc />
+        public override bool IsTypeNullableInProperty => false;
+
         /// <summary>
         /// Ctor
         /// </summary>
@@ -77,8 +83,6 @@ namespace {settings.NamespaceModels}
             internal {TypeFileName}(ItemBase? owner) : base(""{SchemaField.Name}"", owner) {{ }}
 
             public {TypeFileName}() : base(""{SchemaField.Name}"", owner: null) {{ }}
-
-            public {TypeFileName}(string localPathFile) : base(""{SchemaField.Name}"", localPathFile, owner: null) {{ }}
 ");
             if(Options.HasThumbs)
             {
@@ -86,8 +90,8 @@ namespace {settings.NamespaceModels}
             #region Thumbs");
                 foreach (var thumb in Options.Thumbs!)
                     sb.Append($@"
-            public async Task<Stream> Thumb{thumb}Async() => await GetStreamAsync(""{thumb}"");
-            public Stream Thumb{thumb}() => Thumb{thumb}Async().Result;
+            public async Task<Stream> GetThumb{thumb}Async() => await GetStreamAsync(""{thumb}"");
+            public Stream GetThumb{thumb}() => GetThumb{thumb}Async().Result;
 ");
                 sb.Append(@"
             #endregion Thumbs");

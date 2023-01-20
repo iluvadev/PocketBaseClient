@@ -27,8 +27,6 @@ namespace PocketBaseClient.CodeGenerator.Generation
         /// <inheritdoc />
         public override string FilterType => "FieldFilterText";
 
-        /// <inheritdoc />
-        public override bool IsTypeNullableInProperty => true;
 
         /// <inheritdoc />
         public override string InitialValueForProperty => $"new {TypeName}(this)";
