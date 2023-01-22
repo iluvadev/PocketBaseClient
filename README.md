@@ -1,4 +1,4 @@
-**Warning**: This project is in active development. Things described bellow could change.
+This project is in active development. Things described bellow could change.
 
 # PocketBaseClient
 
