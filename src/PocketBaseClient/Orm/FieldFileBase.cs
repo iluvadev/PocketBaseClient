@@ -24,6 +24,11 @@ namespace PocketBaseClient.Orm
         /// <inheritdoc />
         ItemBase? IOwnedByItem.Owner { get => _Owner; set => _Owner = value; }
 
+        /// <summary>
+        /// The Max size of the file
+        /// </summary>
+        public virtual long? MaxSize { get; } = null;
+
         internal string? UrlFile
         {
             get
@@ -113,13 +118,15 @@ namespace PocketBaseClient.Orm
         /// <summary>
         /// Loads the Field with a local File
         /// </summary>
-        /// <param name="localPathFile"></param>
-        public void LoadFromFile(string localPathFile)
+        /// <param name="localPathFile">The entire path of the local file</param>
+        public void LoadFromLocalFile(string localPathFile)
         {
             IsFromServer = false;
             HasChanges = true;
             FileName = Path.GetFileName(localPathFile);
             StreamGetterAsync = (_) => Task.Run(() => new FileStream(localPathFile, FileMode.Open) as Stream);
+
+            ((IOwnedByItem)this).NotifyModificationToOwner();
         }
 
 
@@ -129,6 +136,8 @@ namespace PocketBaseClient.Orm
             FileName = null;
             IsFromServer = false;
             _StreamGetterAsync = null;
+
+            ((IOwnedByItem)this).NotifyModificationToOwner();
         }
 
 

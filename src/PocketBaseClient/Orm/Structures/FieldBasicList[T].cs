@@ -53,7 +53,7 @@ namespace PocketBaseClient.Orm.Structures
         }
 
         /// <inheritdoc />
-        public IEnumerator<T> GetEnumerator()
+        public virtual IEnumerator<T> GetEnumerator()
             => InnerList.GetEnumerator();
 
         /// <inheritdoc />
@@ -69,7 +69,7 @@ namespace PocketBaseClient.Orm.Structures
             => element is T item && Contains(item);
 
         /// <inheritdoc />
-        public T? Add(T? element)
+        public virtual T? Add(T? element)
         {
             if (MaxSize != null && Count == MaxSize)
                 throw new Exception($"List is full: limited to {MaxSize}");
@@ -77,7 +77,7 @@ namespace PocketBaseClient.Orm.Structures
             if (element == null) return default;
 
             InnerList.Add(element);
-            ((IFieldBasicList<T>)this).NotifyModificationToOwner();
+            ((IOwnedByItem)this).NotifyModificationToOwner();
             return (element);
         }
 
@@ -89,14 +89,14 @@ namespace PocketBaseClient.Orm.Structures
 
 
         /// <inheritdoc />
-        public T? Remove(T? element)
+        public virtual T? Remove(T? element)
         {
             if (element == null) return default;
 
             bool bRet = InnerList.Remove(element);
             if (!bRet) return default;
 
-            ((IFieldBasicList<T>)this).NotifyModificationToOwner();
+            ((IOwnedByItem)this).NotifyModificationToOwner();
             return element;
         }
 
@@ -107,14 +107,14 @@ namespace PocketBaseClient.Orm.Structures
         }
 
         /// <inheritdoc />
-        public void DiscardChanges(ListSaveDiscardModes mode)
+        public virtual void DiscardChanges(ListSaveDiscardModes mode)
         {
             //IEPA!!
             throw new NotImplementedException();
         }
 
         /// <inheritdoc />
-        public bool SaveChanges(ListSaveDiscardModes mode)
+        public virtual bool SaveChanges(ListSaveDiscardModes mode)
         {
             //IEPA!!
             throw new NotImplementedException();

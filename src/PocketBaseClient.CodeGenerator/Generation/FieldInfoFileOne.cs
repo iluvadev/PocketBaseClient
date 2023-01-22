@@ -28,10 +28,6 @@ namespace PocketBaseClient.CodeGenerator.Generation
         public override string FilterType => "FieldFilterText";
 
 
-        /// <inheritdoc />
-        public override string InitialValueForProperty => $"new {TypeName}(this)";
-
-
         /// <summary>
         /// Ctor
         /// </summary>

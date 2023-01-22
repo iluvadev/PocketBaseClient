@@ -17,7 +17,8 @@ namespace PocketBaseClient.Orm.Json
     /// Converter for File types
     /// </summary>
     /// <typeparam name="T">The FieldFile type</typeparam>
-    public class FileConverter<T> : JsonConverter<T?> where T: FieldFileBase, new()
+    public class FileConverter<T> : JsonConverter<T?> 
+        where T: FieldFileBase, new()
     {
         /// <inheritdoc />
         public override T? Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)

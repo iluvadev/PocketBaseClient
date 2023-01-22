@@ -20,12 +20,5 @@ namespace PocketBaseClient.Orm.Structures
         /// The number of elements in the list
         /// </summary>
         int Count { get; }
-
-        /// <summary>
-        /// Notifies a modification of the field to the Owner
-        /// </summary>
-        void NotifyModificationToOwner()
-            //=> Owner?.SetPropertyModified(Name);
-            => Owner?.SetModified();
     }
 }

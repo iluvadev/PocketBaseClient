@@ -41,6 +41,9 @@ namespace PocketBaseClient.CodeGenerator.Generation
         /// <inheritdoc />
         public override bool IsTypeNullableInProperty => false;
 
+        /// <inheritdoc />
+        public override string InitialValueForProperty => $"new {TypeName}(this)";
+
         /// <summary>
         /// Ctor
         /// </summary>
@@ -80,9 +83,16 @@ namespace {settings.NamespaceModels}
     {{
         public class {TypeFileName} : FieldFileBase
         {{
-            internal {TypeFileName}(ItemBase? owner) : base(""{SchemaField.Name}"", owner) {{ }}
-
+");
+            if (Options.MaxSize != null)
+                sb.Append($@"
+            /// <inheritdoc />
+            public override long? MaxSize => {Options.MaxSize};
+");
+            sb.Append($@"
             public {TypeFileName}() : base(""{SchemaField.Name}"", owner: null) {{ }}
+
+            public {TypeFileName}({ItemInfo.ClassName}? {ItemInfo.VarName}) : base(""{SchemaField.Name}"", {ItemInfo.VarName}) {{ }}
 ");
             if(Options.HasThumbs)
             {
@@ -98,12 +108,6 @@ namespace {settings.NamespaceModels}
             }
 
             sb.Append($@"
-            public static {TypeFileName} FromLocalFile(string localPathFile)
-            {{
-                var pbFile = new {TypeFileName}();
-                pbFile.LoadFromFile(localPathFile);
-                return pbFile;
-            }}
         }}
     }}
 }}
@@ -137,9 +141,9 @@ namespace {settings.NamespaceModels}
                 throw new Exception($"Field type '{schemaField.Type}' not expected for field '{schemaField.Name}' (expecting 'file')");
 
             var options = JsonSerializer.Deserialize<PocketBaseFieldOptionsFile>(JsonSerializer.Serialize(schemaField.Options)) ?? new PocketBaseFieldOptionsFile();
-            //if (options.IsMultiple)
-            //    return new FieldInfoFileMultiple(itemInfo, schemaField, options);
-            //else
+            if (options.IsMultiple)
+                return new FieldInfoFileMultiple(itemInfo, schemaField, options);
+            else
                 return new FieldInfoFileOne(itemInfo, schemaField, options);
         }
     }
