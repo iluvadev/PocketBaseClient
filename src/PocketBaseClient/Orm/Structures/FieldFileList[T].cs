@@ -19,8 +19,7 @@ namespace PocketBaseClient.Orm.Structures
     public class FieldFileList<T> : FieldBasicList<T>, IFieldFileList<T>
         where T : FieldFileBase, new()
     {
-        protected internal List<string> RemovedFileNames { get; } = new List<string>();
-        protected internal List<string> AddedFileNames { get; } = new List<string>();
+        protected internal List<string> OriginalFileNames { get; } = new List<string>();
 
         /// <summary>
         /// Ctor
@@ -57,34 +56,10 @@ namespace PocketBaseClient.Orm.Structures
                 Remove(fileName);
         }
 
-        /// <inheritdoc />
-        public override T? Remove(T? element)
-        {
-            var removedElement = base.Remove(element);
-            if (removedElement?.IsFromServer ?? false && !string.IsNullOrEmpty(removedElement?.FileName) && !RemovedFileNames.Contains(removedElement.FileName))
-                RemovedFileNames.Add(removedElement.FileName!);
-
-            return removedElement;
-        }
-
-        /// <inheritdoc />
-        public override T? Add(T? element)
-        {
-            var addedElement = base.Add(element);
-            if (!(addedElement?.IsFromServer ?? false) && !string.IsNullOrEmpty(addedElement.FileName) && !AddedFileNames.Contains(addedElement.FileName))
-                AddedFileNames.Add(addedElement.FileName!);
-
-            return (addedElement);
-        }
-
-        internal void ClearLocalModifications()
-        {
-            RemovedFileNames.Clear();
-            AddedFileNames.Clear();
-        }
 
         // IEPA!!
         // Com fer que un Remove directe del File es vegi reflexat a la llista?
+        // Fer d'alguna forma que al marcar com a SetLoaded, es carregui la llista inicial de fitxers
 
     }
 }
