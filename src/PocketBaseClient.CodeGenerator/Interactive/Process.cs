@@ -8,9 +8,9 @@
 // pocketbase-csharp-sdk project: https://github.com/PRCV1/pocketbase-csharp-sdk 
 // pocketbase project: https://github.com/pocketbase/pocketbase
 
+using PocketBaseClient.CodeGenerator.Generation;
 using PocketBaseClient.CodeGenerator.Helpers;
 using PocketBaseClient.CodeGenerator.Models;
-using PocketBaseClient.CodeGenerator.Generation;
 using Sharprompt;
 
 namespace PocketBaseClient.CodeGenerator.Interactive
@@ -213,7 +213,9 @@ namespace PocketBaseClient.CodeGenerator.Interactive
                 pocketBaseCredentials = Prompt.Bind<PocketBaseCredentials>();
                 try
                 {
-                    schema = SchemaDownloader.DownloadSchemaAsync(pocketBaseUri, pocketBaseCredentials.Email ?? "", pocketBaseCredentials.Password ?? "").Result;
+                    schema = Task.Run(async () => await SchemaDownloader.DownloadSchemaAsync(pocketBaseUri,
+                            pocketBaseCredentials.Email ?? "", pocketBaseCredentials.Password ?? "")).GetAwaiter()
+                        .GetResult();
                 }
                 catch (Exception ex)
                 {

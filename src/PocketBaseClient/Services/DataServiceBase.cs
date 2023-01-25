@@ -111,12 +111,16 @@ namespace PocketBaseClient.Services
 
             return bRet;
         }
+
         /// <summary>
         /// Save all changed items to PocketBase, performing Create, Update or Delete for every Item changed to server 
         /// </summary>
         /// <returns></returns>
         public bool SaveChanges()
-            => SaveChangesAsync().Result;
+        {
+            return Task.Run(async () => await SaveChangesAsync()).GetAwaiter().GetResult();
+        }
+
         #endregion SaveChanges
 
     }

@@ -9,16 +9,11 @@
 // pocketbase-csharp-sdk project: https://github.com/PRCV1/pocketbase-csharp-sdk 
 // pocketbase project: https://github.com/pocketbase/pocketbase
 
-using pocketbase_csharp_sdk.Json;
+using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
 using PocketBaseClient.Orm;
 using PocketBaseClient.Orm.Attributes;
-using PocketBaseClient.Orm.Json;
-using PocketBaseClient.Orm.Validators;
 using PocketBaseClient.Services;
-using System.ComponentModel.DataAnnotations;
-using System.Net.Mail;
-using System.Text.Json;
-using System.Text.Json.Serialization;
 
 namespace PocketBaseClient.DemoTest.Models
 {
@@ -77,8 +72,11 @@ namespace PocketBaseClient.DemoTest.Models
         #endregion Collection
 
         #region GetById
-        public static TestForRelated? GetById(string id, bool reload = false) 
-            => GetByIdAsync(id, reload).Result;
+
+        public static TestForRelated? GetById(string id, bool reload = false)
+        {
+            return Task.Run(async () => await GetByIdAsync(id, reload)).GetAwaiter().GetResult();
+        }
 
         public static async Task<TestForRelated?> GetByIdAsync(string id, bool reload = false)
             => await DataServiceBase.GetCollection<TestForRelated>()!.GetByIdAsync(id, reload);

@@ -8,8 +8,8 @@
 // pocketbase-csharp-sdk project: https://github.com/PRCV1/pocketbase-csharp-sdk 
 // pocketbase project: https://github.com/pocketbase/pocketbase
 
-using pocketbase_csharp_sdk.Models.Collection;
 using System.Text.Json;
+using pocketbase_csharp_sdk.Models.Collection;
 
 namespace PocketBaseClient.CodeGenerator.Models
 {
@@ -89,7 +89,9 @@ namespace PocketBaseClient.CodeGenerator.Models
         /// <param name="path">Path where save the schema</param>
         /// <returns></returns>
         public void SaveToFile(string path)
-            => SaveToFileAsync(path).Wait();
+        {
+            Task.Run(async () => await SaveToFileAsync(path)).GetAwaiter().GetResult();
+        }
 
         /// <summary>
         /// Loads the Schema from file

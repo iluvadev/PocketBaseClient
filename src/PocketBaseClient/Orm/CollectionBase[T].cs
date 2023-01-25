@@ -45,6 +45,7 @@ namespace PocketBaseClient.Orm
         #endregion DiscardChanges
 
         #region Save Item
+
         /// <summary>
         /// Save an item to PocketBase, performing a Create or Update to server
         /// </summary>
@@ -52,7 +53,9 @@ namespace PocketBaseClient.Orm
         /// <param name="onlyIfChanges">False to force saving unmodified items</param>
         /// <returns></returns>
         internal bool Save(T item, bool onlyIfChanges = true)
-            => SaveAsync(item, onlyIfChanges).Result;
+        {
+            return Task.Run(async () => await SaveAsync(item, onlyIfChanges)).GetAwaiter().GetResult();
+        }
 
         /// <summary>
         /// Save an item to PocketBase, performing a Create, Update or Delete to server (async)

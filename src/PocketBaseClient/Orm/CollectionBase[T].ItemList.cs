@@ -8,8 +8,8 @@
 // pocketbase-csharp-sdk project: https://github.com/PRCV1/pocketbase-csharp-sdk 
 // pocketbase project: https://github.com/pocketbase/pocketbase
 
-using PocketBaseClient.Orm.Structures;
 using System.Collections;
+using PocketBaseClient.Orm.Structures;
 
 namespace PocketBaseClient.Orm
 {
@@ -30,7 +30,10 @@ namespace PocketBaseClient.Orm
 
 
         /// <inheritdoc />
-        public T? GetById(string? id, bool reload = false) => GetByIdAsync(id, reload).Result;
+        public T? GetById(string? id, bool reload = false)
+        {
+            return Task.Run(async () => await GetByIdAsync(id, reload)).GetAwaiter().GetResult();
+        }
 
         /// <summary>
         /// Gets the item, with its id (async)
