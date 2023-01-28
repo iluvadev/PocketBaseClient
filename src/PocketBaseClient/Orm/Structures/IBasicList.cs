@@ -75,9 +75,10 @@ namespace PocketBaseClient.Orm.Structures
         bool RemoveAll()
         {
             bool result = true;
-            foreach (var item in this)
-                result &= Remove(item) != null;
-
+            var enumerable = this.OfType<object?>().ToList();
+            for (var i = enumerable.Count() - 1; i >= 0; i--)
+                result &= Remove(enumerable.ElementAt(i)) != null;
+                    
             return result;
         }
 

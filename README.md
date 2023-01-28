@@ -1,6 +1,6 @@
-**Warning**: This project is in active development. Things described bellow could change.
+This project is in active development. Things described bellow could change.
 
-# PocketBaseClient-csharp
+# PocketBaseClient
 
 With **PocketBaseClient** and the code generated for your application with [pbcodegen](doc/pbcodegen.md), you can interact with your [PocketBase](https://pocketbase.io) server without having to worry about communication, APIs, object binding, cache management, etc.
 
