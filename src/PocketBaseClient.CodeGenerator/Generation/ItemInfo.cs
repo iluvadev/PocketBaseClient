@@ -144,6 +144,31 @@ namespace {settings.NamespaceModels}
             sb.AppendLine($@"
             }}
         }}");
+            
+            sb.AppendLine($@"
+        #region Constructors
+
+        public {ClassName}() : base()
+        {{
+        }}");
+
+            sb.Append($@"
+        [JsonConstructor]
+        public {ClassName}(");
+            for (int i = 0; i < Fields.Count; i++)
+            {
+                sb.Append($@"{Fields[i].TypeName} {GetParameterNameForConstructor(Fields[i].PropertyName)}");
+                if (i < Fields.Count - 1)
+                    sb.Append($@", ");
+            }
+            sb.AppendLine($@")");
+            sb.AppendLine($@"        {{");
+            foreach (var field in Fields)
+                sb.AppendLine($@"            {field.PropertyName} = {GetParameterNameForConstructor(field.PropertyName)};");
+            sb.AppendLine($@"            AddInternal(this);");
+            sb.AppendLine($@"        }}");
+            sb.AppendLine($@"
+        #endregion");
 
             var relatedItems = Fields.SelectMany(f => f.RelatedItems);
             if (relatedItems.Any())
@@ -168,6 +193,20 @@ namespace {settings.NamespaceModels}
 }}");
 
             return new GeneratedCodeFile(fileName, sb.ToString());
+        }
+
+        /// <summary>
+        /// Generates the parameter name for JSON constructor
+        /// </summary>
+        /// <param name="propertyName">Property name of field. Assume that the first letter is upper-cased.</param>
+        /// <returns>Parameter name, which its first letter is lower-cased</returns>
+        private string GetParameterNameForConstructor(string propertyName)
+        {
+            if (string.IsNullOrEmpty(propertyName))
+                throw new InvalidOperationException("Property name cannot be null or empty");
+            if (!char.IsUpper(propertyName[0]))
+                throw new InvalidOperationException("Property name must start with upper case letter");
+            return $"{propertyName[0].ToString().ToLower()}{propertyName.Substring(1)}";
         }
 
         /// <summary>

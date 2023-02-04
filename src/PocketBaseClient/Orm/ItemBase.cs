@@ -240,6 +240,16 @@ namespace PocketBaseClient.Orm
             Collection.AddInternal(this);
         }
 
+        [JsonConstructor]
+        public ItemBase(string? id, DateTime? created, DateTime? updated)
+        {
+            _Id = id;
+            Created = created;
+            Updated = updated;
+        }
+
+        protected object? AddInternal(object? element) => Collection.AddInternal(element);
+
         /// <inheritdoc />
         public override string ToString()
         {
