@@ -71,7 +71,6 @@ namespace PocketBaseClient.Orm.Structures
             var enumerable = this.OfType<object?>().ToList();
             for (var i = enumerable.Count - 1; i >= 0; i--)
                 result &= Remove(enumerable.ElementAt(i)) != null;
-
             return result;
         }
 
