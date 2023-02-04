@@ -18,6 +18,8 @@ namespace PocketBaseClient.Orm
 
         #region  Save
         internal abstract Task<bool> SaveAsync<T>(T elem, bool onlyIfChanges = true) where T : ItemBase;
+        internal abstract bool Save<T>(T elem, bool onlyIfChanges = true) where T : ItemBase;
+
         /// <summary>
         /// Save all Collection items to PocketBase, performing Create, Update or Delete for every Item to server (async)
         /// </summary>
@@ -32,7 +34,20 @@ namespace PocketBaseClient.Orm
 
             return result;
         }
+        /// <summary>
+        /// Save all Collection items to PocketBase, performing Create, Update or Delete for every Item to server
+        /// </summary>
+        /// <param name="onlyIfChanges">False to force saving unmodified items</param>
+        /// <returns></returns>
+        public bool SaveChanges(bool onlyIfChanges = true)
+        {
+            bool result = true;
+            foreach (var cached in GetCachedObjects())
+                if (cached is ItemBase item)
+                    result &= Save(item, onlyIfChanges);
 
+            return result;
+        }
         #endregion  Save
 
         #region DiscardChanges

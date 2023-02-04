@@ -14,7 +14,7 @@ namespace PocketBaseClient.Orm.Structures
     /// <summary>
     /// Definition for field types of Lists of Items
     /// </summary>
-    public interface IFieldItemList<T> : IFieldBasicList<T>, ILocalItemList<T>
+    public interface IFieldItemList<T> : IFieldBasicList<T>, IItemList<T>
         where T : ItemBase, new()
     {
     }

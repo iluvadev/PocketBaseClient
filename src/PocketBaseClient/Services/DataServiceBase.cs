@@ -74,6 +74,20 @@ namespace PocketBaseClient.Services
 
             return await collection.GetByIdAsync(id, forceLoad);
         }
+        /// <summary>
+        /// Gets the element with specified Id
+        /// </summary>
+        /// <typeparam name="T">The type of the element to find</typeparam>
+        /// <param name="id">The id of the element</param>
+        /// <param name="forceLoad">True for a reload the element from server</param>
+        /// <returns></returns>
+        public static T? GetById<T>(string id, bool forceLoad = false) where T : ItemBase, new()
+        {
+            var collection = GetCollection<T>();
+            if (collection == null) return null;
+
+            return collection.GetById(id, forceLoad);
+        }
         #endregion Get Item
 
         #region DiscardChanges
@@ -97,6 +111,18 @@ namespace PocketBaseClient.Services
             bool bRet = true;
             foreach (var collection in Collections)
                 bRet &= await collection.SaveChangesAsync();
+
+            return bRet;
+        }
+        /// <summary>
+        /// Save all changed items to PocketBase, performing Create, Update or Delete for every Item changed to server
+        /// </summary>
+        /// <returns></returns>
+        public bool SaveChanges()
+        {
+            bool bRet = true;
+            foreach (var collection in Collections)
+                bRet &= collection.SaveChanges();
 
             return bRet;
         }

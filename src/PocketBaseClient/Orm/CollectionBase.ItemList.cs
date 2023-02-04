@@ -31,6 +31,10 @@ namespace PocketBaseClient.Orm
             => await SaveChangesAsync(true);
 
         /// <inheritdoc />
+        bool IBasicCollection.SaveChanges(ListSaveDiscardModes mode)
+            => SaveChanges(true);
+
+        /// <inheritdoc />
         void IBasicCollection.DiscardChanges(ListSaveDiscardModes mode)
             => DiscardChanges();
 

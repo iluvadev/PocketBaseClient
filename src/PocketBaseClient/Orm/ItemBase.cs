@@ -178,6 +178,12 @@ namespace PocketBaseClient.Orm
         /// </summary>
         /// <returns></returns>
         public async Task ReloadAsync() => await LoadAsync(true);
+        
+        /// <summary>
+        /// Reloads the object with the data stored in PocketBase (async)
+        /// </summary>
+        /// <returns></returns>
+        public void Reload() => Load(true);
         #endregion Reload
 
         #region Delete
@@ -220,6 +226,14 @@ namespace PocketBaseClient.Orm
         /// <returns></returns>
         public async Task<bool> SaveAsync(bool onlyIfChanges = false)
             => await Collection.SaveAsync(this, onlyIfChanges);
+
+        /// <summary>
+        /// Saves the object to PocketBase (internally performs insert or update)
+        /// </summary>
+        /// <param name="onlyIfChanges">False to force saving the object also if is unmodified (default behaviour)</param>
+        /// <returns></returns>
+        public bool Save(bool onlyIfChanges = false)
+            => Collection.Save(this, onlyIfChanges);
         #endregion Save
 
         /// <summary>

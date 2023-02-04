@@ -37,6 +37,14 @@ namespace PocketBaseClient.Orm
         public async Task<T?> GetByIdAsync(string? id, bool reload = false)
             => await GetByIdInternalAsync(id, reload);
 
+        /// <summary>
+        /// Gets the item, with its id 
+        /// </summary>
+        /// <param name="id">The id of the item to get</param>
+        /// <param name="reload">True if is forced to reload from PocketBase ignoring Cache (default is false)</param>
+        /// <returns></returns>
+        public T? GetById(string? id, bool reload = false)
+            => GetByIdInternal(id, reload);
 
         /// <inheritdoc />
         T? IBasicList<T>.Add(T? item)
@@ -63,7 +71,7 @@ namespace PocketBaseClient.Orm
         }
 
         /// <inheritdoc />
-        async Task<T?> IRemoteItemList<T>.RemoveAsync(string? id)
+        async Task<T?> Structures.ICollection<T>.RemoveAsync(string? id)
         {
             var item = await GetByIdAsync(id);
             if (Delete(item))
