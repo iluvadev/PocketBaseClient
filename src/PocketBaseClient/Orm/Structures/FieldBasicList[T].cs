@@ -64,10 +64,6 @@ namespace PocketBaseClient.Orm.Structures
             => element != null && InnerList.Contains(element);
 
         /// <inheritdoc />
-        bool IBasicList.Contains(object? element)
-            => element is T item && Contains(item);
-
-        /// <inheritdoc />
         public T? Add(T? element)
         {
             if (MaxSize != null && Count == MaxSize)
@@ -105,18 +101,5 @@ namespace PocketBaseClient.Orm.Structures
             return element is T item ? Remove(item) : default;
         }
 
-        /// <inheritdoc />
-        public void DiscardChanges(ListSaveDiscardModes mode)
-        {
-            //IEPA!!
-            throw new NotImplementedException();
-        }
-
-        /// <inheritdoc />
-        public bool SaveChanges(ListSaveDiscardModes mode)
-        {
-            //IEPA!!
-            throw new NotImplementedException();
-        }
     }
 }

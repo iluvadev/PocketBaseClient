@@ -8,8 +8,8 @@
 // pocketbase-csharp-sdk project: https://github.com/PRCV1/pocketbase-csharp-sdk 
 // pocketbase project: https://github.com/pocketbase/pocketbase
 
-using System.Collections;
 using PocketBaseClient.Orm.Structures;
+using System.Collections;
 
 namespace PocketBaseClient.Orm
 {
@@ -28,13 +28,6 @@ namespace PocketBaseClient.Orm
         public IEnumerator<T> GetEnumerator()
             => GetItems().GetEnumerator();
 
-
-        /// <inheritdoc />
-        public T? GetById(string? id, bool reload = false)
-        {
-            return Task.Run(async () => await GetByIdAsync(id, reload)).GetAwaiter().GetResult();
-        }
-
         /// <summary>
         /// Gets the item, with its id (async)
         /// </summary>
@@ -44,14 +37,6 @@ namespace PocketBaseClient.Orm
         public async Task<T?> GetByIdAsync(string? id, bool reload = false)
             => await GetByIdInternalAsync(id, reload);
 
-
-        /// <inheritdoc />
-        public override bool Contains(object? element)
-            => Contains(element as T);
-
-        /// <inheritdoc />
-        public bool Contains(T? element)
-            => GetById(element?.Id) != null;
 
         /// <inheritdoc />
         T? IBasicList<T>.Add(T? item)
@@ -69,7 +54,7 @@ namespace PocketBaseClient.Orm
         /// <inheritdoc />
         T? IBasicList<T>.Remove(T? item)
             => RemoveInternal(item) as T;
-        
+
         protected override object? RemoveInternal(object? element)
         {
             if (element is T item && Delete(item))
@@ -78,18 +63,13 @@ namespace PocketBaseClient.Orm
         }
 
         /// <inheritdoc />
-        T? IItemList<T>.Remove(string? id)
+        async Task<T?> IRemoteItemList<T>.RemoveAsync(string? id)
         {
-            var item = GetById(id);
+            var item = await GetByIdAsync(id);
             if (Delete(item))
                 return item;
             return null;
         }
-
-
-        /// <inheritdoc />
-        public bool Delete(string? id)
-            => Delete(GetById(id));
 
         /// <inheritdoc />
         public bool Delete(T? item)

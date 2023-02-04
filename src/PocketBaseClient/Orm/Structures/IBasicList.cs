@@ -28,13 +28,6 @@ namespace PocketBaseClient.Orm.Structures
         string? Id { get; }
 
         /// <summary>
-        /// Says if the element is contained in the list
-        /// </summary>
-        /// <param name="element">The element to check if is contained</param>
-        /// <returns></returns>
-        bool Contains(object? element);
-
-        /// <summary>
         /// Adds an element to the list
         /// </summary>
         /// <param name="element">The element to add</param>
@@ -75,24 +68,12 @@ namespace PocketBaseClient.Orm.Structures
         bool RemoveAll()
         {
             bool result = true;
-            foreach (var item in this)
-                result &= Remove(item) != null;
+            var enumerable = this.OfType<object?>().ToList();
+            for (var i = enumerable.Count - 1; i >= 0; i--)
+                result &= Remove(enumerable.ElementAt(i)) != null;
 
             return result;
         }
-
-        /// <summary>
-        /// Save Changes in the list
-        /// </summary>
-        /// <param name="mode">Says what to save</param>
-        /// <returns></returns>
-        bool SaveChanges(ListSaveDiscardModes mode);
-
-        /// <summary>
-        /// Discard changes in list
-        /// </summary>
-        /// <param name="mode">Says what to discard</param>
-        void DiscardChanges(ListSaveDiscardModes mode);
 
         /// <summary>
         /// Updates the List with the list by parameter

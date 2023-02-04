@@ -21,7 +21,7 @@ namespace PocketBaseClient.Orm.Json
     /// <typeparam name="L">The type of the list</typeparam>
     /// <typeparam name="T">The mapped related type</typeparam>
     public class RelationListConverter<L, T> : JsonConverter<L?>
-        where L : IBasicList<T>, new()
+        where L : FieldItemList<T>, new()
         where T : ItemBase, new()
     {
         /// <inheritdoc />

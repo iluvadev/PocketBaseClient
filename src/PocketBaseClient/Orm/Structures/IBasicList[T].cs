@@ -12,13 +12,6 @@ namespace PocketBaseClient.Orm.Structures
 {
     public interface IBasicList<T> : IBasicList, IEnumerable<T>
     {
-        /// <summary>
-        /// Says if the element is contained in the list
-        /// </summary>
-        /// <param name="element">The element to check if is contained</param>
-        /// <returns></returns>
-        bool Contains(T? element);
-
 
         /// <summary>
         /// Adds an element to the list

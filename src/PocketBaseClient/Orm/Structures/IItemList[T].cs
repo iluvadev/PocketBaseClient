@@ -20,22 +20,6 @@ namespace PocketBaseClient.Orm.Structures
         where T : ItemBase, new()
     {
         /// <summary>
-        /// Gets the element of the list with specified Id
-        /// </summary>
-        /// <param name="id">The id of the element</param>
-        /// <returns>The element with Id (null if not exists in the list)</returns>
-        T? this[string id] 
-            => GetById(id);
-
-        /// <summary>
-        /// Gets the item of the list, with its id
-        /// </summary>
-        /// <param name="id">The id of the item to get</param>
-        /// <param name="reload">True if is forced to reload from PocketBase (default is false)</param>
-        /// <returns></returns>
-        T? GetById(string? id, bool reload = false);
-
-        /// <summary>
         /// Gets all items in the list
         /// </summary>
         /// <param name="reload">True: the elements must be reloaded from PocketBase</param>
@@ -56,23 +40,8 @@ namespace PocketBaseClient.Orm.Structures
         /// Adds a new item to the list
         /// </summary>
         /// <returns></returns>
-        T AddNew() 
+        public T AddNew() 
             => Add(new T())!;
-
-        /// <summary>
-        /// Says if the item is contained in the list
-        /// </summary>
-        /// <param name="id">The Id of the item to check if is contained</param>
-        /// <returns></returns>
-        bool Contains(string? id) 
-            => id != null && this[id] != null;
-
-        /// <summary>
-        /// Removes the item from the list
-        /// </summary>
-        /// <param name="id">The Id of the item to be removed</param>
-        /// <returns></returns>
-        T? Remove(string? id);
 
         /// <summary>
         /// Deletes the item contained in the list from memory and PocketBase
@@ -81,14 +50,6 @@ namespace PocketBaseClient.Orm.Structures
         /// <returns></returns>
         /// <remarks>Deleting an item removes it form the list and marks it as 'to be deleted' in PocketBase</remarks>
         bool Delete(T? item);
-
-        /// <summary>
-        /// Deletes the item contained in the list from memory and PocketBase
-        /// </summary>
-        /// <param name="id">The id of the item to be deleted</param>
-        /// <returns></returns>
-        /// <remarks>Deleting an item removes it form the list and marks it as 'to be deleted' in PocketBase</remarks>
-        bool Delete(string? id);
 
         /// <summary>
         /// Deletes all items in the list
