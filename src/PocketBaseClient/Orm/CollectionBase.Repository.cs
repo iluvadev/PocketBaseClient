@@ -31,13 +31,7 @@ namespace PocketBaseClient.Orm
 
             return result;
         }
-        /// <summary>
-        /// Save all Collection items to PocketBase, performing Create, Update or Delete for every Item to server
-        /// </summary>
-        /// <param name="onlyIfChanges">False to force saving unmodified items</param>
-        /// <returns></returns>
-        public bool SaveChanges(bool onlyIfChanges = true)
-            => SaveChangesAsync(onlyIfChanges).Result;
+
         #endregion  Save
 
         #region DiscardChanges

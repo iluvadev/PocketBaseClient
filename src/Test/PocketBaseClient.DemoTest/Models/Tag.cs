@@ -60,12 +60,7 @@ namespace PocketBaseClient.DemoTest.Models
             => (CollectionTags)DataServiceBase.GetCollection<Tag>()!;
         #endregion Collection
 
-        #region GetById
-        public static Tag? GetById(string id, bool reload = false) 
-            => GetByIdAsync(id, reload).Result;
-
         public static async Task<Tag?> GetByIdAsync(string id, bool reload = false)
             => await DataServiceBase.GetCollection<Tag>()!.GetByIdAsync(id, reload);
-        #endregion GetById
     }
 }

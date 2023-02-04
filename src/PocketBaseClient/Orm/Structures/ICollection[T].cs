@@ -10,11 +10,10 @@
 
 namespace PocketBaseClient.Orm.Structures
 {
-
     /// <summary>
-    /// Definition for field types of Lists of Items
+    /// Definition for PocketBase Collection of Items
     /// </summary>
-    public interface IFieldItemList<T> : IFieldBasicList<T>, ILocalItemList<T>
+    public interface ICollection<T> : IBasicCollection, IRemoteItemList<T>
         where T : ItemBase, new()
     {
     }

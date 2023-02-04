@@ -1,12 +1,7 @@
-﻿using pocketbase_csharp_sdk.Models;
+﻿using System.Web;
+using pocketbase_csharp_sdk.Models;
 using PocketBaseClient.Orm.Cache;
 using PocketBaseClient.Orm.Structures;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Web;
 
 namespace PocketBaseClient.Orm
 {
@@ -85,7 +80,9 @@ namespace PocketBaseClient.Orm
             int currentPage = 1;
             while (totalItems == null || loadedItems < totalItems)
             {
-                var page = GetPageFromPbAsync(pageNumber: currentPage, filter: filter, sort: sort).Result;
+                var page = Task
+                    .Run(async () => await GetPageFromPbAsync(currentPage, filter: filter, sort: sort))
+                    .GetAwaiter().GetResult();
                 if (page != null)
                 {
                     currentPage++;
@@ -170,7 +167,7 @@ namespace PocketBaseClient.Orm
                 int currentPage = 1;
                 while (_PocketBaseItemsCount == null || loadedItems < _PocketBaseItemsCount)
                 {
-                    var page = GetPageFromPbAsync(currentPage).Result;
+                    var page = Task.Run(async () => await GetPageFromPbAsync(currentPage)).GetAwaiter().GetResult();
                     if (page != null)
                     {
                         currentPage++;

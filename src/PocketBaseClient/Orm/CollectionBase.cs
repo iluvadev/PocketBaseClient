@@ -17,7 +17,7 @@ namespace PocketBaseClient.Orm
     /// <summary>
     /// Base class for a Collection in PocketBase
     /// </summary>
-    public abstract partial class CollectionBase : IBasicList
+    public abstract partial class CollectionBase : IBasicCollection
     {
         /// <summary>
         /// The PocketBase 'id' of the Collection

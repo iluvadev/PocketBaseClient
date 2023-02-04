@@ -8,11 +8,11 @@
 // pocketbase-csharp-sdk project: https://github.com/PRCV1/pocketbase-csharp-sdk 
 // pocketbase project: https://github.com/pocketbase/pocketbase
 
+using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
 using pocketbase_csharp_sdk.Json;
 using pocketbase_csharp_sdk.Models;
 using PocketBaseClient.Orm.Structures;
-using System.ComponentModel.DataAnnotations;
-using System.Text.Json.Serialization;
 
 namespace PocketBaseClient.Orm
 {
@@ -145,8 +145,12 @@ namespace PocketBaseClient.Orm
                 throw new Exception($"Object does not exists in PocketBase; Collection:{Collection.Name}; RegistryId:{Id}");
             }
         }
+
         private void Load(bool forceLoad = false)
-            => LoadAsync(forceLoad).Wait();
+        {
+            Task.Run(async () => await LoadAsync(forceLoad)).GetAwaiter().GetResult();
+        }
+
         #endregion Load
 
         #region Reload
@@ -155,11 +159,6 @@ namespace PocketBaseClient.Orm
         /// </summary>
         /// <returns></returns>
         public async Task ReloadAsync() => await LoadAsync(true);
-
-        /// <summary>
-        /// Reloads the object with the data stored in PocketBase
-        /// </summary>
-        public void Reload() => ReloadAsync().Wait();
         #endregion Reload
 
         #region Delete
@@ -194,13 +193,6 @@ namespace PocketBaseClient.Orm
         #endregion DiscardChanges
 
         #region Save
-        /// <summary>
-        /// Saves the object to PocketBase (internally performs insert or update)
-        /// </summary>
-        /// <param name="onlyIfChanges">False to force saving the object also if is unmodified (default behaviour)</param>
-        /// <returns></returns>
-        public bool Save(bool onlyIfChanges = false)
-            => SaveAsync(onlyIfChanges).Result;
 
         /// <summary>
         /// Saves the object to PocketBase (internally performs insert or update) (async)

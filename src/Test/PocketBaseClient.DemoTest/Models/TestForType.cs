@@ -262,12 +262,7 @@ namespace PocketBaseClient.DemoTest.Models
             => (CollectionTestForTypes)DataServiceBase.GetCollection<TestForType>()!;
         #endregion Collection
 
-        #region GetById
-        public static TestForType? GetById(string id, bool reload = false) 
-            => GetByIdAsync(id, reload).Result;
-
         public static async Task<TestForType?> GetByIdAsync(string id, bool reload = false)
             => await DataServiceBase.GetCollection<TestForType>()!.GetByIdAsync(id, reload);
-        #endregion GetById
     }
 }
