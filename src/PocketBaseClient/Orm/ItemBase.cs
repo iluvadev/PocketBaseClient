@@ -8,11 +8,11 @@
 // pocketbase-csharp-sdk project: https://github.com/PRCV1/pocketbase-csharp-sdk 
 // pocketbase project: https://github.com/pocketbase/pocketbase
 
-using System.ComponentModel.DataAnnotations;
-using System.Text.Json.Serialization;
 using pocketbase_csharp_sdk.Json;
 using pocketbase_csharp_sdk.Models;
 using PocketBaseClient.Orm.Structures;
+using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
 
 namespace PocketBaseClient.Orm
 {
@@ -132,23 +132,42 @@ namespace PocketBaseClient.Orm
         #region Load
         private async Task LoadAsync(bool forceLoad = false)
         {
-            if (Collection == null) return;
-            if (Metadata_.IsNew) return;
-            if (Metadata_.IsTrash) return;
-            if (Metadata_.IsLoaded && !forceLoad) return;
+            if (NeedToBeLoadedFromPb(forceLoad))
+                await LoadFromPbAsync();
+        }
 
-            if (!await Collection.FillFromPbAsync(this))
+        private void Load(bool forceLoad = false)
+        {
+            if (NeedToBeLoadedFromPb(forceLoad))
+                LoadFromPb();
+        }
+
+
+        private bool NeedToBeLoadedFromPb(bool forceLoad = false)
+        {
+            if (Collection == null) return false;
+            if (Metadata_.IsNew) return false;
+            if (Metadata_.IsTrash) return false;
+            if (Metadata_.IsLoaded && !forceLoad) return false;
+            return true;
+        }
+        private void LoadFromPb()
+        {
+            if (!Collection.FillFromPb(this))
             {
-                //IEPA!!
                 // The registry does not exists in PocketBase
                 Metadata_.IsTrash = true;
                 throw new Exception($"Object does not exists in PocketBase; Collection:{Collection.Name}; RegistryId:{Id}");
             }
         }
-
-        private void Load(bool forceLoad = false)
+        private async Task LoadFromPbAsync()
         {
-            Task.Run(async () => await LoadAsync(forceLoad)).GetAwaiter().GetResult();
+            if (!await Collection.FillFromPbAsync(this))
+            {
+                // The registry does not exists in PocketBase
+                Metadata_.IsTrash = true;
+                throw new Exception($"Object does not exists in PocketBase; Collection:{Collection.Name}; RegistryId:{Id}");
+            }
         }
 
         #endregion Load

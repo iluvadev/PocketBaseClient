@@ -48,6 +48,15 @@ namespace PocketBaseClient.Orm
 
             return page;
         }
+        internal PagedCollectionModel<T>? GetPageFromPb(int? pageNumber = null, int? perPage = null, string? filter = null, string? sort = null)
+        {
+            var page = PocketBase.HttpGetList<T>(UrlRecords, pageNumber, perPage, filter, sort);
+            // Cache all items in the page automatically at creation
+            foreach (var itemFromPb in page?.Items ?? Enumerable.Empty<T>())
+                itemFromPb.Metadata_.SetLoaded();
+
+            return page;
+        }
         internal async IAsyncEnumerable<T> GetItemsFromPbAsync(string? filter = null, string? sort = null)
         {
             int loadedItems = 0;
@@ -73,6 +82,7 @@ namespace PocketBaseClient.Orm
                 }
             }
         }
+
         internal IEnumerable<T> GetItemsFromPb(string? filter = null, string? sort = null)
         {
             int loadedItems = 0;
@@ -80,9 +90,7 @@ namespace PocketBaseClient.Orm
             int currentPage = 1;
             while (totalItems == null || loadedItems < totalItems)
             {
-                var page = Task
-                    .Run(async () => await GetPageFromPbAsync(currentPage, filter: filter, sort: sort))
-                    .GetAwaiter().GetResult();
+                var page = GetPageFromPb(currentPage, filter: filter, sort: sort);
                 if (page != null)
                 {
                     currentPage++;
@@ -116,13 +124,32 @@ namespace PocketBaseClient.Orm
             item.Metadata_.SetLoaded();
             return true;
         }
-
         internal override async Task<bool> FillFromPbAsync<E>(E elem)
         {
             if (elem is T item)
                 return await FillFromPbAsync(item);
             return false;
         }
+
+        private bool FillFromPb(T item)
+        {
+            if (item.Id == null) return false;
+
+            var loadedItem = PocketBase.HttpGet<T>(UrlRecord(item));
+            if (loadedItem == null) return false;
+            loadedItem.Metadata_.SetLoaded();
+
+            item.UpdateWith(loadedItem);
+            item.Metadata_.SetLoaded();
+            return true;
+        }
+        internal override bool FillFromPb<E>(E elem)
+        {
+            if (elem is T item)
+                return FillFromPb(item);
+            return false;
+        }
+
         #endregion Fill Item from PocketBase
 
         #region Get Items
@@ -167,7 +194,8 @@ namespace PocketBaseClient.Orm
                 int currentPage = 1;
                 while (_PocketBaseItemsCount == null || loadedItems < _PocketBaseItemsCount)
                 {
-                    var page = Task.Run(async () => await GetPageFromPbAsync(currentPage)).GetAwaiter().GetResult();
+                    // Get page in sync mode
+                    var page = GetPageFromPb(currentPage);
                     if (page != null)
                     {
                         currentPage++;

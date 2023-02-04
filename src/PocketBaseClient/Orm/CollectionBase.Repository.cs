@@ -8,6 +8,7 @@ namespace PocketBaseClient.Orm
         internal abstract IEnumerable GetObjects();
 
         internal abstract Task<bool> FillFromPbAsync<T>(T elem) where T : ItemBase;
+        internal abstract bool FillFromPb<T>(T elem) where T : ItemBase;
 
         #region Cache
         internal abstract bool CacheContains<T>(T elem) where T : ItemBase;
