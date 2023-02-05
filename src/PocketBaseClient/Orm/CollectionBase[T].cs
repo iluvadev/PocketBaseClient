@@ -61,6 +61,22 @@ namespace PocketBaseClient.Orm
                 return await SaveAsync(item, onlyIfChanges);
             return false;
         }
+        /// <summary>
+        /// Save an item to PocketBase, performing a Create, Update or Delete to server (async)
+        /// </summary>
+        /// <param name="item">The item to be saved</param>
+        /// <param name="onlyIfChanges">False to force saving unmodified items</param>
+        /// <returns></returns>
+        internal bool Save(T item, bool onlyIfChanges = true)
+            => SaveInternal(item, onlyIfChanges);
+
+        internal override bool Save<E>(E elem, bool onlyIfChanges = true)
+        {
+            if (elem is T item)
+                return Save(item, onlyIfChanges);
+            return false;
+        }
+
         #endregion Save Item
 
     }

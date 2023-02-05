@@ -96,6 +96,9 @@ namespace PocketBaseClient.DemoTest.Models
         #endregion Collection
 
         public static async Task<User?> GetByIdAsync(string id, bool reload = false)
-            => await DataServiceBase.GetCollection<User>()!.GetByIdAsync(id, reload);
+            => await GetCollection().GetByIdAsync(id, reload);
+
+        public static User? GetById(string id, bool reload = false)
+            => GetCollection().GetById(id, reload);
     }
 }

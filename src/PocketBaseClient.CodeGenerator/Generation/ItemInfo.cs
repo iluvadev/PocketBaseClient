@@ -187,7 +187,10 @@ namespace {settings.NamespaceModels}
         #endregion Collection
 
         public static async Task<{ClassName}?> GetByIdAsync(string id, bool reload = false)
-            => await DataServiceBase.GetCollection<{ClassName}>()!.GetByIdAsync(id, reload);
+            => await GetCollection().GetByIdAsync(id, reload);
+
+        public static {ClassName}? GetById(string id, bool reload = false)
+            => GetCollection().GetById(id, reload);
     }}
 }}");
 

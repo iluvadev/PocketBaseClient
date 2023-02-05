@@ -1,4 +1,5 @@
 using PocketBaseClient.DemoTest;
+using PocketBaseClient.DemoTest.Models;
 
 namespace PocketBaseClient.Test
 {
@@ -43,6 +44,9 @@ namespace PocketBaseClient.Test
             //res3.SortBy(i => i.SelectMultiple(Desc));
             //res3.SortBy(SortField.Name, SortField.Id);
             //res3.Sort(i => (i.TextNoRestrictions, i.NumberNoRestrictions));
+            var lst = myApp.Data.PostsCollection;
+            var post = lst.FirstOrDefault();
+            Post.Collection
             var res = col.Filter(i => i.Bool.IsTrue()).SortBy(i => i.Created.Desc().AndThenBy(i.Updated));
             foreach(var item in res)
             {
