@@ -63,7 +63,7 @@ namespace PocketBaseClient.DemoTest.Models
         }
 
         [JsonConstructor]
-        public Category(string? id, DateTime? created, DateTime? updated, string? @name)
+        public Category(string? id, DateTime? created, DateTime? updated, string @name)
             : base(id, created, updated)
         {
             Name = @name;

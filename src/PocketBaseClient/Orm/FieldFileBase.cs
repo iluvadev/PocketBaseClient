@@ -10,6 +10,7 @@
 
 using pocketbase_csharp_sdk.Models.Files;
 using PocketBaseClient.Orm.Structures;
+using System.IO;
 using System.Web;
 
 namespace PocketBaseClient.Orm
@@ -59,7 +60,7 @@ namespace PocketBaseClient.Orm
         private Func<string?, Task<Stream>>? _StreamGetterAsync = null;
         internal Func<string?, Task<Stream>> StreamGetterAsync
         {
-            get => _StreamGetterAsync ?? (IsFromServer ? (thumb) => GetStreamFromPb(thumb) : (_) => Task.Run(() => Stream.Null));
+            get => _StreamGetterAsync ?? (IsFromServer ? (thumb) => GetStreamFromPbAsync(thumb) : (_) => Task.Run(() => Stream.Null));
             private set => _StreamGetterAsync = value;
         }
 
@@ -83,7 +84,7 @@ namespace PocketBaseClient.Orm
         /// </summary>
         /// <param name="thumb">The optional Thumb options to ask for</param>
         /// <returns></returns>
-        internal async Task<Stream> GetStreamFromPb(string? thumb = null)
+        internal async Task<Stream> GetStreamFromPbAsync(string? thumb = null)
         {
             var urlFile = UrlFile;
             if (_Owner == null || urlFile == null)
@@ -112,7 +113,7 @@ namespace PocketBaseClient.Orm
         /// </summary>
         /// <returns></returns>
         public Stream GetStream()
-            => GetStreamAsync().Result;
+            => Task.Run(async () => await GetStreamAsync()).GetAwaiter().GetResult(); //WARNING: Async to Sync conversion
 
 
         /// <summary>

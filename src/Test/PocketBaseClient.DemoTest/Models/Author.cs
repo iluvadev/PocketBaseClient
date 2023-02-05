@@ -90,7 +90,7 @@ namespace PocketBaseClient.DemoTest.Models
         }
 
         [JsonConstructor]
-        public Author(string? id, DateTime? created, DateTime? updated, string? @name, MailAddress? @email, Uri? @url, string? @profile)
+        public Author(string? id, DateTime? created, DateTime? updated, string @name, MailAddress @email, Uri @url, string @profile)
             : base(id, created, updated)
         {
             Name = @name;

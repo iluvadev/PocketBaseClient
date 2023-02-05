@@ -50,7 +50,7 @@ namespace PocketBaseClient.Orm
         }
         internal PagedCollectionModel<T>? GetPageFromPb(int? pageNumber = null, int? perPage = null, string? filter = null, string? sort = null)
         {
-            var page = PocketBase.HttpGetList<T>(UrlRecords, pageNumber, perPage, filter, sort);
+            var page = App.HttpGetList<T>(UrlRecords, pageNumber, perPage, filter, sort);
             // Cache all items in the page automatically at creation
             foreach (var itemFromPb in page?.Items ?? Enumerable.Empty<T>())
                 itemFromPb.Metadata_.SetLoaded();
@@ -135,7 +135,7 @@ namespace PocketBaseClient.Orm
         {
             if (item.Id == null) return false;
 
-            var loadedItem = PocketBase.HttpGet<T>(UrlRecord(item));
+            var loadedItem = App.HttpGet<T>(UrlRecord(item));
             if (loadedItem == null) return false;
             loadedItem.Metadata_.SetLoaded();
 
@@ -330,7 +330,7 @@ namespace PocketBaseClient.Orm
         }
         private bool CreateInternal(T item)
         {
-            var savedItem = PocketBase.HttpPost(UrlRecords, item);
+            var savedItem = App.HttpPost(UrlRecords, item);
             if (savedItem == null) return false;
 
             item.UpdateWith(savedItem);
@@ -356,7 +356,7 @@ namespace PocketBaseClient.Orm
             if (item.Id == null) return false;
             if (onlyIfChanges && !item.Metadata_.HasLocalChanges) return true;
 
-            var savedItem = PocketBase.HttpPatch(UrlRecord(item), item);
+            var savedItem = App.HttpPatch(UrlRecord(item), item);
             if (savedItem == null) return false;
 
             item.UpdateWith(savedItem);
@@ -384,7 +384,7 @@ namespace PocketBaseClient.Orm
         {
             if (item.Id == null) return false;
 
-            if (!PocketBase.HttpDelete(UrlRecord(item))) return false;
+            if (!App.HttpDelete(UrlRecord(item))) return false;
 
             //Remove from Cache
             Cache.Remove(item.Id);

@@ -65,7 +65,7 @@ namespace PocketBaseClient.DemoTest.Models
         }
 
         [JsonConstructor]
-        public Tag(string? id, DateTime? created, DateTime? updated, string? @name)
+        public Tag(string? id, DateTime? created, DateTime? updated, string @name)
             : base(id, created, updated)
         {
             Name = @name;
