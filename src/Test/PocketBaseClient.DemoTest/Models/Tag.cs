@@ -46,6 +46,9 @@ namespace PocketBaseClient.DemoTest.Models
         /// <inheritdoc />
         public override void UpdateWith(ItemBase itemBase)
         {
+            // Do not Update with this instance
+            if (ReferenceEquals(this, itemBase)) return;
+
             base.UpdateWith(itemBase);
 
             if (itemBase is Tag item)
@@ -54,6 +57,21 @@ namespace PocketBaseClient.DemoTest.Models
 
             }
         }
+
+        #region Constructors
+
+        public Tag() : base()
+        {
+        }
+
+        [JsonConstructor]
+        public Tag(string? id, DateTime? created, DateTime? updated, string? @name)
+            : base(id, created, updated)
+        {
+            Name = @name;
+
+        }
+        #endregion
 
         #region Collection
         public static CollectionTags GetCollection() 

@@ -80,9 +80,13 @@ namespace PocketBaseClient.Orm.Structures
         /// <param name="listWithUpdates"></param>
         void UpdateWith(IBasicList listWithUpdates)
         {
-            RemoveAll();
-            foreach (var element in listWithUpdates)
-                Add(element);
+            // Do not Update with this instance
+            if (!ReferenceEquals(this, listWithUpdates))
+            {
+                RemoveAll();
+                foreach (var element in listWithUpdates)
+                    Add(element);
+            }
         }
 
     }
