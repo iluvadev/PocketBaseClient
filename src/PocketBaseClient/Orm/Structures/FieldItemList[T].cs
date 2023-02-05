@@ -37,8 +37,7 @@ namespace PocketBaseClient.Orm.Structures
             var item = InnerList.FirstOrDefault(i => i.Id == id);
             if (item == null) return null;
 
-            if (reload) item.Reload();
-
+            if (reload) item.Metadata_.SetNeedBeLoaded();
             return item;
         }
 
@@ -58,16 +57,8 @@ namespace PocketBaseClient.Orm.Structures
         }
 
         /// <inheritdoc />
-        public T? Remove(string? id)
-            => Remove(GetById(id));
-
-        /// <inheritdoc />
         public bool Delete(T? item)
             => Remove(item)?.Delete() ?? false;
-
-        /// <inheritdoc />
-        public bool Delete(string? id)
-            => Delete(GetById(id));
 
     }
 }

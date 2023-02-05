@@ -8,6 +8,7 @@ namespace PocketBaseClient.Orm
         internal abstract IEnumerable GetObjects();
 
         internal abstract Task<bool> FillFromPbAsync<T>(T elem) where T : ItemBase;
+        internal abstract bool FillFromPb<T>(T elem) where T : ItemBase;
 
         #region Cache
         internal abstract bool CacheContains<T>(T elem) where T : ItemBase;
@@ -17,6 +18,8 @@ namespace PocketBaseClient.Orm
 
         #region  Save
         internal abstract Task<bool> SaveAsync<T>(T elem, bool onlyIfChanges = true) where T : ItemBase;
+        internal abstract bool Save<T>(T elem, bool onlyIfChanges = true) where T : ItemBase;
+
         /// <summary>
         /// Save all Collection items to PocketBase, performing Create, Update or Delete for every Item to server (async)
         /// </summary>
@@ -37,7 +40,14 @@ namespace PocketBaseClient.Orm
         /// <param name="onlyIfChanges">False to force saving unmodified items</param>
         /// <returns></returns>
         public bool SaveChanges(bool onlyIfChanges = true)
-            => SaveChangesAsync(onlyIfChanges).Result;
+        {
+            bool result = true;
+            foreach (var cached in GetCachedObjects())
+                if (cached is ItemBase item)
+                    result &= Save(item, onlyIfChanges);
+
+            return result;
+        }
         #endregion  Save
 
         #region DiscardChanges

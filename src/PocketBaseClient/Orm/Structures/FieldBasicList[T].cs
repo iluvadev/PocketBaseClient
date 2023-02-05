@@ -24,9 +24,8 @@ namespace PocketBaseClient.Orm.Structures
         /// <inheritdoc />
         public string? Id { get; }
 
-        private ItemBase? _Owner = null;
         /// <inheritdoc />
-        ItemBase? IOwnedByItem.Owner { get => _Owner; set => _Owner = value; }
+        public ItemBase? Owner { get; set; }
 
         /// <inheritdoc />
         public int? MaxSize { get; }
@@ -45,7 +44,7 @@ namespace PocketBaseClient.Orm.Structures
         /// <param name="maxSize"></param>
         public FieldBasicList(ItemBase? owner, string propertyName, string propertyId, int? maxSize = null)
         {
-            _Owner = owner;
+            Owner = owner;
             Name = propertyName;
             Id = propertyId;
             MaxSize = maxSize;
@@ -53,7 +52,7 @@ namespace PocketBaseClient.Orm.Structures
         }
 
         /// <inheritdoc />
-        public virtual IEnumerator<T> GetEnumerator()
+        public IEnumerator<T> GetEnumerator()
             => InnerList.GetEnumerator();
 
         /// <inheritdoc />
@@ -65,11 +64,7 @@ namespace PocketBaseClient.Orm.Structures
             => element != null && InnerList.Contains(element);
 
         /// <inheritdoc />
-        bool IBasicList.Contains(object? element)
-            => element is T item && Contains(item);
-
-        /// <inheritdoc />
-        public virtual T? Add(T? element)
+        public T? Add(T? element)
         {
             if (MaxSize != null && Count == MaxSize)
                 throw new Exception($"List is full: limited to {MaxSize}");
@@ -77,7 +72,7 @@ namespace PocketBaseClient.Orm.Structures
             if (element == null) return default;
 
             InnerList.Add(element);
-            ((IOwnedByItem)this).NotifyModificationToOwner();
+            ((IFieldBasicList<T>)this).NotifyModificationToOwner();
             return (element);
         }
 
@@ -89,14 +84,14 @@ namespace PocketBaseClient.Orm.Structures
 
 
         /// <inheritdoc />
-        public virtual T? Remove(T? element)
+        public T? Remove(T? element)
         {
             if (element == null) return default;
 
             bool bRet = InnerList.Remove(element);
             if (!bRet) return default;
 
-            ((IOwnedByItem)this).NotifyModificationToOwner();
+            ((IFieldBasicList<T>)this).NotifyModificationToOwner();
             return element;
         }
 
@@ -106,18 +101,5 @@ namespace PocketBaseClient.Orm.Structures
             return element is T item ? Remove(item) : default;
         }
 
-        /// <inheritdoc />
-        public virtual void DiscardChanges(ListSaveDiscardModes mode)
-        {
-            //IEPA!!
-            throw new NotImplementedException();
-        }
-
-        /// <inheritdoc />
-        public virtual bool SaveChanges(ListSaveDiscardModes mode)
-        {
-            //IEPA!!
-            throw new NotImplementedException();
-        }
     }
 }

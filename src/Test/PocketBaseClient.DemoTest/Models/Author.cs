@@ -68,6 +68,9 @@ namespace PocketBaseClient.DemoTest.Models
         /// <inheritdoc />
         public override void UpdateWith(ItemBase itemBase)
         {
+            // Do not Update with this instance
+            if (ReferenceEquals(this, itemBase)) return;
+
             base.UpdateWith(itemBase);
 
             if (itemBase is Author item)
@@ -80,17 +83,33 @@ namespace PocketBaseClient.DemoTest.Models
             }
         }
 
+        #region Constructors
+
+        public Author() : base()
+        {
+        }
+
+        [JsonConstructor]
+        public Author(string? id, DateTime? created, DateTime? updated, string? @name, MailAddress? @email, Uri? @url, string? @profile)
+            : base(id, created, updated)
+        {
+            Name = @name;
+            Email = @email;
+            Url = @url;
+            Profile = @profile;
+
+        }
+        #endregion
+
         #region Collection
         public static CollectionAuthors GetCollection() 
             => (CollectionAuthors)DataServiceBase.GetCollection<Author>()!;
         #endregion Collection
 
-        #region GetById
-        public static Author? GetById(string id, bool reload = false) 
-            => GetByIdAsync(id, reload).Result;
-
         public static async Task<Author?> GetByIdAsync(string id, bool reload = false)
-            => await DataServiceBase.GetCollection<Author>()!.GetByIdAsync(id, reload);
-        #endregion GetById
+            => await GetCollection().GetByIdAsync(id, reload);
+
+        public static Author? GetById(string id, bool reload = false)
+            => GetCollection().GetById(id, reload);
     }
 }

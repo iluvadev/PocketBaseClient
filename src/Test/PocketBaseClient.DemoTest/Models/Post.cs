@@ -103,6 +103,9 @@ namespace PocketBaseClient.DemoTest.Models
         /// <inheritdoc />
         public override void UpdateWith(ItemBase itemBase)
         {
+            // Do not Update with this instance
+            if (ReferenceEquals(this, itemBase)) return;
+
             base.UpdateWith(itemBase);
 
             if (itemBase is Post item)
@@ -119,6 +122,28 @@ namespace PocketBaseClient.DemoTest.Models
             }
         }
 
+        #region Constructors
+
+        public Post() : base()
+        {
+        }
+
+        [JsonConstructor]
+        public Post(string? id, DateTime? created, DateTime? updated, string? @title, Author? @author, string? @summary, string? @content, DateTime? @published, StatusEnum? @status, CategoriesList @categories, TagsList @tags)
+            : base(id, created, updated)
+        {
+            Title = @title;
+            Author = @author;
+            Summary = @summary;
+            Content = @content;
+            Published = @published;
+            Status = @status;
+            Categories = @categories;
+            Tags = @tags;
+
+        }
+        #endregion
+
         /// <inheritdoc />
         protected override IEnumerable<ItemBase?> RelatedItems 
             => base.RelatedItems.Union(new List<ItemBase?>() { Author }).Union(Categories).Union(Tags);
@@ -128,12 +153,10 @@ namespace PocketBaseClient.DemoTest.Models
             => (CollectionPosts)DataServiceBase.GetCollection<Post>()!;
         #endregion Collection
 
-        #region GetById
-        public static Post? GetById(string id, bool reload = false) 
-            => GetByIdAsync(id, reload).Result;
-
         public static async Task<Post?> GetByIdAsync(string id, bool reload = false)
-            => await DataServiceBase.GetCollection<Post>()!.GetByIdAsync(id, reload);
-        #endregion GetById
+            => await GetCollection().GetByIdAsync(id, reload);
+
+        public static Post? GetById(string id, bool reload = false)
+            => GetCollection().GetById(id, reload);
     }
 }

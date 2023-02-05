@@ -28,10 +28,6 @@ namespace PocketBaseClient.Orm
         public IEnumerator<T> GetEnumerator()
             => GetItems().GetEnumerator();
 
-
-        /// <inheritdoc />
-        public T? GetById(string? id, bool reload = false) => GetByIdAsync(id, reload).Result;
-
         /// <summary>
         /// Gets the item, with its id (async)
         /// </summary>
@@ -41,14 +37,14 @@ namespace PocketBaseClient.Orm
         public async Task<T?> GetByIdAsync(string? id, bool reload = false)
             => await GetByIdInternalAsync(id, reload);
 
-
-        /// <inheritdoc />
-        public override bool Contains(object? element)
-            => Contains(element as T);
-
-        /// <inheritdoc />
-        public bool Contains(T? element)
-            => GetById(element?.Id) != null;
+        /// <summary>
+        /// Gets the item, with its id 
+        /// </summary>
+        /// <param name="id">The id of the item to get</param>
+        /// <param name="reload">True if is forced to reload from PocketBase ignoring Cache (default is false)</param>
+        /// <returns></returns>
+        public T? GetById(string? id, bool reload = false)
+            => GetByIdInternal(id, reload);
 
         /// <inheritdoc />
         T? IBasicList<T>.Add(T? item)
@@ -66,7 +62,7 @@ namespace PocketBaseClient.Orm
         /// <inheritdoc />
         T? IBasicList<T>.Remove(T? item)
             => RemoveInternal(item) as T;
-        
+
         protected override object? RemoveInternal(object? element)
         {
             if (element is T item && Delete(item))
@@ -75,18 +71,13 @@ namespace PocketBaseClient.Orm
         }
 
         /// <inheritdoc />
-        T? IItemList<T>.Remove(string? id)
+        async Task<T?> Structures.ICollection<T>.RemoveAsync(string? id)
         {
-            var item = GetById(id);
+            var item = await GetByIdAsync(id);
             if (Delete(item))
                 return item;
             return null;
         }
-
-
-        /// <inheritdoc />
-        public bool Delete(string? id)
-            => Delete(GetById(id));
 
         /// <inheritdoc />
         public bool Delete(T? item)

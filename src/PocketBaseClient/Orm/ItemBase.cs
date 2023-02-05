@@ -33,8 +33,17 @@ namespace PocketBaseClient.Orm
             {
                 var oldValue = _Id;
                 _Id = value;
-                if (oldValue != null && value != oldValue)
+
+                if (oldValue == null)
+                {
+                    // New Id: Add item to Collection 
+                    Collection.AddInternal(this);
+                }
+                else if (value != oldValue)
+                {
+                    // Changing Id: Replace item Id in the Collection
                     Collection.ChangeIdInCache(oldValue, this);
+                }
             }
         }
 
@@ -132,21 +141,46 @@ namespace PocketBaseClient.Orm
         #region Load
         private async Task LoadAsync(bool forceLoad = false)
         {
-            if (Collection == null) return;
-            if (Metadata_.IsNew) return;
-            if (Metadata_.IsTrash) return;
-            if (Metadata_.IsLoaded && !forceLoad) return;
+            if (NeedToBeLoadedFromPb(forceLoad))
+                await LoadFromPbAsync();
+        }
 
-            if (!await Collection.FillFromPbAsync(this))
+        private void Load(bool forceLoad = false)
+        {
+            if (NeedToBeLoadedFromPb(forceLoad))
+                LoadFromPb();
+        }
+
+
+        private bool NeedToBeLoadedFromPb(bool forceLoad = false)
+        {
+            if (Collection == null) return false;
+            if (Metadata_.IsNew) return false;
+            if (Metadata_.IsTrash) return false;
+            if (Metadata_.IsLoaded && !forceLoad) return false;
+            return true;
+        }
+        private void LoadFromPb()
+        {
+            if (!Collection.FillFromPb(this))
             {
-                //IEPA!!
+                // TODO: Need a review
+
                 // The registry does not exists in PocketBase
                 Metadata_.IsTrash = true;
                 throw new Exception($"Object does not exists in PocketBase; Collection:{Collection.Name}; RegistryId:{Id}");
             }
         }
-        private void Load(bool forceLoad = false)
-            => LoadAsync(forceLoad).Wait();
+        private async Task LoadFromPbAsync()
+        {
+            if (!await Collection.FillFromPbAsync(this))
+            {
+                // The registry does not exists in PocketBase
+                Metadata_.IsTrash = true;
+                throw new Exception($"Object does not exists in PocketBase; Collection:{Collection.Name}; RegistryId:{Id}");
+            }
+        }
+
         #endregion Load
 
         #region Reload
@@ -155,11 +189,12 @@ namespace PocketBaseClient.Orm
         /// </summary>
         /// <returns></returns>
         public async Task ReloadAsync() => await LoadAsync(true);
-
+        
         /// <summary>
-        /// Reloads the object with the data stored in PocketBase
+        /// Reloads the object with the data stored in PocketBase (async)
         /// </summary>
-        public void Reload() => ReloadAsync().Wait();
+        /// <returns></returns>
+        public void Reload() => Load(true);
         #endregion Reload
 
         #region Delete
@@ -194,13 +229,6 @@ namespace PocketBaseClient.Orm
         #endregion DiscardChanges
 
         #region Save
-        /// <summary>
-        /// Saves the object to PocketBase (internally performs insert or update)
-        /// </summary>
-        /// <param name="onlyIfChanges">False to force saving the object also if is unmodified (default behaviour)</param>
-        /// <returns></returns>
-        public bool Save(bool onlyIfChanges = false)
-            => SaveAsync(onlyIfChanges).Result;
 
         /// <summary>
         /// Saves the object to PocketBase (internally performs insert or update) (async)
@@ -209,6 +237,14 @@ namespace PocketBaseClient.Orm
         /// <returns></returns>
         public async Task<bool> SaveAsync(bool onlyIfChanges = false)
             => await Collection.SaveAsync(this, onlyIfChanges);
+
+        /// <summary>
+        /// Saves the object to PocketBase (internally performs insert or update)
+        /// </summary>
+        /// <param name="onlyIfChanges">False to force saving the object also if is unmodified (default behaviour)</param>
+        /// <returns></returns>
+        public bool Save(bool onlyIfChanges = false)
+            => Collection.Save(this, onlyIfChanges);
         #endregion Save
 
         /// <summary>
@@ -228,6 +264,9 @@ namespace PocketBaseClient.Orm
         /// <param name="itemBase"></param>
         public virtual void UpdateWith(ItemBase itemBase)
         {
+            // Do not Update with this instance
+            if (ReferenceEquals(this, itemBase)) return;
+
             // Update metadata
             bool isErased = Metadata_.IsTobeDeleted;
             Metadata_ = itemBase.Metadata_;
@@ -245,8 +284,17 @@ namespace PocketBaseClient.Orm
         public ItemBase()
         {
             Id = Random.Shared.PseudorandomString(15).ToLowerInvariant();
-            Collection.AddInternal(this);
         }
+
+        [JsonConstructor]
+        public ItemBase(string? id, DateTime? created, DateTime? updated)
+        {
+            Id = id;
+            Created = created;
+            Updated = updated;
+        }
+
+        //protected object? AddInternal(object? element) => Collection.AddInternal(element);
 
         /// <inheritdoc />
         public override string ToString()

@@ -16,9 +16,6 @@ namespace PocketBaseClient.Orm
 
 
         /// <inheritdoc />
-        public abstract bool Contains(object? element);
-
-        /// <inheritdoc />
         object? IBasicList.Add(object? element)
             => AddInternal(element);
         internal abstract object? AddInternal(object? element);
@@ -30,11 +27,15 @@ namespace PocketBaseClient.Orm
 
 
         /// <inheritdoc />
-        bool IBasicList.SaveChanges(ListSaveDiscardModes mode)
+        async Task<bool> IBasicCollection.SaveChangesAsync(ListSaveDiscardModes mode)
+            => await SaveChangesAsync(true);
+
+        /// <inheritdoc />
+        bool IBasicCollection.SaveChanges(ListSaveDiscardModes mode)
             => SaveChanges(true);
 
         /// <inheritdoc />
-        void IBasicList.DiscardChanges(ListSaveDiscardModes mode)
+        void IBasicCollection.DiscardChanges(ListSaveDiscardModes mode)
             => DiscardChanges();
 
     }

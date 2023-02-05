@@ -44,6 +44,9 @@ namespace PocketBaseClient.DemoTest.Models
         /// <inheritdoc />
         public override void UpdateWith(ItemBase itemBase)
         {
+            // Do not Update with this instance
+            if (ReferenceEquals(this, itemBase)) return;
+
             base.UpdateWith(itemBase);
 
             if (itemBase is Category item)
@@ -53,17 +56,30 @@ namespace PocketBaseClient.DemoTest.Models
             }
         }
 
+        #region Constructors
+
+        public Category() : base()
+        {
+        }
+
+        [JsonConstructor]
+        public Category(string? id, DateTime? created, DateTime? updated, string? @name)
+            : base(id, created, updated)
+        {
+            Name = @name;
+
+        }
+        #endregion
+
         #region Collection
         public static CollectionCategories GetCollection() 
             => (CollectionCategories)DataServiceBase.GetCollection<Category>()!;
         #endregion Collection
 
-        #region GetById
-        public static Category? GetById(string id, bool reload = false) 
-            => GetByIdAsync(id, reload).Result;
-
         public static async Task<Category?> GetByIdAsync(string id, bool reload = false)
-            => await DataServiceBase.GetCollection<Category>()!.GetByIdAsync(id, reload);
-        #endregion GetById
+            => await GetCollection().GetByIdAsync(id, reload);
+
+        public static Category? GetById(string id, bool reload = false)
+            => GetCollection().GetById(id, reload);
     }
 }

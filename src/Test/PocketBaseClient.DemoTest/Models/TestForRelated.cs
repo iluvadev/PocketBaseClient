@@ -60,6 +60,9 @@ namespace PocketBaseClient.DemoTest.Models
         /// <inheritdoc />
         public override void UpdateWith(ItemBase itemBase)
         {
+            // Do not Update with this instance
+            if (ReferenceEquals(this, itemBase)) return;
+
             base.UpdateWith(itemBase);
 
             if (itemBase is TestForRelated item)
@@ -71,17 +74,32 @@ namespace PocketBaseClient.DemoTest.Models
             }
         }
 
+        #region Constructors
+
+        public TestForRelated() : base()
+        {
+        }
+
+        [JsonConstructor]
+        public TestForRelated(string? id, DateTime? created, DateTime? updated, float? @numberUnique, float? @numberNonempty, float? @numberNonemptyUnique)
+            : base(id, created, updated)
+        {
+            NumberUnique = @numberUnique;
+            NumberNonempty = @numberNonempty;
+            NumberNonemptyUnique = @numberNonemptyUnique;
+
+        }
+        #endregion
+
         #region Collection
         public static CollectionTestForRelateds GetCollection() 
             => (CollectionTestForRelateds)DataServiceBase.GetCollection<TestForRelated>()!;
         #endregion Collection
 
-        #region GetById
-        public static TestForRelated? GetById(string id, bool reload = false) 
-            => GetByIdAsync(id, reload).Result;
-
         public static async Task<TestForRelated?> GetByIdAsync(string id, bool reload = false)
-            => await DataServiceBase.GetCollection<TestForRelated>()!.GetByIdAsync(id, reload);
-        #endregion GetById
+            => await GetCollection().GetByIdAsync(id, reload);
+
+        public static TestForRelated? GetById(string id, bool reload = false)
+            => GetCollection().GetById(id, reload);
     }
 }

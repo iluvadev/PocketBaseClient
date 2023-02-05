@@ -1,12 +1,7 @@
-﻿using pocketbase_csharp_sdk.Models;
+﻿using System.Web;
+using pocketbase_csharp_sdk.Models;
 using PocketBaseClient.Orm.Cache;
 using PocketBaseClient.Orm.Structures;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Web;
 
 namespace PocketBaseClient.Orm
 {
@@ -53,6 +48,15 @@ namespace PocketBaseClient.Orm
 
             return page;
         }
+        internal PagedCollectionModel<T>? GetPageFromPb(int? pageNumber = null, int? perPage = null, string? filter = null, string? sort = null)
+        {
+            var page = PocketBase.HttpGetList<T>(UrlRecords, pageNumber, perPage, filter, sort);
+            // Cache all items in the page automatically at creation
+            foreach (var itemFromPb in page?.Items ?? Enumerable.Empty<T>())
+                itemFromPb.Metadata_.SetLoaded();
+
+            return page;
+        }
         internal async IAsyncEnumerable<T> GetItemsFromPbAsync(string? filter = null, string? sort = null)
         {
             int loadedItems = 0;
@@ -78,6 +82,7 @@ namespace PocketBaseClient.Orm
                 }
             }
         }
+
         internal IEnumerable<T> GetItemsFromPb(string? filter = null, string? sort = null)
         {
             int loadedItems = 0;
@@ -85,7 +90,7 @@ namespace PocketBaseClient.Orm
             int currentPage = 1;
             while (totalItems == null || loadedItems < totalItems)
             {
-                var page = GetPageFromPbAsync(pageNumber: currentPage, filter: filter, sort: sort).Result;
+                var page = GetPageFromPb(currentPage, filter: filter, sort: sort);
                 if (page != null)
                 {
                     currentPage++;
@@ -119,13 +124,32 @@ namespace PocketBaseClient.Orm
             item.Metadata_.SetLoaded();
             return true;
         }
-
         internal override async Task<bool> FillFromPbAsync<E>(E elem)
         {
             if (elem is T item)
                 return await FillFromPbAsync(item);
             return false;
         }
+
+        private bool FillFromPb(T item)
+        {
+            if (item.Id == null) return false;
+
+            var loadedItem = PocketBase.HttpGet<T>(UrlRecord(item));
+            if (loadedItem == null) return false;
+            loadedItem.Metadata_.SetLoaded();
+
+            item.UpdateWith(loadedItem);
+            item.Metadata_.SetLoaded();
+            return true;
+        }
+        internal override bool FillFromPb<E>(E elem)
+        {
+            if (elem is T item)
+                return FillFromPb(item);
+            return false;
+        }
+
         #endregion Fill Item from PocketBase
 
         #region Get Items
@@ -133,7 +157,9 @@ namespace PocketBaseClient.Orm
 
         private IEnumerable<T> GetItemsInternal(bool reload = false, GetItemsFilter include = GetItemsFilter.Load | GetItemsFilter.New)
         {
-            //No marcar com a necessita recarregar si té canvis locals! O gestionar-ho bé!!
+            //TODO: Need a review
+            // If an Item has local changes? Changes will be lost? 
+            // Force Reload all cached items? Also items not yielded?
 
             var allCachedItems = Cache.AllItems.ToList();
 
@@ -170,7 +196,8 @@ namespace PocketBaseClient.Orm
                 int currentPage = 1;
                 while (_PocketBaseItemsCount == null || loadedItems < _PocketBaseItemsCount)
                 {
-                    var page = GetPageFromPbAsync(currentPage).Result;
+                    // Get page in sync mode
+                    var page = GetPageFromPb(currentPage);
                     if (page != null)
                     {
                         currentPage++;
@@ -215,6 +242,21 @@ namespace PocketBaseClient.Orm
 
             return Cache.AddOrUpdate(item);
         }
+        private T? GetByIdInternal(string? id, bool reload = false)
+        {
+            if (id == null) return null;
+            T? item = Cache.Get(id);
+            if (item != null)
+            {
+                if (reload) item.Metadata_.SetNeedBeLoaded();
+                return item;
+                //return !forceLoad || await FillFromPbAsync(item) ? item : null;
+            }
+            item = new T() { Id = id };
+            if (!FillFromPb(item)) return null;
+
+            return Cache.AddOrUpdate(item);
+        }
         #endregion Get Items
 
         #region Save
@@ -247,6 +289,35 @@ namespace PocketBaseClient.Orm
             else
                 return await UpdateInternalAsync(item, onlyIfChanges);
         }
+        private bool SaveInternal(T item, bool onlyIfChanges = true)
+        {
+            if (item.Id == null) return false;
+            if (!item.Metadata_.IsValid) return false;
+
+            // WARNING: There is no check for circular references!!
+
+            var newItems = item.RelatedItems.Where(i => i != null && !i.IsSame(item) && i.Metadata_.IsNew).Distinct().ToList();
+            var cachedItems = item.RelatedItems.Where(i => i != null && !i.IsSame(item) && !i.Metadata_.IsNew).Distinct().ToList();
+
+            // Save related new items
+            foreach (var relatedNew in newItems)
+                if (relatedNew?.Metadata_.IsNew ?? false)
+                    relatedNew.Save(true);
+
+            // Save related changed items
+            foreach (var relatedCached in cachedItems)
+                if (relatedCached != null)
+                    relatedCached.Save(true);
+
+            // WARNING: There is no wait for Cascade saving!!
+
+            if (item.Metadata_.IsNew)
+                return CreateInternal(item);
+            else if (item.Metadata_.IsTobeDeleted)
+                return DeleteInternal(item);
+            else
+                return UpdateInternal(item, onlyIfChanges);
+        }
 
         private async Task<bool> CreateInternalAsync(T item)
         {
@@ -257,6 +328,16 @@ namespace PocketBaseClient.Orm
             item.Metadata_.SetLoaded();
             return true;
         }
+        private bool CreateInternal(T item)
+        {
+            var savedItem = PocketBase.HttpPost(UrlRecords, item);
+            if (savedItem == null) return false;
+
+            item.UpdateWith(savedItem);
+            item.Metadata_.SetLoaded();
+            return true;
+        }
+
 
         private async Task<bool> UpdateInternalAsync(T item, bool onlyIfChanges = true)
         {
@@ -264,6 +345,18 @@ namespace PocketBaseClient.Orm
             if (onlyIfChanges && !item.Metadata_.HasLocalChanges) return true;
 
             var savedItem = await App.HttpPatchAsync(UrlRecord(item), item);
+            if (savedItem == null) return false;
+
+            item.UpdateWith(savedItem);
+            item.Metadata_.SetLoaded();
+            return true;
+        }
+        private bool UpdateInternal(T item, bool onlyIfChanges = true)
+        {
+            if (item.Id == null) return false;
+            if (onlyIfChanges && !item.Metadata_.HasLocalChanges) return true;
+
+            var savedItem = PocketBase.HttpPatch(UrlRecord(item), item);
             if (savedItem == null) return false;
 
             item.UpdateWith(savedItem);
@@ -280,6 +373,18 @@ namespace PocketBaseClient.Orm
             // If is the Auth registry, delete it
             if (item.IsSame(App.Auth.AuthStore.Model))
                 App.Auth.AuthStore.Clear();
+
+            //Remove from Cache
+            Cache.Remove(item.Id);
+            item.Metadata_.IsTrash = true;
+
+            return true;
+        }
+        private bool DeleteInternal(T item)
+        {
+            if (item.Id == null) return false;
+
+            if (!PocketBase.HttpDelete(UrlRecord(item))) return false;
 
             //Remove from Cache
             Cache.Remove(item.Id);
