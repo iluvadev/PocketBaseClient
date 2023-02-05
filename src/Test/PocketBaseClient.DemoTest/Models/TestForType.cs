@@ -222,6 +222,9 @@ namespace PocketBaseClient.DemoTest.Models
         /// <inheritdoc />
         public override void UpdateWith(ItemBase itemBase)
         {
+            // Do not Update with this instance
+            if (ReferenceEquals(this, itemBase)) return;
+
             base.UpdateWith(itemBase);
 
             if (itemBase is TestForType item)
@@ -252,6 +255,43 @@ namespace PocketBaseClient.DemoTest.Models
 
             }
         }
+
+        #region Constructors
+
+        public TestForType() : base()
+        {
+        }
+
+        [JsonConstructor]
+        public TestForType(string? id, DateTime? created, DateTime? updated, string? @textNoRestrictions, string? @textRestrictions, float? @numberNoRestrictions, float? @numberRestrictions, bool? @bool, MailAddress? @emailNoRestrictions, MailAddress? @emailRestrictionsExcept, MailAddress? @emailRestrictionsOnly, Uri? @urlNoRestrictions, Uri? @urlRestrictionsExcept, Uri? @urlRestrictionsOnly, DateTime? @datetimeNoRestrictions, DateTime? @datetimeRestrictions, SelectSingleEnum? @selectSingle, SelectMultipleList @selectMultiple, dynamic? @json, object? @fileSingleNoRestriction, object? @fileSingleRestriction, object? @fileMultipleNoRestrictions, object? @fileMultipleRestrictions, TestForRelated? @reationSingle, RelationMultipleNoLimitList @relationMultipleNoLimit, RelationMultipleLimitList @relationMultipleLimit)
+            : base(id, created, updated)
+        {
+            TextNoRestrictions = @textNoRestrictions;
+            TextRestrictions = @textRestrictions;
+            NumberNoRestrictions = @numberNoRestrictions;
+            NumberRestrictions = @numberRestrictions;
+            Bool = @bool;
+            EmailNoRestrictions = @emailNoRestrictions;
+            EmailRestrictionsExcept = @emailRestrictionsExcept;
+            EmailRestrictionsOnly = @emailRestrictionsOnly;
+            UrlNoRestrictions = @urlNoRestrictions;
+            UrlRestrictionsExcept = @urlRestrictionsExcept;
+            UrlRestrictionsOnly = @urlRestrictionsOnly;
+            DatetimeNoRestrictions = @datetimeNoRestrictions;
+            DatetimeRestrictions = @datetimeRestrictions;
+            SelectSingle = @selectSingle;
+            SelectMultiple = @selectMultiple;
+            Json = @json;
+            FileSingleNoRestriction = @fileSingleNoRestriction;
+            FileSingleRestriction = @fileSingleRestriction;
+            FileMultipleNoRestrictions = @fileMultipleNoRestrictions;
+            FileMultipleRestrictions = @fileMultipleRestrictions;
+            ReationSingle = @reationSingle;
+            RelationMultipleNoLimit = @relationMultipleNoLimit;
+            RelationMultipleLimit = @relationMultipleLimit;
+
+        }
+        #endregion
 
         /// <inheritdoc />
         protected override IEnumerable<ItemBase?> RelatedItems 

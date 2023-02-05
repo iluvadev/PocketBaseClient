@@ -11,7 +11,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Test", "Test", "{0D4E72E6-4
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PocketBaseClient.DemoTest", "Test\PocketBaseClient.DemoTest\PocketBaseClient.DemoTest.csproj", "{D112C5A5-38CD-4FFB-9674-65FA61C07C10}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PocketBaseClient.Test", "Test\PocketBaseClient.Test\PocketBaseClient.Test.csproj", "{AD01E4F3-7FE6-4B89-937E-2413EADF302E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PocketBaseClient.Test", "Test\PocketBaseClient.Test\PocketBaseClient.Test.csproj", "{AD01E4F3-7FE6-4B89-937E-2413EADF302E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

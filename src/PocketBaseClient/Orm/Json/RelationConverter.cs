@@ -25,8 +25,9 @@ namespace PocketBaseClient.Orm.Json
         public override T? Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
         {
             var value = reader.GetString();
-            if (value == null)
+            if (string.IsNullOrEmpty(value))
                 return null;
+
             return DataServiceBase.GetCollection<T>()!.AddIdFromPb(value);
         }
 

@@ -59,6 +59,9 @@ namespace PocketBaseClient.DemoTest.Models
         /// <inheritdoc />
         public override void UpdateWith(ItemBase itemBase)
         {
+            // Do not Update with this instance
+            if (ReferenceEquals(this, itemBase)) return;
+
             base.UpdateWith(itemBase);
 
             if (itemBase is User item)
@@ -69,6 +72,23 @@ namespace PocketBaseClient.DemoTest.Models
 
             }
         }
+
+        #region Constructors
+
+        public User() : base()
+        {
+        }
+
+        [JsonConstructor]
+        public User(string? id, DateTime? created, DateTime? updated, string? @name, object? @avatar, Uri? @url)
+            : base(id, created, updated)
+        {
+            Name = @name;
+            Avatar = @avatar;
+            Url = @url;
+
+        }
+        #endregion
 
         #region Collection
         public static CollectionUsers GetCollection() 

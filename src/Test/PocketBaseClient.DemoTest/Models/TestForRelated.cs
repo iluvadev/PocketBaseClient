@@ -60,6 +60,9 @@ namespace PocketBaseClient.DemoTest.Models
         /// <inheritdoc />
         public override void UpdateWith(ItemBase itemBase)
         {
+            // Do not Update with this instance
+            if (ReferenceEquals(this, itemBase)) return;
+
             base.UpdateWith(itemBase);
 
             if (itemBase is TestForRelated item)
@@ -70,6 +73,23 @@ namespace PocketBaseClient.DemoTest.Models
 
             }
         }
+
+        #region Constructors
+
+        public TestForRelated() : base()
+        {
+        }
+
+        [JsonConstructor]
+        public TestForRelated(string? id, DateTime? created, DateTime? updated, float? @numberUnique, float? @numberNonempty, float? @numberNonemptyUnique)
+            : base(id, created, updated)
+        {
+            NumberUnique = @numberUnique;
+            NumberNonempty = @numberNonempty;
+            NumberNonemptyUnique = @numberNonemptyUnique;
+
+        }
+        #endregion
 
         #region Collection
         public static CollectionTestForRelateds GetCollection() 

@@ -33,8 +33,17 @@ namespace PocketBaseClient.Orm
             {
                 var oldValue = _Id;
                 _Id = value;
-                if (oldValue != null && value != oldValue)
+
+                if (oldValue == null)
+                {
+                    // New Id: Add item to Collection 
+                    Collection.AddInternal(this);
+                }
+                else if (value != oldValue)
+                {
+                    // Changing Id: Replace item Id in the Collection
                     Collection.ChangeIdInCache(oldValue, this);
+                }
             }
         }
 
@@ -155,6 +164,8 @@ namespace PocketBaseClient.Orm
         {
             if (!Collection.FillFromPb(this))
             {
+                // TODO: Need a review
+
                 // The registry does not exists in PocketBase
                 Metadata_.IsTrash = true;
                 throw new Exception($"Object does not exists in PocketBase; Collection:{Collection.Name}; RegistryId:{Id}");
@@ -253,6 +264,9 @@ namespace PocketBaseClient.Orm
         /// <param name="itemBase"></param>
         public virtual void UpdateWith(ItemBase itemBase)
         {
+            // Do not Update with this instance
+            if (ReferenceEquals(this, itemBase)) return;
+
             // Update metadata
             bool isErased = Metadata_.IsTobeDeleted;
             Metadata_ = itemBase.Metadata_;
@@ -270,8 +284,17 @@ namespace PocketBaseClient.Orm
         public ItemBase()
         {
             Id = Random.Shared.PseudorandomString(15).ToLowerInvariant();
-            Collection.AddInternal(this);
         }
+
+        [JsonConstructor]
+        public ItemBase(string? id, DateTime? created, DateTime? updated)
+        {
+            Id = id;
+            Created = created;
+            Updated = updated;
+        }
+
+        //protected object? AddInternal(object? element) => Collection.AddInternal(element);
 
         /// <inheritdoc />
         public override string ToString()

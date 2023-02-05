@@ -103,6 +103,9 @@ namespace PocketBaseClient.DemoTest.Models
         /// <inheritdoc />
         public override void UpdateWith(ItemBase itemBase)
         {
+            // Do not Update with this instance
+            if (ReferenceEquals(this, itemBase)) return;
+
             base.UpdateWith(itemBase);
 
             if (itemBase is Post item)
@@ -118,6 +121,28 @@ namespace PocketBaseClient.DemoTest.Models
 
             }
         }
+
+        #region Constructors
+
+        public Post() : base()
+        {
+        }
+
+        [JsonConstructor]
+        public Post(string? id, DateTime? created, DateTime? updated, string? @title, Author? @author, string? @summary, string? @content, DateTime? @published, StatusEnum? @status, CategoriesList @categories, TagsList @tags)
+            : base(id, created, updated)
+        {
+            Title = @title;
+            Author = @author;
+            Summary = @summary;
+            Content = @content;
+            Published = @published;
+            Status = @status;
+            Categories = @categories;
+            Tags = @tags;
+
+        }
+        #endregion
 
         /// <inheritdoc />
         protected override IEnumerable<ItemBase?> RelatedItems 

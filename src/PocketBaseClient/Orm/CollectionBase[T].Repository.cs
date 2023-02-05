@@ -157,7 +157,9 @@ namespace PocketBaseClient.Orm
 
         private IEnumerable<T> GetItemsInternal(bool reload = false, GetItemsFilter include = GetItemsFilter.Load | GetItemsFilter.New)
         {
-            //No marcar com a necessita recarregar si té canvis locals! O gestionar-ho bé!!
+            //TODO: Need a review
+            // If an Item has local changes? Changes will be lost? 
+            // Force Reload all cached items? Also items not yielded?
 
             var allCachedItems = Cache.AllItems.ToList();
 

@@ -29,12 +29,16 @@ namespace PocketBaseClient.Test
             //foreach(var t in myApp.Data.TestForTypesCollection.Filter(a => a.Bool.IsTrue().And(a.EmailNoRestrictions.StartsWith("pepe"))))
 
             var col = myApp.Data.TestForTypesCollection;
-            var res1 = col.Filter(i => i.Id.EndsWith("a").And(i.TextNoRestrictions.StartsWith("b")).And(i.Bool.IsTrue().And(i.SelectSingle.Equal(DemoTest.Models.TestForType.SelectSingleEnum.Option1))));
-            var res2 = col.Where(i => i.Id.EndsWith("a") && i.TextNoRestrictions.StartsWith("b"));
-            var res3 = col.Filter(i => i.ReationSingle.Equal(new DemoTest.Models.TestForRelated()));
-            res3 = col.Filter(i => i.RelationMultipleLimit.Contains(new DemoTest.Models.TestForRelated()));
+
+            //var element = col.GetByIdAsync("kabksx32qx1qhd5").Result;
+
+            //var res1 = col.Filter(i => i.Id.EndsWith("a").And(i.TextNoRestrictions.StartsWith("b")).And(i.Bool.IsTrue().And(i.SelectSingle.Equal(DemoTest.Models.TestForType.SelectSingleEnum.Option1))));
+            //var res2 = col.Where(i => i.Id.EndsWith("a") && i.TextNoRestrictions.StartsWith("b"));
+            //var res3 = col.Filter(i => i.ReationSingle.Equal(new DemoTest.Models.TestForRelated()));
+            //res3 = col.Filter(i => i.RelationMultipleLimit.Contains(new DemoTest.Models.TestForRelated()));
          
-            res3 = col.Filter(i => i.SelectMultiple.Contains(DemoTest.Models.TestForType.SelectMultipleEnum.Option1));
+            //res3 = col.Filter(i => i.SelectMultiple.Contains(DemoTest.Models.TestForType.SelectMultipleEnum.Option1));
+            
             //col.Filter(i => i.TextNoRestrictions.StartsWith("pepe")).SortById(asc).SortBySelectMultipleEnum(desc);
             //col.Filter(i => i.TextNoRestrictions.StartsWith("pepe")).SortBy(i => i.SelectMultiple);
             //res3.SortBy(i => i.SelectMultiple(Desc));

@@ -135,6 +135,9 @@ namespace {settings.NamespaceModels}
         /// <inheritdoc />
         public override void UpdateWith(ItemBase itemBase)
         {{
+            // Do not Update with this instance
+            if (ReferenceEquals(this, itemBase)) return;
+
             base.UpdateWith(itemBase);
 
             if (itemBase is {ClassName} item)
@@ -144,6 +147,27 @@ namespace {settings.NamespaceModels}
             sb.AppendLine($@"
             }}
         }}");
+            
+            sb.AppendLine($@"
+        #region Constructors
+
+        public {ClassName}() : base()
+        {{
+        }}");
+
+            sb.Append($@"
+        [JsonConstructor]
+        public {ClassName}(string? id, DateTime? created, DateTime? updated");
+            for (int i = 0; i < Fields.Count; i++)
+                sb.Append($@", {Fields[i].TypeName} {GetParameterNameForConstructor(Fields[i])}");
+            sb.AppendLine($@")
+            : base(id, created, updated)
+        {{");
+            foreach (var field in Fields)
+                sb.AppendLine($@"            {field.PropertyName} = {GetParameterNameForConstructor(field)};");
+            sb.AppendLine($@"
+        }}
+        #endregion");
 
             var relatedItems = Fields.SelectMany(f => f.RelatedItems);
             if (relatedItems.Any())
@@ -171,6 +195,21 @@ namespace {settings.NamespaceModels}
 }}");
 
             return new GeneratedCodeFile(fileName, sb.ToString());
+        }
+
+        /// <summary>
+        /// Generates the parameter name for JSON constructor
+        /// </summary>
+        /// <param name="propertyName">Property name of field. Assume that the first letter is upper-cased.</param>
+        /// <returns>Parameter name, which its first letter is lower-cased</returns>
+        private string GetParameterNameForConstructor(FieldInfo fieldInfo)
+        {
+            return $"@{fieldInfo.PropertyName.ToCamelCase()}";
+            //if (string.IsNullOrEmpty(propertyName))
+            //    throw new InvalidOperationException("Property name cannot be null or empty");
+            //if (!char.IsUpper(propertyName[0]))
+            //    throw new InvalidOperationException("Property name must start with upper case letter");
+            //return $"{propertyName[0].ToString().ToLower()}{propertyName.Substring(1)}";
         }
 
         /// <summary>
