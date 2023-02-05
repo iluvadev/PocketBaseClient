@@ -23,9 +23,15 @@ namespace PocketBaseClient.Orm.Json
         public override T? Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
         {
             var value = reader.GetString();
-            var valuesDesc = typeof(T).GetEnumValuesWithDescription<T>();
+            if(string.IsNullOrEmpty(value)) 
+                return null;
 
-            return valuesDesc?.FirstOrDefault(kvp => kvp.Value == value).Key;
+            var valuesDesc = typeof(T).GetEnumValuesWithDescription<T>();
+            var kvp = valuesDesc?.FirstOrDefault(kvp => kvp.Value == value);
+            if (kvp == null)
+                return null;
+
+            return kvp.Value.Key;
         }
 
         /// <inheritdoc />
