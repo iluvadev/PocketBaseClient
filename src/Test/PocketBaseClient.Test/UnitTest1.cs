@@ -30,7 +30,7 @@ namespace PocketBaseClient.Test
 
             var col = myApp.Data.TestForTypesCollection;
 
-            //var element = col.GetByIdAsync("kabksx32qx1qhd5").Result;
+            var element = col.GetById("kabksx32qx1qhd5");
 
             //var res1 = col.Filter(i => i.Id.EndsWith("a").And(i.TextNoRestrictions.StartsWith("b")).And(i.Bool.IsTrue().And(i.SelectSingle.Equal(DemoTest.Models.TestForType.SelectSingleEnum.Option1))));
             //var res2 = col.Where(i => i.Id.EndsWith("a") && i.TextNoRestrictions.StartsWith("b"));
@@ -46,7 +46,6 @@ namespace PocketBaseClient.Test
             //res3.Sort(i => (i.TextNoRestrictions, i.NumberNoRestrictions));
             var lst = myApp.Data.PostsCollection;
             var post = lst.FirstOrDefault();
-            Post.Collection
             var res = col.Filter(i => i.Bool.IsTrue()).SortBy(i => i.Created.Desc().AndThenBy(i.Updated));
             foreach(var item in res)
             {
