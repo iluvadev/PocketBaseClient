@@ -44,6 +44,9 @@ namespace PocketBaseClient.DemoTest.Models
         /// <inheritdoc />
         public override void UpdateWith(ItemBase itemBase)
         {
+            // Do not Update with this instance
+            if (ReferenceEquals(this, itemBase)) return;
+
             base.UpdateWith(itemBase);
 
             if (itemBase is Category item)
@@ -52,6 +55,21 @@ namespace PocketBaseClient.DemoTest.Models
 
             }
         }
+
+        #region Constructors
+
+        public Category() : base()
+        {
+        }
+
+        [JsonConstructor]
+        public Category(string? id, DateTime? created, DateTime? updated, string? @name)
+            : base(id, created, updated)
+        {
+            Name = @name;
+
+        }
+        #endregion
 
         #region Collection
         public static CollectionCategories GetCollection() 

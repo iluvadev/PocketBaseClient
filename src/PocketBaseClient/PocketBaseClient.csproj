@@ -28,8 +28,9 @@
     <DebugType>embedded</DebugType>
   </PropertyGroup>
 
-	<ItemGroup>
-		<PackageReference Include="pocketbase-csharp-sdk" Version="1.1.0-prerelease" />
-	</ItemGroup>
+  <ItemGroup>
+    <!--<ProjectReference Include="..\..\..\pocketbase-csharp-sdk\pocketbase-csharp-sdk\pocketbase-csharp-sdk.csproj" />-->
+	<PackageReference Include="pocketbase-csharp-sdk" Version="1.1.0-prerelease" />
+  </ItemGroup>
 
 </Project>
