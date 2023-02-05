@@ -32,55 +32,55 @@ namespace PocketBaseClient.DemoTest.Models
         #endregion Collection
 
         #region Field Properties
-        private string? _Title = null;
+        private string? _Title = default;
         /// <summary> Maps to 'title' field in PocketBase </summary>
         [JsonPropertyName("title")]
         [PocketBaseField(id: "eqr6uyuh", name: "title", required: true, system: false, unique: true, type: "text")]
         [Display(Name = "Title")]
         [Required(ErrorMessage = @"Title is required")]
         [StringLength(2147483647, MinimumLength = 5, ErrorMessage = "Minimum 5, Maximum 2147483647 characters")]
-        public string? Title { get => Get(() => _Title); set => Set(value, ref _Title); }
+        public string Title { get => Get(() => _Title ??= string.Empty); set => Set(value, ref _Title); }
 
-        private Author? _Author = null;
+        private Author? _Author = default;
         /// <summary> Maps to 'author' field in PocketBase </summary>
         [JsonPropertyName("author")]
         [PocketBaseField(id: "cetvvrdy", name: "author", required: false, system: false, unique: false, type: "relation")]
         [Display(Name = "Author")]
         [JsonConverter(typeof(RelationConverter<Author>))]
-        public Author? Author { get => Get(() => _Author); set => Set(value, ref _Author); }
+        public Author? Author { get => Get(() => _Author ??= default); set => Set(value, ref _Author); }
 
-        private string? _Summary = null;
+        private string? _Summary = default;
         /// <summary> Maps to 'summary' field in PocketBase </summary>
         [JsonPropertyName("summary")]
         [PocketBaseField(id: "s9fvv8uu", name: "summary", required: false, system: false, unique: false, type: "text")]
         [Display(Name = "Summary")]
         [StringLength(100, ErrorMessage = "Maximum 100 characters")]
-        public string? Summary { get => Get(() => _Summary); set => Set(value, ref _Summary); }
+        public string? Summary { get => Get(() => _Summary ??= default); set => Set(value, ref _Summary); }
 
-        private string? _Content = null;
+        private string? _Content = default;
         /// <summary> Maps to 'content' field in PocketBase </summary>
         [JsonPropertyName("content")]
         [PocketBaseField(id: "irhofrtf", name: "content", required: false, system: false, unique: false, type: "text")]
         [Display(Name = "Content")]
-        public string? Content { get => Get(() => _Content); set => Set(value, ref _Content); }
+        public string? Content { get => Get(() => _Content ??= default); set => Set(value, ref _Content); }
 
-        private DateTime? _Published = null;
+        private DateTime? _Published = default;
         /// <summary> Maps to 'published' field in PocketBase </summary>
         [JsonPropertyName("published")]
         [PocketBaseField(id: "3zouwrab", name: "published", required: false, system: false, unique: false, type: "date")]
         [Display(Name = "Published")]
         [JsonConverter(typeof(DateTimeConverter))]
-        public DateTime? Published { get => Get(() => _Published); set => Set(value, ref _Published); }
+        public DateTime? Published { get => Get(() => _Published ??= default); set => Set(value, ref _Published); }
 
-        private StatusEnum? _Status = null;
+        private StatusEnum? _Status = default;
         /// <summary> Maps to 'status' field in PocketBase </summary>
         [JsonPropertyName("status")]
         [PocketBaseField(id: "eusjau7x", name: "status", required: false, system: false, unique: false, type: "select")]
         [Display(Name = "Status")]
         [JsonConverter(typeof(EnumConverter<StatusEnum>))]
-        public StatusEnum? Status { get => Get(() => _Status); set => Set(value, ref _Status); }
+        public StatusEnum? Status { get => Get(() => _Status ??= default); set => Set(value, ref _Status); }
 
-        private CategoriesList _Categories = new CategoriesList();
+        private CategoriesList? _Categories = default;
         /// <summary> Maps to 'categories' field in PocketBase </summary>
         [JsonPropertyName("categories")]
         [PocketBaseField(id: "2ftkqyzs", name: "categories", required: false, system: false, unique: false, type: "relation")]
@@ -89,7 +89,7 @@ namespace PocketBaseClient.DemoTest.Models
         [JsonConverter(typeof(RelationListConverter<CategoriesList, Category>))]
         public CategoriesList Categories { get => Get(() => _Categories ??= new CategoriesList(this)); private set => Set(value, ref _Categories); }
 
-        private TagsList _Tags = new TagsList();
+        private TagsList? _Tags = default;
         /// <summary> Maps to 'tags' field in PocketBase </summary>
         [JsonPropertyName("tags")]
         [PocketBaseField(id: "vqnnjaiq", name: "tags", required: false, system: false, unique: false, type: "relation")]

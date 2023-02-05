@@ -32,12 +32,12 @@ namespace PocketBaseClient.DemoTest.Models
         #endregion Collection
 
         #region Field Properties
-        private string? _Name = null;
+        private string? _Name = default;
         /// <summary> Maps to 'name' field in PocketBase </summary>
         [JsonPropertyName("name")]
         [PocketBaseField(id: "p221scv1", name: "name", required: false, system: false, unique: false, type: "text")]
         [Display(Name = "Name")]
-        public string? Name { get => Get(() => _Name); set => Set(value, ref _Name); }
+        public string? Name { get => Get(() => _Name ??= default); set => Set(value, ref _Name); }
 
         #endregion Field Properties
 

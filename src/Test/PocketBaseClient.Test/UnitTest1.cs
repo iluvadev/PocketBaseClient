@@ -1,4 +1,7 @@
 using PocketBaseClient.DemoTest;
+using PocketBaseClient.DemoTest.Models;
+using PocketBaseClient.Orm.Structures;
+using static PocketBaseClient.DemoTest.Models.TestForType;
 
 namespace PocketBaseClient.Test
 {
@@ -44,8 +47,23 @@ namespace PocketBaseClient.Test
             {
                 item.NumberNoRestrictions = 2;
                 item.NumberRestrictions = 0.1f;
+                item.FileSingleRestriction.GetThumb100x100f();
+                //item.FileSingleNoRestriction.LoadFromFile
+                item.FileMultipleRestrictions.Re
+                (item.FileMultipleRestrictions as IFieldFileList<FileMultipleRestrictionsFile>).AddFromLocalFile("fdsad");
+
+            //    item.FileSingleNoRestriction
             }
-            
+            var i = new TestForType();
+            //i.FileSingleNoRestriction.FileName
+            //i.FileSingleNoRestriction.IsEmpty
+            //i.FileSingleNoRestriction.Stream
+            //i.FileSingleNoRestriction.AsImage
+            //i.FileSingleNoRestriction.ReplaceWith(fullPath)
+            //i.FileSingleNoRestriction.Upload(fullPath)
+            //i.FileSingleNoRestriction.Download(fullPath)
+            //i.FileSingleNoRestriction.Remove()
+            //i.FileSingleNoRestriction.Thumb100x200f
         }
     }
 }
