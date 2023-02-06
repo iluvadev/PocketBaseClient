@@ -70,7 +70,7 @@ namespace PocketBaseClient
                     response.EnsureSuccessStatusCode();
 
                     using (var stream = response.Content.ReadAsStream())
-                        return JsonSerializer.Deserialize<T>(stream);
+                        return JsonSerializer.Deserialize<T>(stream, new JsonSerializerOptions(JsonSerializerDefaults.Web));
                 }
                 catch (Exception ex)
                 {
