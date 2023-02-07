@@ -84,10 +84,11 @@ namespace PocketBaseClient.DemoTest.Models
         public TestForRelated(string? id, DateTime? created, DateTime? updated, float? @numberUnique, float? @numberNonempty, float? @numberNonemptyUnique)
             : base(id, created, updated)
         {
-            NumberUnique = @numberUnique;
-            NumberNonempty = @numberNonempty;
-            NumberNonemptyUnique = @numberNonemptyUnique;
+            this.NumberUnique = @numberUnique;
+            this.NumberNonempty = @numberNonempty;
+            this.NumberNonemptyUnique = @numberNonemptyUnique;
 
+            AddInternal(this);
         }
         #endregion
 

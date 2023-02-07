@@ -93,11 +93,12 @@ namespace PocketBaseClient.DemoTest.Models
         public Author(string? id, DateTime? created, DateTime? updated, string? @name, MailAddress? @email, Uri? @url, string? @profile)
             : base(id, created, updated)
         {
-            Name = @name;
-            Email = @email;
-            Url = @url;
-            Profile = @profile;
+            this.Name = @name;
+            this.Email = @email;
+            this.Url = @url;
+            this.Profile = @profile;
 
+            AddInternal(this);
         }
         #endregion
 

@@ -266,30 +266,31 @@ namespace PocketBaseClient.DemoTest.Models
         public TestForType(string? id, DateTime? created, DateTime? updated, string? @textNoRestrictions, string? @textRestrictions, float? @numberNoRestrictions, float? @numberRestrictions, bool? @bool, MailAddress? @emailNoRestrictions, MailAddress? @emailRestrictionsExcept, MailAddress? @emailRestrictionsOnly, Uri? @urlNoRestrictions, Uri? @urlRestrictionsExcept, Uri? @urlRestrictionsOnly, DateTime? @datetimeNoRestrictions, DateTime? @datetimeRestrictions, SelectSingleEnum? @selectSingle, SelectMultipleList @selectMultiple, dynamic? @json, object? @fileSingleNoRestriction, object? @fileSingleRestriction, object? @fileMultipleNoRestrictions, object? @fileMultipleRestrictions, TestForRelated? @reationSingle, RelationMultipleNoLimitList @relationMultipleNoLimit, RelationMultipleLimitList @relationMultipleLimit)
             : base(id, created, updated)
         {
-            TextNoRestrictions = @textNoRestrictions;
-            TextRestrictions = @textRestrictions;
-            NumberNoRestrictions = @numberNoRestrictions;
-            NumberRestrictions = @numberRestrictions;
-            Bool = @bool;
-            EmailNoRestrictions = @emailNoRestrictions;
-            EmailRestrictionsExcept = @emailRestrictionsExcept;
-            EmailRestrictionsOnly = @emailRestrictionsOnly;
-            UrlNoRestrictions = @urlNoRestrictions;
-            UrlRestrictionsExcept = @urlRestrictionsExcept;
-            UrlRestrictionsOnly = @urlRestrictionsOnly;
-            DatetimeNoRestrictions = @datetimeNoRestrictions;
-            DatetimeRestrictions = @datetimeRestrictions;
-            SelectSingle = @selectSingle;
-            SelectMultiple = @selectMultiple;
-            Json = @json;
-            FileSingleNoRestriction = @fileSingleNoRestriction;
-            FileSingleRestriction = @fileSingleRestriction;
-            FileMultipleNoRestrictions = @fileMultipleNoRestrictions;
-            FileMultipleRestrictions = @fileMultipleRestrictions;
-            ReationSingle = @reationSingle;
-            RelationMultipleNoLimit = @relationMultipleNoLimit;
-            RelationMultipleLimit = @relationMultipleLimit;
+            this.TextNoRestrictions = @textNoRestrictions;
+            this.TextRestrictions = @textRestrictions;
+            this.NumberNoRestrictions = @numberNoRestrictions;
+            this.NumberRestrictions = @numberRestrictions;
+            this.Bool = @bool;
+            this.EmailNoRestrictions = @emailNoRestrictions;
+            this.EmailRestrictionsExcept = @emailRestrictionsExcept;
+            this.EmailRestrictionsOnly = @emailRestrictionsOnly;
+            this.UrlNoRestrictions = @urlNoRestrictions;
+            this.UrlRestrictionsExcept = @urlRestrictionsExcept;
+            this.UrlRestrictionsOnly = @urlRestrictionsOnly;
+            this.DatetimeNoRestrictions = @datetimeNoRestrictions;
+            this.DatetimeRestrictions = @datetimeRestrictions;
+            this.SelectSingle = @selectSingle;
+            this.SelectMultiple = @selectMultiple;
+            this.Json = @json;
+            this.FileSingleNoRestriction = @fileSingleNoRestriction;
+            this.FileSingleRestriction = @fileSingleRestriction;
+            this.FileMultipleNoRestrictions = @fileMultipleNoRestrictions;
+            this.FileMultipleRestrictions = @fileMultipleRestrictions;
+            this.ReationSingle = @reationSingle;
+            this.RelationMultipleNoLimit = @relationMultipleNoLimit;
+            this.RelationMultipleLimit = @relationMultipleLimit;
 
+            AddInternal(this);
         }
         #endregion
 

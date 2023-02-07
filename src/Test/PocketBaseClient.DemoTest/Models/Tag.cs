@@ -68,8 +68,9 @@ namespace PocketBaseClient.DemoTest.Models
         public Tag(string? id, DateTime? created, DateTime? updated, string? @name)
             : base(id, created, updated)
         {
-            Name = @name;
+            this.Name = @name;
 
+            AddInternal(this);
         }
         #endregion
 
