@@ -289,12 +289,13 @@ namespace PocketBaseClient.Orm
         [JsonConstructor]
         public ItemBase(string? id, DateTime? created, DateTime? updated)
         {
-            Id = id;
+            _Id = id;
             Created = created;
             Updated = updated;
+            Metadata_.SetLoaded();
         }
 
-        //protected object? AddInternal(object? element) => Collection.AddInternal(element);
+        protected object? AddInternal(object? element) => Collection.AddInternal(element);
 
         /// <inheritdoc />
         public override string ToString()
