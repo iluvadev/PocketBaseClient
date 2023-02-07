@@ -164,8 +164,9 @@ namespace {settings.NamespaceModels}
             : base(id, created, updated)
         {{");
             foreach (var field in Fields)
-                sb.AppendLine($@"            {field.PropertyName} = {GetParameterNameForConstructor(field)};");
+                sb.AppendLine($@"            this.{field.PropertyName} = {GetParameterNameForConstructor(field)};");
             sb.AppendLine($@"
+            AddInternal(this);
         }}
         #endregion");
 
