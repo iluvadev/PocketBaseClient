@@ -90,7 +90,7 @@ namespace PocketBaseClient.Orm
             if (_Owner == null || urlFile == null)
                 return Stream.Null;
 
-            return await _Owner.Collection.App.GetStreamAsync(urlFile, thumb);
+            return await _Owner.Collection.App.Sdk.HttpGetStreamAsync(urlFile, thumb);
         }
 
         /// <summary>
