@@ -159,7 +159,10 @@ namespace {settings.NamespaceModels}
         [JsonConstructor]
         public {ClassName}(string? id, DateTime? created, DateTime? updated");
             for (int i = 0; i < Fields.Count; i++)
-                sb.Append($@", {Fields[i].TypeName} {GetParameterNameForConstructor(Fields[i])}");
+            {
+                var typeName = Fields[i].TypeName + (Fields[i].IsTypeNullableInProperty ? "?" : "");
+                sb.Append($@", {typeName} {GetParameterNameForConstructor(Fields[i])}");
+            }
             sb.AppendLine($@")
             : base(id, created, updated)
         {{");

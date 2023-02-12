@@ -129,7 +129,7 @@ namespace PocketBaseClient.DemoTest.Models
         }
 
         [JsonConstructor]
-        public Post(string? id, DateTime? created, DateTime? updated, string @title, Author @author, string @summary, string @content, DateTime @published, StatusEnum @status, CategoriesList @categories, TagsList @tags)
+        public Post(string? id, DateTime? created, DateTime? updated, string @title, Author? @author, string? @summary, string? @content, DateTime? @published, StatusEnum? @status, CategoriesList @categories, TagsList @tags)
             : base(id, created, updated)
         {
             this.Title = @title;

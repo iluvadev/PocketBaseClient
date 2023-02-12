@@ -36,7 +36,7 @@ namespace PocketBaseClient.Orm
             {
                 if (_Owner == null) return null;
                 if (FileName == null) return null;
-                return $"/api/collections/{HttpUtility.UrlEncode(_Owner.CollectionId)}/records/{HttpUtility.UrlEncode(_Owner.Id)}/{FileName}";
+                return $"/api/files/{HttpUtility.UrlEncode(_Owner.CollectionId)}/{HttpUtility.UrlEncode(_Owner.Id)}/{FileName}";
             }
         }
 
@@ -74,7 +74,7 @@ namespace PocketBaseClient.Orm
         {
             _Owner = owner;
             FieldName = fieldName;
-            IsFromServer = false;
+            //IsFromServer = false;
         }
 
         #endregion Ctor
@@ -140,13 +140,8 @@ namespace PocketBaseClient.Orm
         internal async Task SaveToLocalFileAsync(string localPathFile, string? thumb)
         {
             using (var localFileStream = File.Create(localPathFile))
-            {
                 using (var remoteFileStream = await GetStreamAsync(thumb))
-                {
-                    remoteFileStream.Seek(0, SeekOrigin.Begin);
                     await remoteFileStream.CopyToAsync(localFileStream);
-                }
-            }
         }
 
         /// <summary>

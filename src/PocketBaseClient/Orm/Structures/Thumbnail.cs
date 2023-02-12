@@ -30,6 +30,6 @@ namespace PocketBaseClient.Orm.Structures
         /// <param name="localPathFile"></param>
         /// <returns></returns>
         public async Task SaveToLocalFileAsync(string localPathFile)
-            => await FieldFile.SaveToLocalFileAsync(localPathFile, null);
+            => await FieldFile.SaveToLocalFileAsync(localPathFile, ThumbDimensions);
     }
 }

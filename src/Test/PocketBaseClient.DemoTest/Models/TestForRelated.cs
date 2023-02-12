@@ -81,7 +81,7 @@ namespace PocketBaseClient.DemoTest.Models
         }
 
         [JsonConstructor]
-        public TestForRelated(string? id, DateTime? created, DateTime? updated, float @numberUnique, float @numberNonempty, float @numberNonemptyUnique)
+        public TestForRelated(string? id, DateTime? created, DateTime? updated, float? @numberUnique, float @numberNonempty, float @numberNonemptyUnique)
             : base(id, created, updated)
         {
             this.NumberUnique = @numberUnique;

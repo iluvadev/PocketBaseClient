@@ -9,6 +9,7 @@
 // pocketbase project: https://github.com/pocketbase/pocketbase
 
 using MimeMapping;
+using PocketBaseClient.Orm.Structures;
 using System.ComponentModel.DataAnnotations;
 
 namespace PocketBaseClient.Orm.Validators
@@ -42,9 +43,14 @@ namespace PocketBaseClient.Orm.Validators
             if (value is FieldFileBase fieldFile)
                 return MimeTypesList.Contains(MimeUtility.GetMimeMapping(fieldFile.FileName));
 
-            //TODO: List of Files
-
-            return false;
+            if (value is IBasicList basicList)
+            {
+                foreach (var item in basicList)
+                    if (item is FieldFileBase itemFile)
+                        if (!MimeTypesList.Contains(MimeUtility.GetMimeMapping(itemFile.FileName)))
+                            return false;
+            }
+            return true;
         }
     }
 }

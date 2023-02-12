@@ -22,13 +22,6 @@ namespace PocketBaseClient.Orm.Structures
         int Count { get; }
 
         /// <summary>
-        /// Notifies a modification of the field to the Owner
-        /// </summary>
-        void NotifyModificationToOwner()
-            //=> Owner?.SetPropertyModified(Name);
-            => Owner?.SetModified();
-
-        /// <summary>
         /// Says if the element is contained in the list
         /// </summary>
         /// <param name="element">The element to check if is contained</param>

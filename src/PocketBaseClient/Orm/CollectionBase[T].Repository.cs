@@ -291,6 +291,7 @@ namespace PocketBaseClient.Orm
         }
         private bool SaveInternal(T item, bool onlyIfChanges = true)
         {
+            //TODO: Throw exceptions in case of Id null or not Valid
             if (item.Id == null) return false;
             if (!item.Metadata_.IsValid) return false;
 
