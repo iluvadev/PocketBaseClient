@@ -10,11 +10,6 @@
 
 using pocketbase_csharp_sdk.Models.Collection;
 using PocketBaseClient.CodeGenerator.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace PocketBaseClient.CodeGenerator.Generation
 {
@@ -34,7 +29,10 @@ namespace PocketBaseClient.CodeGenerator.Generation
         /// <param name="itemInfo"></param>
         /// <param name="schemaField"></param>
         /// <param name="options"></param>
-        public FieldInfoFileOne(ItemInfo itemInfo, SchemaFieldModel schemaField, PocketBaseFieldOptionsFile options) : base(itemInfo, schemaField, options) { }
+        public FieldInfoFileOne(ItemInfo itemInfo, SchemaFieldModel schemaField, PocketBaseFieldOptionsFile options) : base(itemInfo, schemaField, options)
+        {
+            RelatedFiles.Add(@$".Union(new List<FieldFileBase?>() {{ {PropertyName} }})");
+        }
 
         /// <inheritdoc />
         protected override List<string> GetLinesForPropertyDecorators()

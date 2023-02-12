@@ -258,6 +258,9 @@ namespace PocketBaseClient.Orm
         protected internal virtual IEnumerable<ItemBase?> RelatedItems
             => Enumerable.Empty<ItemBase>();
 
+        protected internal virtual IEnumerable<FieldFileBase?> RelatedFiles
+            => Enumerable.Empty<FieldFileBase>();
+
         /// <summary>
         /// Update the object with data from other
         /// </summary>

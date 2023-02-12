@@ -56,6 +56,12 @@ namespace PocketBaseClient.CodeGenerator.Generation
         /// </summary>
         public List<string> RelatedItems => _RelatedItems;
 
+        protected List<string> _RelatedFiles = new List<string>();
+        /// <summary>
+        /// The Property Names of the fields of type File, in the generated code
+        /// </summary>
+        public List<string> RelatedFiles => _RelatedFiles;
+
         /// <summary>
         /// The name of the mapped c# type for the field, in the generated code
         /// </summary>

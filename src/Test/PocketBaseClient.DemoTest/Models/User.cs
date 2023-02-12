@@ -94,6 +94,10 @@ namespace PocketBaseClient.DemoTest.Models
         }
         #endregion
 
+        /// <inheritdoc />
+        protected override IEnumerable<FieldFileBase?> RelatedFiles 
+            => base.RelatedFiles.Union(new List<FieldFileBase?>() { Avatar });
+
         #region Collection
         public static CollectionUsers GetCollection() 
             => (CollectionUsers)DataServiceBase.GetCollection<User>()!;

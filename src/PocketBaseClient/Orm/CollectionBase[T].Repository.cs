@@ -1,5 +1,6 @@
 ﻿using System.Web;
 using pocketbase_csharp_sdk.Models;
+using pocketbase_csharp_sdk.Models.Files;
 using PocketBaseClient.Orm.Cache;
 using PocketBaseClient.Orm.Structures;
 
@@ -357,7 +358,7 @@ namespace PocketBaseClient.Orm
             if (item.Id == null) return false;
             if (onlyIfChanges && !item.Metadata_.HasLocalChanges) return true;
 
-            var savedItem = App.Sdk.HttpPatch(UrlRecord(item), item);
+            var savedItem = App.Sdk.HttpPatch(UrlRecord(item), item, item.RelatedFiles.Where(f => f != null && f.HasChanges).Select(f => (IFile)f!));
             if (savedItem == null) return false;
 
             item.UpdateWith(savedItem);

@@ -308,6 +308,10 @@ namespace PocketBaseClient.DemoTest.Models
         protected override IEnumerable<ItemBase?> RelatedItems 
             => base.RelatedItems.Union(new List<ItemBase?>() { ReationSingle }).Union(RelationMultipleNoLimit).Union(RelationMultipleLimit);
 
+        /// <inheritdoc />
+        protected override IEnumerable<FieldFileBase?> RelatedFiles 
+            => base.RelatedFiles.Union(new List<FieldFileBase?>() { FileSingleNoRestriction }).Union(new List<FieldFileBase?>() { FileSingleRestriction }).Union(FileMultipleNoRestrictions).Union(FileMultipleRestrictions);
+
         #region Collection
         public static CollectionTestForTypes GetCollection() 
             => (CollectionTestForTypes)DataServiceBase.GetCollection<TestForType>()!;

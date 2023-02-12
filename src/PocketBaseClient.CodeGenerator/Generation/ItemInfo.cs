@@ -184,6 +184,19 @@ namespace {settings.NamespaceModels}
                     sb.Append($@"{relatedItem}");
                 sb.AppendLine(";");
             }
+
+            var relatedFiles = Fields.SelectMany(f => f.RelatedFiles);
+            if(relatedFiles.Any())
+            {
+                sb.Append($@"
+        /// <inheritdoc />
+        protected override IEnumerable<FieldFileBase?> RelatedFiles 
+            => base.RelatedFiles");
+                foreach (var relatedFile in relatedFiles)
+                    sb.Append($@"{relatedFile}");
+                sb.AppendLine(";");
+            }
+
             sb.AppendLine($@"
         #region Collection
         public static {CollectionInfo.ClassName} GetCollection() 
