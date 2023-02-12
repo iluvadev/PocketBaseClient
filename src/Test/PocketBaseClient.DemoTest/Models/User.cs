@@ -86,10 +86,11 @@ namespace PocketBaseClient.DemoTest.Models
         public User(string? id, DateTime? created, DateTime? updated, string @name, AvatarFile @avatar, Uri @url)
             : base(id, created, updated)
         {
-            Name = @name;
-            Avatar = @avatar;
-            Url = @url;
+            this.Name = @name;
+            this.Avatar = @avatar;
+            this.Url = @url;
 
+            AddInternal(this);
         }
         #endregion
 

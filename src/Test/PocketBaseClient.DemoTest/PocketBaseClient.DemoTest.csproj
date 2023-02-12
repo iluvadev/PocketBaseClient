@@ -8,7 +8,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\PocketBaseClient\PocketBaseClient.csproj" />
+    <PackageReference Include="PocketBaseClient" Version="*" />
   </ItemGroup>
 
 </Project>

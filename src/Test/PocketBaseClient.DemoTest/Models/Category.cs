@@ -66,8 +66,9 @@ namespace PocketBaseClient.DemoTest.Models
         public Category(string? id, DateTime? created, DateTime? updated, string @name)
             : base(id, created, updated)
         {
-            Name = @name;
+            this.Name = @name;
 
+            AddInternal(this);
         }
         #endregion
 

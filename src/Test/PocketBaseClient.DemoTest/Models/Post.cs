@@ -132,15 +132,16 @@ namespace PocketBaseClient.DemoTest.Models
         public Post(string? id, DateTime? created, DateTime? updated, string @title, Author @author, string @summary, string @content, DateTime @published, StatusEnum @status, CategoriesList @categories, TagsList @tags)
             : base(id, created, updated)
         {
-            Title = @title;
-            Author = @author;
-            Summary = @summary;
-            Content = @content;
-            Published = @published;
-            Status = @status;
-            Categories = @categories;
-            Tags = @tags;
+            this.Title = @title;
+            this.Author = @author;
+            this.Summary = @summary;
+            this.Content = @content;
+            this.Published = @published;
+            this.Status = @status;
+            this.Categories = @categories;
+            this.Tags = @tags;
 
+            AddInternal(this);
         }
         #endregion
 
