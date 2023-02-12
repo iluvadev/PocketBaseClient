@@ -10,6 +10,7 @@
 // pocketbase project: https://github.com/pocketbase/pocketbase
 
 using PocketBaseClient.Orm;
+using PocketBaseClient.Orm.Structures;
 
 namespace PocketBaseClient.DemoTest.Models
 {

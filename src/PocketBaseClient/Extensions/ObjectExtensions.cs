@@ -15,7 +15,7 @@ namespace PocketBaseClient
     /// <summary>
     /// Extensions for Objects
     /// </summary>
-    public static class ObjectExtensions
+    internal static class ObjectExtensions
     {
 
         /// <summary>

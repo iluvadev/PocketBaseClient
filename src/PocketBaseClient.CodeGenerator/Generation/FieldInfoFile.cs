@@ -76,6 +76,7 @@ namespace PocketBaseClient.CodeGenerator.Generation
             StringBuilder sb = new();
             sb.Append($@"{settings.CodeHeader}
 using PocketBaseClient.Orm;
+using PocketBaseClient.Orm.Structures;
 
 namespace {settings.NamespaceModels}
 {{
@@ -100,8 +101,8 @@ namespace {settings.NamespaceModels}
             #region Thumbs");
                 foreach (var thumb in Options.Thumbs!)
                     sb.Append($@"
-            public async Task<Stream> GetThumb{thumb}Async() => await GetStreamAsync(""{thumb}"");
-            public Stream GetThumb{thumb}() => GetThumb{thumb}Async().Result;
+            private Thumbnail? _Thumb{thumb} = null;
+            public Thumbnail Thumb{thumb} => _Thumb{thumb} ??= new Thumbnail(this, ""{thumb}"");
 ");
                 sb.Append(@"
             #endregion Thumbs");

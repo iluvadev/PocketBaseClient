@@ -30,7 +30,10 @@ namespace PocketBaseClient.Test
 
             var col = myApp.Data.TestForTypesCollection;
 
-            var element = col.GetById("kabksx32qx1qhd5");
+            var element = col.First();//.GetById("kabksx32qx1qhd5");
+            var stream = element.FileSingleNoRestriction.GetStreamAsync().Result;
+            element.FileSingleRestriction.Thumb100x100f.SaveToLocalFileAsync(@"C:\Dev\thumb100.png").RunSynchronously();
+
 
             //var res1 = col.Filter(i => i.Id.EndsWith("a").And(i.TextNoRestrictions.StartsWith("b")).And(i.Bool.IsTrue().And(i.SelectSingle.Equal(DemoTest.Models.TestForType.SelectSingleEnum.Option1))));
             //var res2 = col.Where(i => i.Id.EndsWith("a") && i.TextNoRestrictions.StartsWith("b"));

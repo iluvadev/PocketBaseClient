@@ -85,9 +85,9 @@ namespace {settings.NamespaceModels}
 
             public {ListClassName}({ItemInfo.ClassName}? {ItemInfo.VarName}) : base({ItemInfo.VarName}, ""{PropertyName}"", ""{SchemaField.Id}"", {Options.MaxSelect?.ToString() ?? "null"}) {{ }}
 
-            internal List<string> GetRemovedFileNames() => RemovedFileNames;
+            //internal List<string> GetRemovedFileNames() => RemovedFileNames;
 
-            internal List<string> GetAddedFileNames() => AddedFileNames;
+            //internal List<string> GetAddedFileNames() => AddedFileNames;
         }}
     }}
 }}

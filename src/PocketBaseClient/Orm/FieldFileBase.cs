@@ -98,7 +98,7 @@ namespace PocketBaseClient.Orm
         /// </summary>
         /// <param name="thumb">The optional Thumb options to ask for</param>
         /// <returns></returns>
-        protected async Task<Stream> GetStreamAsync(string? thumb)
+        internal async Task<Stream> GetStreamAsync(string? thumb)
             => await StreamGetterAsync.Invoke(thumb);
 
         /// <summary>
@@ -112,7 +112,7 @@ namespace PocketBaseClient.Orm
         /// Gets the Stream of the File 
         /// </summary>
         /// <returns></returns>
-        public Stream GetStream()
+        Stream IFile.GetStream()
             => Task.Run(async () => await GetStreamAsync()).GetAwaiter().GetResult(); //WARNING: Async to Sync conversion
 
 
@@ -129,6 +129,33 @@ namespace PocketBaseClient.Orm
 
             ((IOwnedByItem)this).NotifyModificationToOwner();
         }
+
+
+        /// <summary>
+        /// Saves the remote file to local file (async)
+        /// </summary>
+        /// <param name="localPathFile"></param>
+        /// <param name="thumb"></param>
+        /// <returns></returns>
+        internal async Task SaveToLocalFileAsync(string localPathFile, string? thumb)
+        {
+            using (var localFileStream = File.Create(localPathFile))
+            {
+                using (var remoteFileStream = await GetStreamAsync(thumb))
+                {
+                    remoteFileStream.Seek(0, SeekOrigin.Begin);
+                    await remoteFileStream.CopyToAsync(localFileStream);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Saves the remote file to local file (async)
+        /// </summary>
+        /// <param name="localPathFile"></param>
+        /// <returns></returns>
+        public async Task SaveToLocalFileAsync(string localPathFile)
+            => await SaveToLocalFileAsync(localPathFile, null);
 
 
         public void Remove()
