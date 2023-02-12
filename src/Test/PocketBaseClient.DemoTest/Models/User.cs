@@ -32,27 +32,30 @@ namespace PocketBaseClient.DemoTest.Models
         #endregion Collection
 
         #region Field Properties
-        private string? _Name = null;
+        private string? _Name = default;
         /// <summary> Maps to 'name' field in PocketBase </summary>
         [JsonPropertyName("name")]
         [PocketBaseField(id: "users_name", name: "name", required: false, system: false, unique: false, type: "text")]
         [Display(Name = "Name")]
-        public string? Name { get => Get(() => _Name); set => Set(value, ref _Name); }
+        public string? Name { get => Get(() => _Name ??= default); set => Set(value, ref _Name); }
 
-        private object? _Avatar = null;
+        private AvatarFile? _Avatar = default;
         /// <summary> Maps to 'avatar' field in PocketBase </summary>
         [JsonPropertyName("avatar")]
         [PocketBaseField(id: "users_avatar", name: "avatar", required: false, system: false, unique: false, type: "file")]
         [Display(Name = "Avatar")]
-        public object? Avatar { get => Get(() => _Avatar); set => Set(value, ref _Avatar); }
+        [JsonInclude]
+        [MimeTypes("image/jpg,image/jpeg,image/png,image/svg+xml,image/gif", ErrorMessage = "Only MIME Types accepted: 'image/jpg,image/jpeg,image/png,image/svg+xml,image/gif'")]
+        [JsonConverter(typeof(FileConverter<AvatarFile>))]
+        public AvatarFile Avatar { get => Get(() => _Avatar ??= new AvatarFile(this)); private set => Set(value, ref _Avatar); }
 
-        private Uri? _Url = null;
+        private Uri? _Url = default;
         /// <summary> Maps to 'url' field in PocketBase </summary>
         [JsonPropertyName("url")]
         [PocketBaseField(id: "3wsfdiz3", name: "url", required: false, system: false, unique: false, type: "url")]
         [Display(Name = "Url")]
         [JsonConverter(typeof(UrlConverter))]
-        public Uri? Url { get => Get(() => _Url); set => Set(value, ref _Url); }
+        public Uri? Url { get => Get(() => _Url ??= default); set => Set(value, ref _Url); }
 
         #endregion Field Properties
 
@@ -80,7 +83,7 @@ namespace PocketBaseClient.DemoTest.Models
         }
 
         [JsonConstructor]
-        public User(string? id, DateTime? created, DateTime? updated, string? @name, object? @avatar, Uri? @url)
+        public User(string? id, DateTime? created, DateTime? updated, string @name, AvatarFile @avatar, Uri @url)
             : base(id, created, updated)
         {
             this.Name = @name;

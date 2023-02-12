@@ -32,14 +32,14 @@ namespace PocketBaseClient.DemoTest.Models
         #endregion Collection
 
         #region Field Properties
-        private string? _Name = null;
+        private string? _Name = default;
         /// <summary> Maps to 'name' field in PocketBase </summary>
         [JsonPropertyName("name")]
         [PocketBaseField(id: "jdukbual", name: "name", required: true, system: false, unique: true, type: "text")]
         [Display(Name = "Name")]
         [Required(ErrorMessage = @"Name is required")]
         [StringLength(10, MinimumLength = 2, ErrorMessage = "Minimum 2, Maximum 10 characters")]
-        public string? Name { get => Get(() => _Name); set => Set(value, ref _Name); }
+        public string Name { get => Get(() => _Name ??= string.Empty); set => Set(value, ref _Name); }
 
         #endregion Field Properties
 
@@ -65,7 +65,7 @@ namespace PocketBaseClient.DemoTest.Models
         }
 
         [JsonConstructor]
-        public Tag(string? id, DateTime? created, DateTime? updated, string? @name)
+        public Tag(string? id, DateTime? created, DateTime? updated, string @name)
             : base(id, created, updated)
         {
             this.Name = @name;

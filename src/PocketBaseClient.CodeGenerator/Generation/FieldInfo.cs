@@ -9,7 +9,9 @@
 // pocketbase project: https://github.com/pocketbase/pocketbase
 
 using pocketbase_csharp_sdk.Models.Collection;
+using PocketBaseClient.CodeGenerator.Models;
 using System.Text;
+using System.Text.Json;
 
 namespace PocketBaseClient.CodeGenerator.Generation
 {
@@ -18,6 +20,11 @@ namespace PocketBaseClient.CodeGenerator.Generation
     /// </summary>
     internal abstract class FieldInfo
     {
+        /// <summary>
+        /// Says if the Field is Required
+        /// </summary>
+        protected bool IsRequired => SchemaField.Required ?? false;
+
         /// <summary>
         /// The item of this field
         /// </summary>
@@ -55,14 +62,34 @@ namespace PocketBaseClient.CodeGenerator.Generation
         public abstract string TypeName { get; }
 
         /// <summary>
+        /// Says if the mapped c# type for the field is nullable, in the generated code
+        /// </summary>
+        public virtual bool IsTypeNullableInAttribute { get; } = true;
+
+        /// <summary>
+        /// Says if the mapped c# type for the field is nullable, in the generated code
+        /// </summary>
+        public virtual bool IsTypeNullableInProperty => !IsRequired;
+
+        /// <summary>
+        /// The Type for the mapped attribute in c#
+        /// </summary>
+        private string TypeNameForAttribute => TypeName + (IsTypeNullableInAttribute ? "?" : "");
+
+        /// <summary>
+        /// The Type for the mapped property in c#
+        /// </summary>
+        private string TypeNameForProperty => TypeName + (IsTypeNullableInProperty ? "?" : "");
+
+        /// <summary>
         /// The initial value of the mapped property for the field, in the generated code
         /// </summary>
-        public virtual string InitialValueForProperty { get; } = "null";
+        public virtual string InitialValueForProperty { get; } = "default";
 
         /// <summary>
         /// The initial value of the mapped attribute for the field, in the generated code
         /// </summary>
-        public virtual string InitialValueForAttribute { get; } = "null";
+        public virtual string InitialValueForAttribute { get; } = "default";
 
         /// <summary>
         /// Says if the Property setter must be private, in the generated code
@@ -107,7 +134,7 @@ namespace PocketBaseClient.CodeGenerator.Generation
         {
             return new()
             {
-                $"private {TypeName} {AttributeName} = {InitialValueForAttribute};",
+                $"private {TypeNameForAttribute} {AttributeName} = {InitialValueForAttribute};",
             };
         }
 
@@ -131,7 +158,7 @@ namespace PocketBaseClient.CodeGenerator.Generation
         {
             return new()
             {
-                @$"[JsonPropertyName(""{SchemaField.Name}"")]",
+                $@"[JsonPropertyName(""{SchemaField.Name}"")]",
                 $@"[PocketBaseField(id: ""{SchemaField.Id}"", name: ""{SchemaField.Name}"", required: {(SchemaField.Required ?? false).ToString().ToLower()}, system: {(SchemaField.System ?? false).ToString().ToLower()}, unique: {(SchemaField.Unique ?? false).ToString().ToLower()}, type: ""{SchemaField.Type}"")]",
                 $@"[Display(Name = ""{DisplayName}"")]",
                 (SchemaField.Required ?? false) ? $@"[Required(ErrorMessage = @""{PropertyName} is required"")]" : "",
@@ -149,7 +176,7 @@ namespace PocketBaseClient.CodeGenerator.Generation
             string strGet = (InitialValueForAttribute == "null") ? $"get => Get(() => {AttributeName});" : $"get => Get(() => {AttributeName} ??= {InitialValueForProperty});";
             string strSet = PrivateSetter ? $"private set => Set(value, ref {AttributeName});" : $"set => Set(value, ref {AttributeName});";
 
-            list.Add($@"public {TypeName} {PropertyName} {{ {strGet} {strSet} }}");
+            list.Add($@"public {TypeNameForProperty} {PropertyName} {{ {strGet} {strSet} }}");
 
             return list;
         }
@@ -246,7 +273,7 @@ namespace PocketBaseClient.CodeGenerator.Generation
         /// <returns></returns>
         protected virtual List<string> GetLinesForSortAttribute()
         {
-            return new ();
+            return new();
         }
 
         /// <summary>
@@ -260,16 +287,16 @@ namespace PocketBaseClient.CodeGenerator.Generation
                 $"/// <summary>Makes a SortCommand to Order by the '{SchemaField.Name}' field</summary>"
             };
         }
-        
+
         /// <summary>
         /// Returns generated lines of code for the Decorators of the Property for the sorting options for the field in the Sorting class
         /// </summary>
         /// <returns></returns>
         protected virtual List<string> GetLinesForSortDecorators()
         {
-            return new ();
+            return new();
         }
-        
+
         /// <summary>
         /// Returns generated lines of code for the Property definition for the sorting options for the field in the Sorting class
         /// </summary>
@@ -281,7 +308,7 @@ namespace PocketBaseClient.CodeGenerator.Generation
                 $@"public SortCommand {PropertyName} => new SortCommand(""{SchemaField.Name}"");"
             };
         }
-        
+
         /// <summary>
         /// Returns the generated code for the Property that defines the sorting option for the field in the Sorting class
         /// </summary>
@@ -326,13 +353,13 @@ namespace PocketBaseClient.CodeGenerator.Generation
             else if (schemaField.Type == "date")
                 return new FieldInfoDate(itemInfo, schemaField);
             else if (schemaField.Type == "select")
-                return new FieldInfoSelect(itemInfo, schemaField);
+                return FieldInfoSelect.NewFieldInfoSelect(itemInfo, schemaField);
             else if (schemaField.Type == "json")
                 return new FieldInfoJson(itemInfo, schemaField);
             else if (schemaField.Type == "file")
-                return new FieldInfoFile(itemInfo, schemaField);
+                return FieldInfoFile.NewFieldInfoFile(itemInfo, schemaField);
             else if (schemaField.Type == "relation")
-                return new FieldInfoRelation(itemInfo, schemaField);
+                return FieldInfoRelation.NewFieldInfoRelation(itemInfo, schemaField);
 
             throw new Exception($"Field type '{schemaField.Type}' not supported for field '{schemaField.Name}'");
         }

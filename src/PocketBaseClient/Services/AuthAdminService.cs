@@ -29,8 +29,8 @@ namespace PocketBaseClient.Services
         /// <param name="email"></param>
         /// <param name="password"></param>
         /// <returns></returns>
-        public async Task<AdminAuthModel?> AuthenticateWithPassword(string email, string password)
-            => await App.Sdk.Admin.AuthenticateWithPassword(email, password);
+        public async Task<AdminAuthModel?> AuthenticateWithPasswordAsync(string email, string password)
+            => await App.Sdk.Admin.AuthenticateWithPasswordAsync(email, password);
 
         /// <summary>
         /// Request an Admin Password reset

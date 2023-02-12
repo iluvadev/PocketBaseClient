@@ -10,7 +10,6 @@
 
 using pocketbase_csharp_sdk.Models.Collection;
 using PocketBaseClient.CodeGenerator.Models;
-using System;
 using System.Text.Json;
 
 namespace PocketBaseClient.CodeGenerator.Generation
@@ -26,7 +25,7 @@ namespace PocketBaseClient.CodeGenerator.Generation
         private PocketBaseFieldOptionsEmailUrl Options { get; }
 
         /// <inheritdoc />
-        public override string TypeName => "Uri?";
+        public override string TypeName => "Uri";
 
         /// <inheritdoc />
         public override string FilterType => "FieldFilterUri";
@@ -46,9 +45,9 @@ namespace PocketBaseClient.CodeGenerator.Generation
         {
             var list = base.GetLinesForPropertyDecorators();
 
-            if (Options.OnlyDomains != null)
+            if (Options.OnlyDomains?.Any() ?? false)
                 list.Add($@"[OnlyDomains(""{Options.OnlyDomainsJoined}"", ErrorMessage = ""Only domains accepted: '{Options.OnlyDomainsJoined}'"")]");
-            else if (Options.ExceptDomains != null)
+            else if (Options.ExceptDomains?.Any() ?? false)
                 list.Add($@"[ExceptDomains(""{Options.ExceptDomainsJoined}"", ErrorMessage = ""Except domains accepted: '{Options.ExceptDomainsJoined}'"")]");
 
             list.Add("[JsonConverter(typeof(UrlConverter))]");
