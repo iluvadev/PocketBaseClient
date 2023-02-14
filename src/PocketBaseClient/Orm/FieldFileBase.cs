@@ -10,8 +10,6 @@
 
 using pocketbase_csharp_sdk.Models.Files;
 using PocketBaseClient.Orm.Structures;
-using System.IO;
-using System.Web;
 
 namespace PocketBaseClient.Orm
 {
@@ -19,48 +17,47 @@ namespace PocketBaseClient.Orm
     /// <summary>
     /// Class definition for a field of type File
     /// </summary>
-    public class FieldFileBase : IFile, IOwnedByItem
+    public class FieldFileBase : IOwnedByItem
     {
-        private ItemBase? _Owner = null;
+        internal ItemBase? Item { get; set; }
         /// <inheritdoc />
-        ItemBase? IOwnedByItem.Owner { get => _Owner; set => _Owner = value; }
+        ItemBase? IOwnedByItem.Owner { get => Item; set => Item = value; }
 
         /// <summary>
         /// The Max size of the file
         /// </summary>
         public virtual long? MaxSize { get; } = null;
 
-        internal string? UrlFile
-        {
-            get
-            {
-                if (_Owner == null) return null;
-                if (FileName == null) return null;
-                return $"/api/files/{HttpUtility.UrlEncode(_Owner.CollectionId)}/{HttpUtility.UrlEncode(_Owner.Id)}/{FileName}";
-            }
-        }
+        internal protected FileOrigins Origin { get; private set; } = FileOrigins.PocketBase;
 
         /// <summary>
         /// The Column name in the PocketBase field
         /// </summary>
         internal string? FieldName { get; private set; }
-        string? IFile.FieldName { get => FieldName; set => FieldName = value; }
 
         /// <summary>
         /// The File Name
         /// </summary>
         public string? FileName { get; internal set; }
-        string? IFile.FileName { get => FileName; set => FileName = value; }
 
-        internal protected bool IsFromServer { get; private set; } = true;
+        public string? EntireFileName
+        {
+            get
+            {
+                if(Origin== FileOrigins.PocketBase)
+                    return Item?.Collection.UrlFile()
+            }
+        }
+
 
         public bool HasChanges { get; private set; } = false;
         public bool IsEmpty => string.IsNullOrEmpty(FileName);
 
+
         private Func<string?, Task<Stream>>? _StreamGetterAsync = null;
         internal Func<string?, Task<Stream>> StreamGetterAsync
         {
-            get => _StreamGetterAsync ?? (IsFromServer ? (thumb) => GetStreamFromPbAsync(thumb) : (_) => Task.Run(() => Stream.Null));
+            get => _StreamGetterAsync ?? (Origin == FileOrigins.PocketBase ? (thumb) => CollectionBase.GetFileStreamFromPbAsync(this, thumb) : (_) => Task.Run(() => Stream.Null));
             private set => _StreamGetterAsync = value;
         }
 
@@ -72,26 +69,11 @@ namespace PocketBaseClient.Orm
         /// <param name="owner"></param>
         protected FieldFileBase(string fieldName, ItemBase? owner)
         {
-            _Owner = owner;
+            Item = owner;
             FieldName = fieldName;
-            //IsFromServer = false;
         }
 
         #endregion Ctor
-
-        /// <summary>
-        /// Gets the Stream of the file from PocketBase server
-        /// </summary>
-        /// <param name="thumb">The optional Thumb options to ask for</param>
-        /// <returns></returns>
-        internal async Task<Stream> GetStreamFromPbAsync(string? thumb = null)
-        {
-            var urlFile = UrlFile;
-            if (_Owner == null || urlFile == null)
-                return Stream.Null;
-
-            return await _Owner.Collection.App.Sdk.HttpGetStreamAsync(urlFile, thumb);
-        }
 
         /// <summary>
         /// Gets the Stream of the File with thumb option (async)
@@ -108,13 +90,6 @@ namespace PocketBaseClient.Orm
         public async Task<Stream> GetStreamAsync()
             => await GetStreamAsync(null);
 
-        /// <summary>
-        /// Gets the Stream of the File 
-        /// </summary>
-        /// <returns></returns>
-        Stream IFile.GetStream()
-            => Task.Run(async () => await GetStreamAsync()).GetAwaiter().GetResult(); //WARNING: Async to Sync conversion
-
 
         /// <summary>
         /// Loads the Field with a local File
@@ -122,7 +97,7 @@ namespace PocketBaseClient.Orm
         /// <param name="localPathFile">The entire path of the local file</param>
         public void LoadFromLocalFile(string localPathFile)
         {
-            IsFromServer = false;
+            Origin = FileOrigins.LocalSystem;
             HasChanges = true;
             FileName = Path.GetFileName(localPathFile);
             StreamGetterAsync = (_) => Task.Run(() => new FileStream(localPathFile, FileMode.Open) as Stream);
@@ -140,8 +115,8 @@ namespace PocketBaseClient.Orm
         internal async Task SaveToLocalFileAsync(string localPathFile, string? thumb)
         {
             using (var localFileStream = File.Create(localPathFile))
-                using (var remoteFileStream = await GetStreamAsync(thumb))
-                    await remoteFileStream.CopyToAsync(localFileStream);
+            using (var remoteFileStream = await GetStreamAsync(thumb))
+                await remoteFileStream.CopyToAsync(localFileStream);
         }
 
         /// <summary>
@@ -157,21 +132,26 @@ namespace PocketBaseClient.Orm
         {
             HasChanges |= !IsEmpty;
             FileName = null;
-            IsFromServer = false;
+            Origin = FileOrigins.Unknown;
             _StreamGetterAsync = null;
 
             ((IOwnedByItem)this).NotifyModificationToOwner();
         }
 
-
-        /*
-         * IEPA!!
-         * Fer que sigui No nullable i set privat
-         * Afegir mètode/propietat:
-         *      IsEmpty
-         *      Remove()
-         *      
-         * Fer constructor dels mapejos internal
-         */ 
+        internal IFile GetSdkFile()
+        {
+            if (Origin == FileOrigins.PocketBase)
+                return new StreamFile()
+                {
+                    FileName = FileName,
+                    FieldName = FieldName,
+                    Stream = Task.Run(async () => await GetStreamAsync()).GetAwaiter().GetResult(), //WARNING: Async to Sync conversion
+                };
+            if (Origin == FileOrigins.LocalSystem)
+                return new FilepathFile()
+                {
+                    FileName = 
+                };
+        }
     }
 }

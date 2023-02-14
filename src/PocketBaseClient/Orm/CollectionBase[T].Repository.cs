@@ -1,6 +1,4 @@
-﻿using System.Web;
-using pocketbase_csharp_sdk.Models;
-using pocketbase_csharp_sdk.Models.Files;
+﻿using pocketbase_csharp_sdk.Models;
 using PocketBaseClient.Orm.Cache;
 using PocketBaseClient.Orm.Structures;
 
@@ -27,8 +25,6 @@ namespace PocketBaseClient.Orm
         #endregion Cache
 
         #region Url
-        internal string UrlRecords => $"/api/collections/{HttpUtility.UrlEncode(Name)}/records";
-        internal string UrlRecord(string id) => $"{UrlRecords}/{HttpUtility.UrlEncode(id)}";
         internal string UrlRecord(T item) => UrlRecord(item.Id!);
         #endregion  Url
 
@@ -109,7 +105,6 @@ namespace PocketBaseClient.Orm
                 }
             }
         }
-
         #endregion Support functions
 
         #region Fill Item from PocketBase
@@ -358,7 +353,7 @@ namespace PocketBaseClient.Orm
             if (item.Id == null) return false;
             if (onlyIfChanges && !item.Metadata_.HasLocalChanges) return true;
 
-            var savedItem = App.Sdk.HttpPatch(UrlRecord(item), item, item.RelatedFiles.Where(f => f != null && f.HasChanges).Select(f => (IFile)f!));
+            var savedItem = App.Sdk.HttpPatch(UrlRecord(item), item);
             if (savedItem == null) return false;
 
             item.UpdateWith(savedItem);
@@ -369,7 +364,7 @@ namespace PocketBaseClient.Orm
         private async Task<bool> DeleteInternalAsync(T item)
         {
             if (item.Id == null) return false;
-           
+
             if (!await App.Sdk.HttpDeleteAsync(UrlRecord(item))) return false;
 
             // If is the Auth registry, delete it

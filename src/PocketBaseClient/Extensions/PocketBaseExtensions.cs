@@ -11,6 +11,7 @@
 using pocketbase_csharp_sdk;
 using pocketbase_csharp_sdk.Models;
 using pocketbase_csharp_sdk.Models.Files;
+using PocketBaseClient.Orm;
 using System.Text.Json;
 
 namespace PocketBaseClient
@@ -92,20 +93,25 @@ namespace PocketBaseClient
         }
 
 
-        internal static async Task<T?> HttpPatchAsync<T>(this PocketBase pocketBase, string url, T element)
+        internal static async Task<T?> HttpPatchAsync<T>(this PocketBase pocketBase, string url, T item)
+            where T : ItemBase
         {
             // Convert Serialized element to Dictionary<string, object>
-            var body = JsonSerializer.Deserialize<Dictionary<string, object>>(JsonSerializer.Serialize(element));
+            var body = JsonSerializer.Deserialize<Dictionary<string, object>>(JsonSerializer.Serialize(item));
+            var files = item.RelatedFiles.Where(f => f != null && f.HasChanges)?.Select(f => f!.GetSdkFile);
 
-            return await pocketBase.SendAsync<T>(url, HttpMethod.Patch, body: body);
+            return await pocketBase.SendAsync<T>(url, HttpMethod.Patch, body: body, files: files);
         }
-        internal static T? HttpPatch<T>(this PocketBase pocketBase, string url, T element, IEnumerable<IFile>? files = null)
+        internal static T? HttpPatch<T>(this PocketBase pocketBase, string url, T item) 
+            where T: ItemBase
         {
             // Convert Serialized element to Dictionary<string, object>
-            var body = JsonSerializer.Deserialize<Dictionary<string, object>>(JsonSerializer.Serialize(element));
+            var body = JsonSerializer.Deserialize<Dictionary<string, object>>(JsonSerializer.Serialize(item));
+            var files = item.RelatedFiles.Where(f => f != null && f.HasChanges)?.Select(f => f!.GetSdkFile);
 
             return pocketBase.Send<T>(url, HttpMethod.Patch, body: body, files: files);
         }
+
 
         internal static async Task<Stream> HttpGetStreamAsync(this PocketBase pocketBase, string url, string? thumb = null)
         {
