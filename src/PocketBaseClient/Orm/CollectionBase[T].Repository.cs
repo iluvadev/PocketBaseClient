@@ -303,8 +303,7 @@ namespace PocketBaseClient.Orm
 
             // Save related changed items
             foreach (var relatedCached in cachedItems)
-                if (relatedCached != null)
-                    relatedCached.Save(true);
+                relatedCached?.Save(true);
 
             // WARNING: There is no wait for Cascade saving!!
 

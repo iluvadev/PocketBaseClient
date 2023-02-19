@@ -10,7 +10,6 @@
 
 using pocketbase_csharp_sdk;
 using pocketbase_csharp_sdk.Models;
-using pocketbase_csharp_sdk.Models.Files;
 using PocketBaseClient.Orm;
 using System.Text.Json;
 
@@ -98,16 +97,16 @@ namespace PocketBaseClient
         {
             // Convert Serialized element to Dictionary<string, object>
             var body = JsonSerializer.Deserialize<Dictionary<string, object>>(JsonSerializer.Serialize(item));
-            var files = item.RelatedFiles.Where(f => f != null && f.HasChanges)?.Select(f => f!.GetSdkFile);
+            var files = item.RelatedFiles.Where(f => f != null && f.HasChanges)?.Select(f => f!.GetSdkFileToUpload()).Where(f => f != null).Select(f => f!);
 
             return await pocketBase.SendAsync<T>(url, HttpMethod.Patch, body: body, files: files);
         }
-        internal static T? HttpPatch<T>(this PocketBase pocketBase, string url, T item) 
-            where T: ItemBase
+        internal static T? HttpPatch<T>(this PocketBase pocketBase, string url, T item)
+            where T : ItemBase
         {
             // Convert Serialized element to Dictionary<string, object>
             var body = JsonSerializer.Deserialize<Dictionary<string, object>>(JsonSerializer.Serialize(item));
-            var files = item.RelatedFiles.Where(f => f != null && f.HasChanges)?.Select(f => f!.GetSdkFile);
+            var files = item.RelatedFiles.Where(f => f != null && f.HasChanges)?.Select(f => f!.GetSdkFileToUpload()).Where(f => f != null).Select(f=> f!);
 
             return pocketBase.Send<T>(url, HttpMethod.Patch, body: body, files: files);
         }

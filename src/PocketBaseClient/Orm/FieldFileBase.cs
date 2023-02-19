@@ -40,24 +40,19 @@ namespace PocketBaseClient.Orm
         /// </summary>
         public string? FileName { get; internal set; }
 
-        public string? EntireFileName
-        {
-            get
-            {
-                if(Origin== FileOrigins.PocketBase)
-                    return Item?.Collection.UrlFile()
-            }
-        }
-
+        /// <summary>
+        /// The entire Local FileName
+        /// </summary>
+        protected string? EntireLocalFileName { get; set; }
 
         public bool HasChanges { get; private set; } = false;
         public bool IsEmpty => string.IsNullOrEmpty(FileName);
 
-
         private Func<string?, Task<Stream>>? _StreamGetterAsync = null;
         internal Func<string?, Task<Stream>> StreamGetterAsync
         {
-            get => _StreamGetterAsync ?? (Origin == FileOrigins.PocketBase ? (thumb) => CollectionBase.GetFileStreamFromPbAsync(this, thumb) : (_) => Task.Run(() => Stream.Null));
+            get => _StreamGetterAsync ?? (Origin == FileOrigins.PocketBase ? (thumb) => CollectionBase.GetFileStreamFromPbAsync(this, thumb) : 
+                                                                             (_) => Task.Run(() => Stream.Null));
             private set => _StreamGetterAsync = value;
         }
 
@@ -100,6 +95,7 @@ namespace PocketBaseClient.Orm
             Origin = FileOrigins.LocalSystem;
             HasChanges = true;
             FileName = Path.GetFileName(localPathFile);
+            EntireLocalFileName = localPathFile;
             StreamGetterAsync = (_) => Task.Run(() => new FileStream(localPathFile, FileMode.Open) as Stream);
 
             ((IOwnedByItem)this).NotifyModificationToOwner();
@@ -138,20 +134,15 @@ namespace PocketBaseClient.Orm
             ((IOwnedByItem)this).NotifyModificationToOwner();
         }
 
-        internal IFile GetSdkFile()
+        internal FilepathFile? GetSdkFileToUpload()
         {
-            if (Origin == FileOrigins.PocketBase)
-                return new StreamFile()
-                {
-                    FileName = FileName,
-                    FieldName = FieldName,
-                    Stream = Task.Run(async () => await GetStreamAsync()).GetAwaiter().GetResult(), //WARNING: Async to Sync conversion
-                };
-            if (Origin == FileOrigins.LocalSystem)
-                return new FilepathFile()
-                {
-                    FileName = 
-                };
+            if (Origin != FileOrigins.LocalSystem)
+                return null;
+            return new FilepathFile(EntireLocalFileName)
+            {
+                FieldName = FieldName,
+                FileName = FileName
+            };
         }
     }
 }
