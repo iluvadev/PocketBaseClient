@@ -40,13 +40,13 @@ namespace PocketBaseClient.Orm.Validators
         {
             if (value == null) return false;
 
-            if (value is FieldFileBase fieldFile)
+            if (value is FieldFileBase fieldFile && !string.IsNullOrEmpty(fieldFile.FileName))
                 return MimeTypesList.Contains(MimeUtility.GetMimeMapping(fieldFile.FileName));
 
             if (value is IBasicList basicList)
             {
                 foreach (var item in basicList)
-                    if (item is FieldFileBase itemFile)
+                    if (item is FieldFileBase itemFile && !string.IsNullOrEmpty(itemFile.FileName))
                         if (!MimeTypesList.Contains(MimeUtility.GetMimeMapping(itemFile.FileName)))
                             return false;
             }
