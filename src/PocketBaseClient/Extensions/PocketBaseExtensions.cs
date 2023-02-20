@@ -97,18 +97,28 @@ namespace PocketBaseClient
         {
             // Convert Serialized element to Dictionary<string, object>
             var body = JsonSerializer.Deserialize<Dictionary<string, object>>(JsonSerializer.Serialize(item));
-            var files = item.RelatedFiles.Where(f => f != null && f.HasChanges)?.Select(f => f!.GetSdkFileToUpload()).Where(f => f != null).Select(f => f!);
+            var files = item.RelatedFiles.Where(f => f != null && f.HasChanges)?.Select(f => f!.GetSdkFileToUpload()).Where(f => f != null).Select(f => f!)?.ToList();
 
-            return await pocketBase.SendAsync<T>(url, HttpMethod.Patch, body: body, files: files);
+            var result = await pocketBase.SendAsync<T>(url, HttpMethod.Patch, body: body);
+
+            if (files?.Any() ?? false)
+                return await pocketBase.SendAsync<T>(url, HttpMethod.Patch, files: files);
+
+            return result;
         }
         internal static T? HttpPatch<T>(this PocketBase pocketBase, string url, T item)
             where T : ItemBase
         {
             // Convert Serialized element to Dictionary<string, object>
             var body = JsonSerializer.Deserialize<Dictionary<string, object>>(JsonSerializer.Serialize(item));
-            var files = item.RelatedFiles.Where(f => f != null && f.HasChanges)?.Select(f => f!.GetSdkFileToUpload()).Where(f => f != null).Select(f=> f!);
+            var files = item.RelatedFiles.Where(f => f != null && f.HasChanges)?.Select(f => f!.GetSdkFileToUpload()).Where(f => f != null).Select(f => f!)?.ToList();
 
-            return pocketBase.Send<T>(url, HttpMethod.Patch, body: body, files: files);
+            var result = pocketBase.Send<T>(url, HttpMethod.Patch, body: body);
+
+            if (files?.Any() ?? false)
+                return pocketBase.Send<T>(url, HttpMethod.Patch, files: files);
+
+            return result;
         }
 
 
