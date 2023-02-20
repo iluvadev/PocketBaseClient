@@ -9,9 +9,7 @@
 // pocketbase project: https://github.com/pocketbase/pocketbase
 
 using pocketbase_csharp_sdk.Models.Collection;
-using PocketBaseClient.CodeGenerator.Models;
 using System.Text;
-using System.Text.Json;
 
 namespace PocketBaseClient.CodeGenerator.Generation
 {
@@ -90,12 +88,12 @@ namespace PocketBaseClient.CodeGenerator.Generation
         /// <summary>
         /// The initial value of the mapped property for the field, in the generated code
         /// </summary>
-        public virtual string InitialValueForProperty { get; } = "default";
+        public virtual string InitialValueForProperty => IsTypeNullableInProperty ? "null" : "default";
 
         /// <summary>
         /// The initial value of the mapped attribute for the field, in the generated code
         /// </summary>
-        public virtual string InitialValueForAttribute { get; } = "default";
+        public virtual string InitialValueForAttribute => IsTypeNullableInAttribute ? "null" : "default";
 
         /// <summary>
         /// Says if the Property setter must be private, in the generated code
@@ -179,7 +177,7 @@ namespace PocketBaseClient.CodeGenerator.Generation
         protected virtual List<string> GetLinesForPropertyDefinition()
         {
             var list = new List<string>();
-            string strGet = (InitialValueForAttribute == "null") ? $"get => Get(() => {AttributeName});" : $"get => Get(() => {AttributeName} ??= {InitialValueForProperty});";
+            string strGet = (InitialValueForProperty == "null") ? $"get => Get(() => {AttributeName});" : $"get => Get(() => {AttributeName} ??= {InitialValueForProperty});";
             string strSet = PrivateSetter ? $"private set => Set(value, ref {AttributeName});" : $"set => Set(value, ref {AttributeName});";
 
             list.Add($@"public {TypeNameForProperty} {PropertyName} {{ {strGet} {strSet} }}");
