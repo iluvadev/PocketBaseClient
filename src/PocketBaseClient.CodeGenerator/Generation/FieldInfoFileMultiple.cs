@@ -82,9 +82,7 @@ namespace {settings.NamespaceModels}
 
             public {ListClassName}({ItemInfo.ClassName}? {ItemInfo.VarName}) : base({ItemInfo.VarName}, ""{PropertyName}"", ""{SchemaField.Id}"", {Options.MaxSelect?.ToString() ?? "null"}) {{ }}
 
-            //internal List<string> GetRemovedFileNames() => RemovedFileNames;
-
-            //internal List<string> GetAddedFileNames() => AddedFileNames;
+            internal List<string> GetRemovedFileNames() => RemovedFileNames;
         }}
     }}
 }}
@@ -101,5 +99,17 @@ namespace {settings.NamespaceModels}
 
             return list;
         }
+
+        /// <inheritdoc />
+        protected override List<string> GetLinesForExtraPropertyDefinition()
+        {
+            var list = base.GetLinesForExtraPropertyDefinition();
+
+            list.Add($@"[JsonPropertyName(""{SchemaField.Name}-"")]");
+            list.Add($@"[JsonInclude]");
+            list.Add($@"public List<string> {PropertyName}_RemovedFileNames => {PropertyName}.GetRemovedFileNames();");
+            return list;
+        }
+
     }
 }

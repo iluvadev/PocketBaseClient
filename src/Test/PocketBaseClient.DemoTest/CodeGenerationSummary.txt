@@ -26,7 +26,7 @@
 
 Code generated with:
     PocketBaseClient CodeGenerator: pbcodegen v.0.6.1.0
-    At: 2023-02-12T18:36:10.1067744Z
+    At: 2023-02-20T16:00:30.7513240Z
 
 PocketBase Application: 
     Name: demo-test

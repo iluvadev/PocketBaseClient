@@ -32,7 +32,7 @@ namespace PocketBaseClient.DemoTest.Models
         #endregion Collection
 
         #region Field Properties
-        private string? _Name = default;
+        private string? _Name = null;
         /// <summary> Maps to 'name' field in PocketBase </summary>
         [JsonPropertyName("name")]
         [PocketBaseField(id: "vxfcwb67", name: "name", required: true, system: false, unique: false, type: "text")]
@@ -40,28 +40,28 @@ namespace PocketBaseClient.DemoTest.Models
         [Required(ErrorMessage = @"Name is required")]
         public string Name { get => Get(() => _Name ??= string.Empty); set => Set(value, ref _Name); }
 
-        private MailAddress? _Email = default;
+        private MailAddress? _Email = null;
         /// <summary> Maps to 'email' field in PocketBase </summary>
         [JsonPropertyName("email")]
         [PocketBaseField(id: "47aw4yhp", name: "email", required: false, system: false, unique: false, type: "email")]
         [Display(Name = "Email")]
         [JsonConverter(typeof(EmailConverter))]
-        public MailAddress? Email { get => Get(() => _Email ??= default); set => Set(value, ref _Email); }
+        public MailAddress? Email { get => Get(() => _Email); set => Set(value, ref _Email); }
 
-        private Uri? _Url = default;
+        private Uri? _Url = null;
         /// <summary> Maps to 'url' field in PocketBase </summary>
         [JsonPropertyName("url")]
         [PocketBaseField(id: "pm9srne2", name: "url", required: false, system: false, unique: false, type: "url")]
         [Display(Name = "Url")]
         [JsonConverter(typeof(UrlConverter))]
-        public Uri? Url { get => Get(() => _Url ??= default); set => Set(value, ref _Url); }
+        public Uri? Url { get => Get(() => _Url); set => Set(value, ref _Url); }
 
-        private string? _Profile = default;
+        private string? _Profile = null;
         /// <summary> Maps to 'profile' field in PocketBase </summary>
         [JsonPropertyName("profile")]
         [PocketBaseField(id: "oiphi3xd", name: "profile", required: false, system: false, unique: false, type: "text")]
         [Display(Name = "Profile")]
-        public string? Profile { get => Get(() => _Profile ??= default); set => Set(value, ref _Profile); }
+        public string? Profile { get => Get(() => _Profile); set => Set(value, ref _Profile); }
 
         #endregion Field Properties
 

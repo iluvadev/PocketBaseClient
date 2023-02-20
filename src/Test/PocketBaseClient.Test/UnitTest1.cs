@@ -33,14 +33,21 @@ namespace PocketBaseClient.Test
             var elem = col.GetById("kabksx32qx1qhd5");
             Debug.WriteLine(elem);
 
-            elem.FileSingleNoRestriction.SaveToLocalFileAsync(@"C:\Dev\img.png").Wait();
-            elem.FileSingleRestriction.Thumb100x100f.SaveToLocalFileAsync(@"C:\Dev\thumb100.png").Wait();
-            elem.FileSingleRestriction.LoadFromLocalFile(@"C:\Dev\TestImage.jpg");
+
+
+            //elem.FileSingleNoRestriction.SaveToLocalFileAsync(@"C:\Dev\img.png").Wait();
+            //elem.FileSingleRestriction.Thumb100x100f.SaveToLocalFileAsync(@"C:\Dev\thumb100.png").Wait();
+            //elem.FileSingleRestriction.LoadFromLocalFile(@"C:\Dev\TestImage.jpg");
+            //elem.FileSingleRestriction.Remove();
+            //elem.FileMultipleNoRestrictions.AddFromLocalFile(@"C:\Dev\TestImage.jpg");
+            elem.FileMultipleNoRestrictions.First().Remove();
+
             elem.Save();
-            using(var stream = elem.FileSingleRestriction.GetStreamAsync().Result)
-            {
-                Debug.WriteLine(stream);
-            }
+            Debug.WriteLine(elem.ToString());
+            //using(var stream = elem.FileSingleRestriction.GetStreamAsync().Result)
+            //{
+            //    Debug.WriteLine(stream);
+            //}
 
             //var element = col.First();//.GetById("kabksx32qx1qhd5");
             //var stream = element.FileSingleNoRestriction.GetStreamAsync().Result;

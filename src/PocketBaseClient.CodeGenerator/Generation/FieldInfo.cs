@@ -186,6 +186,15 @@ namespace PocketBaseClient.CodeGenerator.Generation
         }
 
         /// <summary>
+        /// Returns generated lines of code for extra Property definition for the field in the Item class
+        /// </summary>
+        /// <returns></returns>
+        protected virtual List<string> GetLinesForExtraPropertyDefinition()
+        {
+            return new();
+        }
+
+        /// <summary>
         /// Returns the generated code for the Property that represents the field in the Item class
         /// </summary>
         /// <param name="indent">The indentation for each line</param>
@@ -200,6 +209,8 @@ namespace PocketBaseClient.CodeGenerator.Generation
             foreach (var line in GetLinesForPropertyDecorators().Where(l => !string.IsNullOrEmpty(l)))
                 sb.AppendLine(indent + line);
             foreach (var line in GetLinesForPropertyDefinition().Where(l => !string.IsNullOrEmpty(l)))
+                sb.AppendLine(indent + line);
+            foreach (var line in GetLinesForExtraPropertyDefinition().Where(l => !string.IsNullOrEmpty(l)))
                 sb.AppendLine(indent + line);
 
             return sb.ToString();

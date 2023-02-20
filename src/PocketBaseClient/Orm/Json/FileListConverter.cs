@@ -20,7 +20,7 @@ namespace PocketBaseClient.Orm.Json
     /// <typeparam name="L">The type of the list</typeparam>
     /// <typeparam name="T">The mapped related type</typeparam>
     public class FileListConverter<L, T> : JsonConverter<L?>
-        where L : IBasicList<T>, new()
+        where L : FieldFileList<T>, new()
         where T : FieldFileBase, new()
     {
         /// <inheritdoc />
@@ -33,6 +33,7 @@ namespace PocketBaseClient.Orm.Json
             {
                 var value = new T() { FileName = str };
                 valueList.Add(value);
+                valueList.OriginalFileNames.Add(str);
             }
             return valueList;
         }

@@ -21,9 +21,7 @@ namespace PocketBaseClient.DemoTest.Models
 
             public FileMultipleNoRestrictionsList(TestForType? testForType) : base(testForType, "FileMultipleNoRestrictions", "mqokykua", 10) { }
 
-            //internal List<string> GetRemovedFileNames() => RemovedFileNames;
-
-            //internal List<string> GetAddedFileNames() => AddedFileNames;
+            internal List<string> GetRemovedFileNames() => RemovedFileNames;
         }
     }
 }

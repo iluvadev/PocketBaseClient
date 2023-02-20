@@ -32,14 +32,14 @@ namespace PocketBaseClient.DemoTest.Models
         #endregion Collection
 
         #region Field Properties
-        private float? _NumberUnique = default;
+        private float? _NumberUnique = null;
         /// <summary> Maps to 'number_unique' field in PocketBase </summary>
         [JsonPropertyName("number_unique")]
         [PocketBaseField(id: "s10g39sb", name: "number_unique", required: false, system: false, unique: true, type: "number")]
         [Display(Name = "Number unique")]
-        public float? NumberUnique { get => Get(() => _NumberUnique ??= default); set => Set(value, ref _NumberUnique); }
+        public float? NumberUnique { get => Get(() => _NumberUnique); set => Set(value, ref _NumberUnique); }
 
-        private float? _NumberNonempty = default;
+        private float? _NumberNonempty = null;
         /// <summary> Maps to 'number_nonempty' field in PocketBase </summary>
         [JsonPropertyName("number_nonempty")]
         [PocketBaseField(id: "iy8rrkm2", name: "number_nonempty", required: true, system: false, unique: false, type: "number")]
@@ -47,7 +47,7 @@ namespace PocketBaseClient.DemoTest.Models
         [Required(ErrorMessage = @"NumberNonempty is required")]
         public float NumberNonempty { get => Get(() => _NumberNonempty ??= default); set => Set(value, ref _NumberNonempty); }
 
-        private float? _NumberNonemptyUnique = default;
+        private float? _NumberNonemptyUnique = null;
         /// <summary> Maps to 'number_nonempty_unique' field in PocketBase </summary>
         [JsonPropertyName("number_nonempty_unique")]
         [PocketBaseField(id: "mmzxqln4", name: "number_nonempty_unique", required: true, system: false, unique: true, type: "number")]

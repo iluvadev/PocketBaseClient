@@ -32,14 +32,14 @@ namespace PocketBaseClient.DemoTest.Models
         #endregion Collection
 
         #region Field Properties
-        private string? _Name = default;
+        private string? _Name = null;
         /// <summary> Maps to 'name' field in PocketBase </summary>
         [JsonPropertyName("name")]
         [PocketBaseField(id: "users_name", name: "name", required: false, system: false, unique: false, type: "text")]
         [Display(Name = "Name")]
-        public string? Name { get => Get(() => _Name ??= default); set => Set(value, ref _Name); }
+        public string? Name { get => Get(() => _Name); set => Set(value, ref _Name); }
 
-        private AvatarFile? _Avatar = default;
+        private AvatarFile? _Avatar = null;
         /// <summary> Maps to 'avatar' field in PocketBase </summary>
         [JsonPropertyName("avatar")]
         [PocketBaseField(id: "users_avatar", name: "avatar", required: false, system: false, unique: false, type: "file")]
@@ -49,13 +49,13 @@ namespace PocketBaseClient.DemoTest.Models
         [JsonConverter(typeof(FileConverter<AvatarFile>))]
         public AvatarFile Avatar { get => Get(() => _Avatar ??= new AvatarFile(this)); private set => Set(value, ref _Avatar); }
 
-        private Uri? _Url = default;
+        private Uri? _Url = null;
         /// <summary> Maps to 'url' field in PocketBase </summary>
         [JsonPropertyName("url")]
         [PocketBaseField(id: "3wsfdiz3", name: "url", required: false, system: false, unique: false, type: "url")]
         [Display(Name = "Url")]
         [JsonConverter(typeof(UrlConverter))]
-        public Uri? Url { get => Get(() => _Url ??= default); set => Set(value, ref _Url); }
+        public Uri? Url { get => Get(() => _Url); set => Set(value, ref _Url); }
 
         #endregion Field Properties
 

@@ -32,122 +32,122 @@ namespace PocketBaseClient.DemoTest.Models
         #endregion Collection
 
         #region Field Properties
-        private string? _TextNoRestrictions = default;
+        private string? _TextNoRestrictions = null;
         /// <summary> Maps to 'text_no_restrictions' field in PocketBase </summary>
         [JsonPropertyName("text_no_restrictions")]
         [PocketBaseField(id: "kkyx3zk2", name: "text_no_restrictions", required: false, system: false, unique: false, type: "text")]
         [Display(Name = "Text no restrictions")]
-        public string? TextNoRestrictions { get => Get(() => _TextNoRestrictions ??= default); set => Set(value, ref _TextNoRestrictions); }
+        public string? TextNoRestrictions { get => Get(() => _TextNoRestrictions); set => Set(value, ref _TextNoRestrictions); }
 
-        private string? _TextRestrictions = default;
+        private string? _TextRestrictions = null;
         /// <summary> Maps to 'text_restrictions' field in PocketBase </summary>
         [JsonPropertyName("text_restrictions")]
         [PocketBaseField(id: "sgd9bm7z", name: "text_restrictions", required: false, system: false, unique: false, type: "text")]
         [Display(Name = "Text restrictions")]
         [StringLength(15, MinimumLength = 5, ErrorMessage = "Minimum 5, Maximum 15 characters")]
         [RegularExpression(@"^\w+$", ErrorMessage = @"Pattern '^\w+$' not match")]
-        public string? TextRestrictions { get => Get(() => _TextRestrictions ??= default); set => Set(value, ref _TextRestrictions); }
+        public string? TextRestrictions { get => Get(() => _TextRestrictions); set => Set(value, ref _TextRestrictions); }
 
-        private float? _NumberNoRestrictions = default;
+        private float? _NumberNoRestrictions = null;
         /// <summary> Maps to 'number_no_restrictions' field in PocketBase </summary>
         [JsonPropertyName("number_no_restrictions")]
         [PocketBaseField(id: "zasulmy0", name: "number_no_restrictions", required: false, system: false, unique: false, type: "number")]
         [Display(Name = "Number no restrictions")]
-        public float? NumberNoRestrictions { get => Get(() => _NumberNoRestrictions ??= default); set => Set(value, ref _NumberNoRestrictions); }
+        public float? NumberNoRestrictions { get => Get(() => _NumberNoRestrictions); set => Set(value, ref _NumberNoRestrictions); }
 
-        private float? _NumberRestrictions = default;
+        private float? _NumberRestrictions = null;
         /// <summary> Maps to 'number_restrictions' field in PocketBase </summary>
         [JsonPropertyName("number_restrictions")]
         [PocketBaseField(id: "xsz2augn", name: "number_restrictions", required: false, system: false, unique: false, type: "number")]
         [Display(Name = "Number restrictions")]
         [Range(0, 10, ErrorMessage = "Minimum 0, Maximum 10")]
-        public float? NumberRestrictions { get => Get(() => _NumberRestrictions ??= default); set => Set(value, ref _NumberRestrictions); }
+        public float? NumberRestrictions { get => Get(() => _NumberRestrictions); set => Set(value, ref _NumberRestrictions); }
 
-        private bool? _Bool = default;
+        private bool? _Bool = null;
         /// <summary> Maps to 'bool' field in PocketBase </summary>
         [JsonPropertyName("bool")]
         [PocketBaseField(id: "vo8jeqfr", name: "bool", required: false, system: false, unique: false, type: "bool")]
         [Display(Name = "Bool")]
-        public bool? Bool { get => Get(() => _Bool ??= default); set => Set(value, ref _Bool); }
+        public bool? Bool { get => Get(() => _Bool); set => Set(value, ref _Bool); }
 
-        private MailAddress? _EmailNoRestrictions = default;
+        private MailAddress? _EmailNoRestrictions = null;
         /// <summary> Maps to 'email_no_restrictions' field in PocketBase </summary>
         [JsonPropertyName("email_no_restrictions")]
         [PocketBaseField(id: "dfc3hzbp", name: "email_no_restrictions", required: false, system: false, unique: false, type: "email")]
         [Display(Name = "Email no restrictions")]
         [JsonConverter(typeof(EmailConverter))]
-        public MailAddress? EmailNoRestrictions { get => Get(() => _EmailNoRestrictions ??= default); set => Set(value, ref _EmailNoRestrictions); }
+        public MailAddress? EmailNoRestrictions { get => Get(() => _EmailNoRestrictions); set => Set(value, ref _EmailNoRestrictions); }
 
-        private MailAddress? _EmailRestrictionsExcept = default;
+        private MailAddress? _EmailRestrictionsExcept = null;
         /// <summary> Maps to 'email_restrictions_except' field in PocketBase </summary>
         [JsonPropertyName("email_restrictions_except")]
         [PocketBaseField(id: "hea5cksh", name: "email_restrictions_except", required: false, system: false, unique: false, type: "email")]
         [Display(Name = "Email restrictions except")]
         [ExceptDomains("gmail.com,hotmail.com", ErrorMessage = "Except domains accepted: 'gmail.com,hotmail.com'")]
         [JsonConverter(typeof(EmailConverter))]
-        public MailAddress? EmailRestrictionsExcept { get => Get(() => _EmailRestrictionsExcept ??= default); set => Set(value, ref _EmailRestrictionsExcept); }
+        public MailAddress? EmailRestrictionsExcept { get => Get(() => _EmailRestrictionsExcept); set => Set(value, ref _EmailRestrictionsExcept); }
 
-        private MailAddress? _EmailRestrictionsOnly = default;
+        private MailAddress? _EmailRestrictionsOnly = null;
         /// <summary> Maps to 'email_restrictions_only' field in PocketBase </summary>
         [JsonPropertyName("email_restrictions_only")]
         [PocketBaseField(id: "ddvywcfc", name: "email_restrictions_only", required: false, system: false, unique: false, type: "email")]
         [Display(Name = "Email restrictions only")]
         [OnlyDomains("pockethost.io", ErrorMessage = "Only domains accepted: 'pockethost.io'")]
         [JsonConverter(typeof(EmailConverter))]
-        public MailAddress? EmailRestrictionsOnly { get => Get(() => _EmailRestrictionsOnly ??= default); set => Set(value, ref _EmailRestrictionsOnly); }
+        public MailAddress? EmailRestrictionsOnly { get => Get(() => _EmailRestrictionsOnly); set => Set(value, ref _EmailRestrictionsOnly); }
 
-        private Uri? _UrlNoRestrictions = default;
+        private Uri? _UrlNoRestrictions = null;
         /// <summary> Maps to 'url_no_restrictions' field in PocketBase </summary>
         [JsonPropertyName("url_no_restrictions")]
         [PocketBaseField(id: "n11oh0zk", name: "url_no_restrictions", required: false, system: false, unique: false, type: "url")]
         [Display(Name = "Url no restrictions")]
         [JsonConverter(typeof(UrlConverter))]
-        public Uri? UrlNoRestrictions { get => Get(() => _UrlNoRestrictions ??= default); set => Set(value, ref _UrlNoRestrictions); }
+        public Uri? UrlNoRestrictions { get => Get(() => _UrlNoRestrictions); set => Set(value, ref _UrlNoRestrictions); }
 
-        private Uri? _UrlRestrictionsExcept = default;
+        private Uri? _UrlRestrictionsExcept = null;
         /// <summary> Maps to 'url_restrictions_except' field in PocketBase </summary>
         [JsonPropertyName("url_restrictions_except")]
         [PocketBaseField(id: "gimszuxa", name: "url_restrictions_except", required: false, system: false, unique: false, type: "url")]
         [Display(Name = "Url restrictions except")]
         [ExceptDomains("google.com", ErrorMessage = "Except domains accepted: 'google.com'")]
         [JsonConverter(typeof(UrlConverter))]
-        public Uri? UrlRestrictionsExcept { get => Get(() => _UrlRestrictionsExcept ??= default); set => Set(value, ref _UrlRestrictionsExcept); }
+        public Uri? UrlRestrictionsExcept { get => Get(() => _UrlRestrictionsExcept); set => Set(value, ref _UrlRestrictionsExcept); }
 
-        private Uri? _UrlRestrictionsOnly = default;
+        private Uri? _UrlRestrictionsOnly = null;
         /// <summary> Maps to 'url_restrictions_only' field in PocketBase </summary>
         [JsonPropertyName("url_restrictions_only")]
         [PocketBaseField(id: "pntohkfm", name: "url_restrictions_only", required: false, system: false, unique: false, type: "url")]
         [Display(Name = "Url restrictions only")]
         [OnlyDomains("pockethost.io", ErrorMessage = "Only domains accepted: 'pockethost.io'")]
         [JsonConverter(typeof(UrlConverter))]
-        public Uri? UrlRestrictionsOnly { get => Get(() => _UrlRestrictionsOnly ??= default); set => Set(value, ref _UrlRestrictionsOnly); }
+        public Uri? UrlRestrictionsOnly { get => Get(() => _UrlRestrictionsOnly); set => Set(value, ref _UrlRestrictionsOnly); }
 
-        private DateTime? _DatetimeNoRestrictions = default;
+        private DateTime? _DatetimeNoRestrictions = null;
         /// <summary> Maps to 'datetime_no_restrictions' field in PocketBase </summary>
         [JsonPropertyName("datetime_no_restrictions")]
         [PocketBaseField(id: "why1vezh", name: "datetime_no_restrictions", required: false, system: false, unique: false, type: "date")]
         [Display(Name = "Datetime no restrictions")]
         [JsonConverter(typeof(DateTimeConverter))]
-        public DateTime? DatetimeNoRestrictions { get => Get(() => _DatetimeNoRestrictions ??= default); set => Set(value, ref _DatetimeNoRestrictions); }
+        public DateTime? DatetimeNoRestrictions { get => Get(() => _DatetimeNoRestrictions); set => Set(value, ref _DatetimeNoRestrictions); }
 
-        private DateTime? _DatetimeRestrictions = default;
+        private DateTime? _DatetimeRestrictions = null;
         /// <summary> Maps to 'datetime_restrictions' field in PocketBase </summary>
         [JsonPropertyName("datetime_restrictions")]
         [PocketBaseField(id: "xsnujvoc", name: "datetime_restrictions", required: false, system: false, unique: false, type: "date")]
         [Display(Name = "Datetime restrictions")]
         [Range(typeof(DateTime), "1/11/2022 13:00:00", "31/12/9999 22:59:59", ErrorMessage = "Minimum '1/11/2022 13:00:00', Maximum '31/12/9999 22:59:59'")]
         [JsonConverter(typeof(DateTimeConverter))]
-        public DateTime? DatetimeRestrictions { get => Get(() => _DatetimeRestrictions ??= default); set => Set(value, ref _DatetimeRestrictions); }
+        public DateTime? DatetimeRestrictions { get => Get(() => _DatetimeRestrictions); set => Set(value, ref _DatetimeRestrictions); }
 
-        private SelectSingleEnum? _SelectSingle = default;
+        private SelectSingleEnum? _SelectSingle = null;
         /// <summary> Maps to 'select_single' field in PocketBase </summary>
         [JsonPropertyName("select_single")]
         [PocketBaseField(id: "uiv0j5vw", name: "select_single", required: false, system: false, unique: false, type: "select")]
         [Display(Name = "Select single")]
         [JsonConverter(typeof(EnumConverter<SelectSingleEnum>))]
-        public SelectSingleEnum? SelectSingle { get => Get(() => _SelectSingle ??= default); set => Set(value, ref _SelectSingle); }
+        public SelectSingleEnum? SelectSingle { get => Get(() => _SelectSingle); set => Set(value, ref _SelectSingle); }
 
-        private SelectMultipleList? _SelectMultiple = default;
+        private SelectMultipleList? _SelectMultiple = null;
         /// <summary> Maps to 'select_multiple' field in PocketBase </summary>
         [JsonPropertyName("select_multiple")]
         [PocketBaseField(id: "8dks1xfy", name: "select_multiple", required: false, system: false, unique: false, type: "select")]
@@ -156,14 +156,14 @@ namespace PocketBaseClient.DemoTest.Models
         [JsonConverter(typeof(EnumListConverter<SelectMultipleList, SelectMultipleEnum>))]
         public SelectMultipleList SelectMultiple { get => Get(() => _SelectMultiple ??= new SelectMultipleList(this)); private set => Set(value, ref _SelectMultiple); }
 
-        private dynamic? _Json = default;
+        private dynamic? _Json = null;
         /// <summary> Maps to 'json' field in PocketBase </summary>
         [JsonPropertyName("json")]
         [PocketBaseField(id: "hmr5iih4", name: "json", required: false, system: false, unique: false, type: "json")]
         [Display(Name = "Json")]
-        public dynamic? Json { get => Get(() => _Json ??= default); set => Set(value, ref _Json); }
+        public dynamic? Json { get => Get(() => _Json); set => Set(value, ref _Json); }
 
-        private FileSingleNoRestrictionFile? _FileSingleNoRestriction = default;
+        private FileSingleNoRestrictionFile? _FileSingleNoRestriction = null;
         /// <summary> Maps to 'file_single_no_restriction' field in PocketBase </summary>
         [JsonPropertyName("file_single_no_restriction")]
         [PocketBaseField(id: "mpnfu1ph", name: "file_single_no_restriction", required: false, system: false, unique: false, type: "file")]
@@ -172,7 +172,7 @@ namespace PocketBaseClient.DemoTest.Models
         [JsonConverter(typeof(FileConverter<FileSingleNoRestrictionFile>))]
         public FileSingleNoRestrictionFile FileSingleNoRestriction { get => Get(() => _FileSingleNoRestriction ??= new FileSingleNoRestrictionFile(this)); private set => Set(value, ref _FileSingleNoRestriction); }
 
-        private FileSingleRestrictionFile? _FileSingleRestriction = default;
+        private FileSingleRestrictionFile? _FileSingleRestriction = null;
         /// <summary> Maps to 'file_single_restriction' field in PocketBase </summary>
         [JsonPropertyName("file_single_restriction")]
         [PocketBaseField(id: "cn4tglcr", name: "file_single_restriction", required: false, system: false, unique: false, type: "file")]
@@ -182,7 +182,7 @@ namespace PocketBaseClient.DemoTest.Models
         [JsonConverter(typeof(FileConverter<FileSingleRestrictionFile>))]
         public FileSingleRestrictionFile FileSingleRestriction { get => Get(() => _FileSingleRestriction ??= new FileSingleRestrictionFile(this)); private set => Set(value, ref _FileSingleRestriction); }
 
-        private FileMultipleNoRestrictionsList? _FileMultipleNoRestrictions = default;
+        private FileMultipleNoRestrictionsList? _FileMultipleNoRestrictions = null;
         /// <summary> Maps to 'file_multiple_no_restrictions' field in PocketBase </summary>
         [JsonPropertyName("file_multiple_no_restrictions")]
         [PocketBaseField(id: "mqokykua", name: "file_multiple_no_restrictions", required: false, system: false, unique: false, type: "file")]
@@ -190,8 +190,11 @@ namespace PocketBaseClient.DemoTest.Models
         [JsonInclude]
         [JsonConverter(typeof(FileListConverter<FileMultipleNoRestrictionsList, FileMultipleNoRestrictionsFile>))]
         public FileMultipleNoRestrictionsList FileMultipleNoRestrictions { get => Get(() => _FileMultipleNoRestrictions ??= new FileMultipleNoRestrictionsList(this)); private set => Set(value, ref _FileMultipleNoRestrictions); }
+        [JsonPropertyName("file_multiple_no_restrictions-")]
+        [JsonInclude]
+        public List<string> FileMultipleNoRestrictions_RemovedFileNames => FileMultipleNoRestrictions.GetRemovedFileNames();
 
-        private FileMultipleRestrictionsList? _FileMultipleRestrictions = default;
+        private FileMultipleRestrictionsList? _FileMultipleRestrictions = null;
         /// <summary> Maps to 'file_multiple_restrictions' field in PocketBase </summary>
         [JsonPropertyName("file_multiple_restrictions")]
         [PocketBaseField(id: "o4hs5o8n", name: "file_multiple_restrictions", required: false, system: false, unique: false, type: "file")]
@@ -200,16 +203,19 @@ namespace PocketBaseClient.DemoTest.Models
         [MimeTypes("image/jpg,image/jpeg,image/png,image/svg+xml,image/gif", ErrorMessage = "Only MIME Types accepted: 'image/jpg,image/jpeg,image/png,image/svg+xml,image/gif'")]
         [JsonConverter(typeof(FileListConverter<FileMultipleRestrictionsList, FileMultipleRestrictionsFile>))]
         public FileMultipleRestrictionsList FileMultipleRestrictions { get => Get(() => _FileMultipleRestrictions ??= new FileMultipleRestrictionsList(this)); private set => Set(value, ref _FileMultipleRestrictions); }
+        [JsonPropertyName("file_multiple_restrictions-")]
+        [JsonInclude]
+        public List<string> FileMultipleRestrictions_RemovedFileNames => FileMultipleRestrictions.GetRemovedFileNames();
 
-        private TestForRelated? _ReationSingle = default;
+        private TestForRelated? _ReationSingle = null;
         /// <summary> Maps to 'reation_single' field in PocketBase </summary>
         [JsonPropertyName("reation_single")]
         [PocketBaseField(id: "7q0qviac", name: "reation_single", required: false, system: false, unique: false, type: "relation")]
         [Display(Name = "Reation single")]
         [JsonConverter(typeof(RelationConverter<TestForRelated>))]
-        public TestForRelated? ReationSingle { get => Get(() => _ReationSingle ??= default); set => Set(value, ref _ReationSingle); }
+        public TestForRelated? ReationSingle { get => Get(() => _ReationSingle); set => Set(value, ref _ReationSingle); }
 
-        private RelationMultipleNoLimitList? _RelationMultipleNoLimit = default;
+        private RelationMultipleNoLimitList? _RelationMultipleNoLimit = null;
         /// <summary> Maps to 'relation_multiple_no_limit' field in PocketBase </summary>
         [JsonPropertyName("relation_multiple_no_limit")]
         [PocketBaseField(id: "a4chtr6c", name: "relation_multiple_no_limit", required: false, system: false, unique: false, type: "relation")]
@@ -218,7 +224,7 @@ namespace PocketBaseClient.DemoTest.Models
         [JsonConverter(typeof(RelationListConverter<RelationMultipleNoLimitList, TestForRelated>))]
         public RelationMultipleNoLimitList RelationMultipleNoLimit { get => Get(() => _RelationMultipleNoLimit ??= new RelationMultipleNoLimitList(this)); private set => Set(value, ref _RelationMultipleNoLimit); }
 
-        private RelationMultipleLimitList? _RelationMultipleLimit = default;
+        private RelationMultipleLimitList? _RelationMultipleLimit = null;
         /// <summary> Maps to 'relation_multiple_limit' field in PocketBase </summary>
         [JsonPropertyName("relation_multiple_limit")]
         [PocketBaseField(id: "otxwaoam", name: "relation_multiple_limit", required: false, system: false, unique: false, type: "relation")]
