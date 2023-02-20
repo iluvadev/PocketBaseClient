@@ -39,7 +39,7 @@ namespace PocketBaseClient.DemoTest.Models
         [Display(Name = "Title")]
         [Required(ErrorMessage = @"Title is required")]
         [StringLength(2147483647, MinimumLength = 5, ErrorMessage = "Minimum 5, Maximum 2147483647 characters")]
-        public string? Title { get => Get(() => _Title); set => Set(value, ref _Title); }
+        public string Title { get => Get(() => _Title ??= string.Empty); set => Set(value, ref _Title); }
 
         private Author? _Author = null;
         /// <summary> Maps to 'author' field in PocketBase </summary>
@@ -80,7 +80,7 @@ namespace PocketBaseClient.DemoTest.Models
         [JsonConverter(typeof(EnumConverter<StatusEnum>))]
         public StatusEnum? Status { get => Get(() => _Status); set => Set(value, ref _Status); }
 
-        private CategoriesList _Categories = new CategoriesList();
+        private CategoriesList? _Categories = null;
         /// <summary> Maps to 'categories' field in PocketBase </summary>
         [JsonPropertyName("categories")]
         [PocketBaseField(id: "2ftkqyzs", name: "categories", required: false, system: false, unique: false, type: "relation")]
@@ -89,7 +89,7 @@ namespace PocketBaseClient.DemoTest.Models
         [JsonConverter(typeof(RelationListConverter<CategoriesList, Category>))]
         public CategoriesList Categories { get => Get(() => _Categories ??= new CategoriesList(this)); private set => Set(value, ref _Categories); }
 
-        private TagsList _Tags = new TagsList();
+        private TagsList? _Tags = null;
         /// <summary> Maps to 'tags' field in PocketBase </summary>
         [JsonPropertyName("tags")]
         [PocketBaseField(id: "vqnnjaiq", name: "tags", required: false, system: false, unique: false, type: "relation")]
@@ -129,7 +129,7 @@ namespace PocketBaseClient.DemoTest.Models
         }
 
         [JsonConstructor]
-        public Post(string? id, DateTime? created, DateTime? updated, string? @title, Author? @author, string? @summary, string? @content, DateTime? @published, StatusEnum? @status, CategoriesList @categories, TagsList @tags)
+        public Post(string? id, DateTime? created, DateTime? updated, string @title, Author? @author, string? @summary, string? @content, DateTime? @published, StatusEnum? @status, CategoriesList @categories, TagsList @tags)
             : base(id, created, updated)
         {
             this.Title = @title;

@@ -31,7 +31,7 @@ namespace PocketBaseClient.CodeGenerator
             var app = new PocketBaseClientApplication(url.ToString());
 
             ConsoleHelper.WriteProcess($"Connecting to {url} with Admin {email}");
-            var admin = await app.Auth.Admin.AuthenticateWithPassword(email, pwd);
+            var admin = await app.Auth.Admin.AuthenticateWithPasswordAsync(email, pwd);
             if (string.IsNullOrEmpty(admin?.Token))
             {
                 ConsoleHelper.WriteError($"Failed to connect to {url} with Admin {email} credentials");

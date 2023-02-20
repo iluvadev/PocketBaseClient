@@ -26,7 +26,7 @@
 
 Code generated with:
     PocketBaseClient CodeGenerator: pbcodegen v.0.6.1.0
-    At: 2023-02-07T17:38:45.7057739Z
+    At: 2023-02-20T16:00:30.7513240Z
 
 PocketBase Application: 
     Name: demo-test
@@ -61,6 +61,12 @@ Files Generated:
     C:\Dev\iluvadev\projects\PocketBaseClient-csharp\src\Test\PocketBaseClient.DemoTest\Models\TestForRelated.Filters.cs
     C:\Dev\iluvadev\projects\PocketBaseClient-csharp\src\Test\PocketBaseClient.DemoTest\Models\TestForRelated.Sorts.cs
     C:\Dev\iluvadev\projects\PocketBaseClient-csharp\src\Test\PocketBaseClient.DemoTest\Models\TestForType.cs
+    C:\Dev\iluvadev\projects\PocketBaseClient-csharp\src\Test\PocketBaseClient.DemoTest\Models\TestForType.FileMultipleNoRestrictionsFile.cs
+    C:\Dev\iluvadev\projects\PocketBaseClient-csharp\src\Test\PocketBaseClient.DemoTest\Models\TestForType.FileMultipleNoRestrictionsList.cs
+    C:\Dev\iluvadev\projects\PocketBaseClient-csharp\src\Test\PocketBaseClient.DemoTest\Models\TestForType.FileMultipleRestrictionsFile.cs
+    C:\Dev\iluvadev\projects\PocketBaseClient-csharp\src\Test\PocketBaseClient.DemoTest\Models\TestForType.FileMultipleRestrictionsList.cs
+    C:\Dev\iluvadev\projects\PocketBaseClient-csharp\src\Test\PocketBaseClient.DemoTest\Models\TestForType.FileSingleNoRestrictionFile.cs
+    C:\Dev\iluvadev\projects\PocketBaseClient-csharp\src\Test\PocketBaseClient.DemoTest\Models\TestForType.FileSingleRestrictionFile.cs
     C:\Dev\iluvadev\projects\PocketBaseClient-csharp\src\Test\PocketBaseClient.DemoTest\Models\TestForType.Filters.cs
     C:\Dev\iluvadev\projects\PocketBaseClient-csharp\src\Test\PocketBaseClient.DemoTest\Models\TestForType.RelationMultipleLimitList.cs
     C:\Dev\iluvadev\projects\PocketBaseClient-csharp\src\Test\PocketBaseClient.DemoTest\Models\TestForType.RelationMultipleNoLimitList.cs
@@ -68,6 +74,7 @@ Files Generated:
     C:\Dev\iluvadev\projects\PocketBaseClient-csharp\src\Test\PocketBaseClient.DemoTest\Models\TestForType.SelectMultipleList.cs
     C:\Dev\iluvadev\projects\PocketBaseClient-csharp\src\Test\PocketBaseClient.DemoTest\Models\TestForType.SelectSingleEnum.cs
     C:\Dev\iluvadev\projects\PocketBaseClient-csharp\src\Test\PocketBaseClient.DemoTest\Models\TestForType.Sorts.cs
+    C:\Dev\iluvadev\projects\PocketBaseClient-csharp\src\Test\PocketBaseClient.DemoTest\Models\User.AvatarFile.cs
     C:\Dev\iluvadev\projects\PocketBaseClient-csharp\src\Test\PocketBaseClient.DemoTest\Models\User.cs
     C:\Dev\iluvadev\projects\PocketBaseClient-csharp\src\Test\PocketBaseClient.DemoTest\Models\User.Filters.cs
     C:\Dev\iluvadev\projects\PocketBaseClient-csharp\src\Test\PocketBaseClient.DemoTest\Models\User.Sorts.cs

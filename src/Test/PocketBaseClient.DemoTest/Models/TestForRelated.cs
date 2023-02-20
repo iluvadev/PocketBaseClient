@@ -45,7 +45,7 @@ namespace PocketBaseClient.DemoTest.Models
         [PocketBaseField(id: "iy8rrkm2", name: "number_nonempty", required: true, system: false, unique: false, type: "number")]
         [Display(Name = "Number nonempty")]
         [Required(ErrorMessage = @"NumberNonempty is required")]
-        public float? NumberNonempty { get => Get(() => _NumberNonempty); set => Set(value, ref _NumberNonempty); }
+        public float NumberNonempty { get => Get(() => _NumberNonempty ??= default); set => Set(value, ref _NumberNonempty); }
 
         private float? _NumberNonemptyUnique = null;
         /// <summary> Maps to 'number_nonempty_unique' field in PocketBase </summary>
@@ -53,7 +53,7 @@ namespace PocketBaseClient.DemoTest.Models
         [PocketBaseField(id: "mmzxqln4", name: "number_nonempty_unique", required: true, system: false, unique: true, type: "number")]
         [Display(Name = "Number nonempty unique")]
         [Required(ErrorMessage = @"NumberNonemptyUnique is required")]
-        public float? NumberNonemptyUnique { get => Get(() => _NumberNonemptyUnique); set => Set(value, ref _NumberNonemptyUnique); }
+        public float NumberNonemptyUnique { get => Get(() => _NumberNonemptyUnique ??= default); set => Set(value, ref _NumberNonemptyUnique); }
 
         #endregion Field Properties
 
@@ -81,7 +81,7 @@ namespace PocketBaseClient.DemoTest.Models
         }
 
         [JsonConstructor]
-        public TestForRelated(string? id, DateTime? created, DateTime? updated, float? @numberUnique, float? @numberNonempty, float? @numberNonemptyUnique)
+        public TestForRelated(string? id, DateTime? created, DateTime? updated, float? @numberUnique, float @numberNonempty, float @numberNonemptyUnique)
             : base(id, created, updated)
         {
             this.NumberUnique = @numberUnique;

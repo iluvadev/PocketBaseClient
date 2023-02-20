@@ -25,7 +25,7 @@ namespace PocketBaseClient.CodeGenerator.Generation
         private PocketBaseFieldOptionsDatetime Options { get; }
 
         /// <inheritdoc />
-        public override string TypeName => "DateTime?";
+        public override string TypeName => "DateTime";
 
         /// <inheritdoc />
         public override string FilterType => "FieldFilterDate";

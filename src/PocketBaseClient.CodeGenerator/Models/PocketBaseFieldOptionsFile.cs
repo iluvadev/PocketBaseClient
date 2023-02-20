@@ -22,22 +22,42 @@ namespace PocketBaseClient.CodeGenerator.Models
         /// </summary>
         [JsonPropertyName("maxSelect")]
         public int? MaxSelect { get; set; }
-        /// <summary>
-        /// Says if the field has only one element
-        /// </summary>
-        public bool IsSinglSelect => (MaxSelect ?? 1) == 1;
 
         /// <summary>
-        /// Max size of the files
+        /// Says if the field can contain multiple values
+        /// </summary>
+        [JsonIgnore]
+        public bool IsMultiple => MaxSelect == null || MaxSelect > 1;
+
+        /// <summary>
+        /// Max size of the files (in Bytes)
         /// </summary>
         [JsonPropertyName("maxSize")]
         public long? MaxSize { get; set; }
+
+        /// <summary>
+        /// Says if all defined MimeTypes are image types
+        /// </summary>
+        [JsonIgnore]
+        public bool IsImage => MimeTypes?.All(m => m.Split('/')[0] == "image") ?? false;
 
         /// <summary>
         /// Mimetypes accepted
         /// </summary>
         [JsonPropertyName("mimeTypes")]
         public List<string>? MimeTypes { get; set; }
+
+        /// <summary>
+        /// MimeTypes accepted as string joined by ','
+        /// </summary>
+        [JsonIgnore]
+        public string MimeTypesJoined => (MimeTypes?.Any() ?? false) ? string.Join(',', MimeTypes) : string.Empty;
+        
+        /// <summary>
+        /// Says if has Thumbs defined
+        /// </summary>
+        [JsonIgnore]
+        public bool HasThumbs => Thumbs?.Any() ?? false;
 
         /// <summary>
         /// Thumbs accepted

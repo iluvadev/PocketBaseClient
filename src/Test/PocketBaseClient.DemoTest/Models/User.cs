@@ -39,12 +39,15 @@ namespace PocketBaseClient.DemoTest.Models
         [Display(Name = "Name")]
         public string? Name { get => Get(() => _Name); set => Set(value, ref _Name); }
 
-        private object? _Avatar = null;
+        private AvatarFile? _Avatar = null;
         /// <summary> Maps to 'avatar' field in PocketBase </summary>
         [JsonPropertyName("avatar")]
         [PocketBaseField(id: "users_avatar", name: "avatar", required: false, system: false, unique: false, type: "file")]
         [Display(Name = "Avatar")]
-        public object? Avatar { get => Get(() => _Avatar); set => Set(value, ref _Avatar); }
+        [JsonInclude]
+        [MimeTypes("image/jpg,image/jpeg,image/png,image/svg+xml,image/gif", ErrorMessage = "Only MIME Types accepted: 'image/jpg,image/jpeg,image/png,image/svg+xml,image/gif'")]
+        [JsonConverter(typeof(FileConverter<AvatarFile>))]
+        public AvatarFile Avatar { get => Get(() => _Avatar ??= new AvatarFile(this)); private set => Set(value, ref _Avatar); }
 
         private Uri? _Url = null;
         /// <summary> Maps to 'url' field in PocketBase </summary>
@@ -80,7 +83,7 @@ namespace PocketBaseClient.DemoTest.Models
         }
 
         [JsonConstructor]
-        public User(string? id, DateTime? created, DateTime? updated, string? @name, object? @avatar, Uri? @url)
+        public User(string? id, DateTime? created, DateTime? updated, string? @name, AvatarFile @avatar, Uri? @url)
             : base(id, created, updated)
         {
             this.Name = @name;
@@ -90,6 +93,10 @@ namespace PocketBaseClient.DemoTest.Models
             AddInternal(this);
         }
         #endregion
+
+        /// <inheritdoc />
+        protected override IEnumerable<FieldFileBase?> RelatedFiles 
+            => base.RelatedFiles.Union(new List<FieldFileBase?>() { Avatar });
 
         #region Collection
         public static CollectionUsers GetCollection() 

@@ -14,11 +14,13 @@
       "Updated": "26/12/2022 19:48:14",
       "Name": "users",
       "System": false,
+      "Type": null,
       "ListRule": "id = @request.auth.id",
       "ViewRule": "id = @request.auth.id",
       "CreateRule": "",
       "UpdateRule": "id = @request.auth.id",
       "DeleteRule": "id = @request.auth.id",
+      "Options": null,
       "Schema": [
         {
           "Id": "users_name",
@@ -73,11 +75,13 @@
       "Updated": "31/12/2022 12:17:42",
       "Name": "test_for_types",
       "System": false,
+      "Type": null,
       "ListRule": "",
       "ViewRule": "",
       "CreateRule": null,
       "UpdateRule": null,
       "DeleteRule": null,
+      "Options": null,
       "Schema": [
         {
           "Id": "kkyx3zk2",
@@ -417,11 +421,13 @@
       "Updated": "26/12/2022 19:48:14",
       "Name": "test_for_related",
       "System": false,
+      "Type": null,
       "ListRule": null,
       "ViewRule": null,
       "CreateRule": null,
       "UpdateRule": null,
       "DeleteRule": null,
+      "Options": null,
       "Schema": [
         {
           "Id": "s10g39sb",
@@ -467,11 +473,13 @@
       "Updated": "26/12/2022 19:48:14",
       "Name": "posts",
       "System": false,
+      "Type": null,
       "ListRule": "",
       "ViewRule": "",
       "CreateRule": "",
       "UpdateRule": "",
       "DeleteRule": "",
+      "Options": null,
       "Schema": [
         {
           "Id": "eqr6uyuh",
@@ -589,11 +597,13 @@
       "Updated": "26/12/2022 19:48:14",
       "Name": "authors",
       "System": false,
+      "Type": null,
       "ListRule": "",
       "ViewRule": "",
       "CreateRule": "",
       "UpdateRule": "",
       "DeleteRule": "",
+      "Options": null,
       "Schema": [
         {
           "Id": "vxfcwb67",
@@ -653,11 +663,13 @@
       "Updated": "26/12/2022 19:48:14",
       "Name": "categories",
       "System": false,
+      "Type": null,
       "ListRule": "",
       "ViewRule": "",
       "CreateRule": "",
       "UpdateRule": "",
       "DeleteRule": "",
+      "Options": null,
       "Schema": [
         {
           "Id": "p221scv1",
@@ -680,11 +692,13 @@
       "Updated": "26/12/2022 19:48:14",
       "Name": "tags",
       "System": false,
+      "Type": null,
       "ListRule": "",
       "ViewRule": "",
       "CreateRule": "",
       "UpdateRule": "",
       "DeleteRule": "",
+      "Options": null,
       "Schema": [
         {
           "Id": "jdukbual",

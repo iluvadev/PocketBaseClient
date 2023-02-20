@@ -20,5 +20,12 @@ namespace PocketBaseClient.Orm.Structures
         /// The Owner 
         /// </summary>
         ItemBase? Owner { get; set; }
+
+        /// <summary>
+        /// Notifies a modification of the field to the Owner
+        /// </summary>
+        void NotifyModificationToOwner()
+            //=> Owner?.SetPropertyModified(Name);
+            => Owner?.SetModified();
     }
 }

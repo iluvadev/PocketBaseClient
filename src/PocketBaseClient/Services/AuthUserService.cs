@@ -49,7 +49,7 @@ namespace PocketBaseClient.Services
         /// <param name="password"></param>
         /// <returns></returns>
         public async Task<UserAuthModel?> AuthenticateWithPasswordAsync(string email, string password)
-            => await App.Sdk.User.AuthenticateWithPassword(email, password);
+            => await App.Sdk.User.AuthenticateWithPasswordAsync(email, password);
 
         /// <summary>
         /// Authenticate an User with OAuth2 provider
@@ -60,7 +60,7 @@ namespace PocketBaseClient.Services
         /// <param name="redirectUrl"></param>
         /// <returns></returns>
         public async Task<UserAuthModel?> AuthenticateViaOAuth2Async(string provider, string code, string codeVerifier, string redirectUrl)
-            => await App.Sdk.User.AuthenticateViaOAuth2(provider, code, codeVerifier, redirectUrl);
+            => await App.Sdk.User.AuthenticateViaOAuth2Async(provider, code, codeVerifier, redirectUrl);
 
         /// <summary>
         /// Refresh User Authentication information

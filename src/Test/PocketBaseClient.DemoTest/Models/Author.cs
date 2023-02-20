@@ -38,7 +38,7 @@ namespace PocketBaseClient.DemoTest.Models
         [PocketBaseField(id: "vxfcwb67", name: "name", required: true, system: false, unique: false, type: "text")]
         [Display(Name = "Name")]
         [Required(ErrorMessage = @"Name is required")]
-        public string? Name { get => Get(() => _Name); set => Set(value, ref _Name); }
+        public string Name { get => Get(() => _Name ??= string.Empty); set => Set(value, ref _Name); }
 
         private MailAddress? _Email = null;
         /// <summary> Maps to 'email' field in PocketBase </summary>
@@ -90,7 +90,7 @@ namespace PocketBaseClient.DemoTest.Models
         }
 
         [JsonConstructor]
-        public Author(string? id, DateTime? created, DateTime? updated, string? @name, MailAddress? @email, Uri? @url, string? @profile)
+        public Author(string? id, DateTime? created, DateTime? updated, string @name, MailAddress? @email, Uri? @url, string? @profile)
             : base(id, created, updated)
         {
             this.Name = @name;

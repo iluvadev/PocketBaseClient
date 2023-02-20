@@ -9,11 +9,8 @@
 // pocketbase project: https://github.com/pocketbase/pocketbase
 
 using pocketbase_csharp_sdk;
-using pocketbase_csharp_sdk.Event;
 using pocketbase_csharp_sdk.Models;
-using pocketbase_csharp_sdk.Models.Files;
-using System.Net.Http;
-using System.Net.Http.Json;
+using PocketBaseClient.Orm;
 using System.Text.Json;
 
 namespace PocketBaseClient
@@ -23,91 +20,6 @@ namespace PocketBaseClient
     /// </summary>
     public static class PocketBaseExtensions
     {
-        #region Sync
-        private static HttpClient? _HttpClient = null;
-        private static HttpClient HttpClient => _HttpClient ??= new HttpClient();
-
-        private static void Send(this PocketBase pocketBase, string path, HttpMethod method, IDictionary<string, string>? headers = null, IDictionary<string, object?>? query = null, IDictionary<string, object>? body = null)
-        {
-            headers ??= new Dictionary<string, string>();
-            query ??= new Dictionary<string, object?>();
-            body ??= new Dictionary<string, object>();
-
-            Uri url = pocketBase.BuildUrl(path, query);
-
-            using (HttpRequestMessage request = pocketBase.CreateRequest(url, method, headers: headers, query: query, body: body))
-            {
-                try
-                {
-                    var response = HttpClient.Send(request);
-                    if ((int)response.StatusCode >= 400)
-                        throw new ClientException(url.ToString(), statusCode: (int)response.StatusCode);
-                }
-                catch (Exception ex)
-                {
-                    if (ex is ClientException) throw;
-                    throw new ClientException(url: url.ToString(), originalError: ex, isAbort: ex is HttpRequestException);
-                }
-            }
-        }
-
-        private static T? Send<T>(this PocketBase pocketBase, string path, HttpMethod method, IDictionary<string, string>? headers = null, IDictionary<string, object?>? query = null, IDictionary<string, object>? body = null)
-        {
-            headers ??= new Dictionary<string, string>();
-            query ??= new Dictionary<string, object?>();
-            body ??= new Dictionary<string, object>();
-
-            Uri url = pocketBase.BuildUrl(path, query);
-
-            using (HttpRequestMessage request = pocketBase.CreateRequest(url, method, headers: headers, query: query, body: body))
-            {
-                try
-                {
-                    var response = HttpClient.Send(request);
-                    if ((int)response.StatusCode >= 400)
-                        throw new ClientException(url.ToString(), statusCode: (int)response.StatusCode);
-
-                    response.EnsureSuccessStatusCode();
-
-                    using (var stream = response.Content.ReadAsStream())
-                        return JsonSerializer.Deserialize<T>(stream, new JsonSerializerOptions(JsonSerializerDefaults.Web));
-                }
-                catch (Exception ex)
-                {
-                    if (ex is ClientException) throw;
-                    throw new ClientException(url: url.ToString(), originalError: ex, isAbort: ex is HttpRequestException);
-                }
-            }
-        }
-
-        private static HttpRequestMessage CreateRequest(this PocketBase pocketBase, Uri url, HttpMethod method, IDictionary<string, string> headers, IDictionary<string, object?> query, IDictionary<string, object> body)
-        {
-            HttpRequestMessage request;
-
-            request = BuildJsonRequest(method, url, headers, body);
-
-            if (!headers.ContainsKey("Authorization") && pocketBase.AuthStore.IsValid)
-                request.Headers.Add("Authorization", pocketBase.AuthStore.Token);
-
-            if (!headers.ContainsKey("Accept-Language"))
-                request.Headers.Add("Accept-Language", "en-US");// pocketBase._language);
-
-            return request;
-        }
-        private static HttpRequestMessage BuildJsonRequest(HttpMethod method, Uri url, IDictionary<string, string>? headers = null, IDictionary<string, object>? body = null)
-        {
-            var request = new HttpRequestMessage(method, url);
-            if (body is not null && body.Count > 0)
-                request.Content = JsonContent.Create(body);
-
-            if (headers is not null)
-                foreach (var header in headers)
-                    request.Headers.Add(header.Key, header.Value);
-
-            return request;
-        }
-        #endregion Sync
-
         internal static async Task<T?> HttpGetAsync<T>(this PocketBase pocketBase, string url)
         {
             return await pocketBase.SendAsync<T>(url, HttpMethod.Get);
@@ -180,19 +92,44 @@ namespace PocketBaseClient
         }
 
 
-        internal static async Task<T?> HttpPatchAsync<T>(this PocketBase pocketBase, string url, T element)
+        internal static async Task<T?> HttpPatchAsync<T>(this PocketBase pocketBase, string url, T item)
+            where T : ItemBase
         {
             // Convert Serialized element to Dictionary<string, object>
-            var body = JsonSerializer.Deserialize<Dictionary<string, object>>(JsonSerializer.Serialize(element));
+            var body = JsonSerializer.Deserialize<Dictionary<string, object>>(JsonSerializer.Serialize(item));
+            var files = item.RelatedFiles.Where(f => f != null && f.HasChanges)?.Select(f => f!.GetSdkFileToUpload()).Where(f => f != null).Select(f => f!)?.ToList();
 
-            return await pocketBase.SendAsync<T>(url, HttpMethod.Patch, body: body);
+            var result = await pocketBase.SendAsync<T>(url, HttpMethod.Patch, body: body);
+
+            if (files?.Any() ?? false)
+                return await pocketBase.SendAsync<T>(url, HttpMethod.Patch, files: files);
+
+            return result;
         }
-        internal static T? HttpPatch<T>(this PocketBase pocketBase, string url, T element)
+        internal static T? HttpPatch<T>(this PocketBase pocketBase, string url, T item)
+            where T : ItemBase
         {
             // Convert Serialized element to Dictionary<string, object>
-            var body = JsonSerializer.Deserialize<Dictionary<string, object>>(JsonSerializer.Serialize(element));
+            var body = JsonSerializer.Deserialize<Dictionary<string, object>>(JsonSerializer.Serialize(item));
+            var files = item.RelatedFiles.Where(f => f != null && f.HasChanges)?.Select(f => f!.GetSdkFileToUpload()).Where(f => f != null).Select(f => f!)?.ToList();
 
-            return pocketBase.Send<T>(url, HttpMethod.Patch, body: body);
+            var result = pocketBase.Send<T>(url, HttpMethod.Patch, body: body);
+
+            if (files?.Any() ?? false)
+                return pocketBase.Send<T>(url, HttpMethod.Patch, files: files);
+
+            return result;
         }
+
+
+        internal static async Task<Stream> HttpGetStreamAsync(this PocketBase pocketBase, string url, string? thumb = null)
+        {
+            var query = new Dictionary<string, object?>();
+            if (!string.IsNullOrEmpty(thumb))
+                query.Add("thumb", thumb);
+
+            return await pocketBase.GetStreamAsync(url, query);
+        }
+
     }
 }

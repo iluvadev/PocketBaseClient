@@ -159,7 +159,10 @@ namespace {settings.NamespaceModels}
         [JsonConstructor]
         public {ClassName}(string? id, DateTime? created, DateTime? updated");
             for (int i = 0; i < Fields.Count; i++)
-                sb.Append($@", {Fields[i].TypeName} {GetParameterNameForConstructor(Fields[i])}");
+            {
+                var typeName = Fields[i].TypeName + (Fields[i].IsTypeNullableInProperty ? "?" : "");
+                sb.Append($@", {typeName} {GetParameterNameForConstructor(Fields[i])}");
+            }
             sb.AppendLine($@")
             : base(id, created, updated)
         {{");
@@ -181,6 +184,19 @@ namespace {settings.NamespaceModels}
                     sb.Append($@"{relatedItem}");
                 sb.AppendLine(";");
             }
+
+            var relatedFiles = Fields.SelectMany(f => f.RelatedFiles);
+            if(relatedFiles.Any())
+            {
+                sb.Append($@"
+        /// <inheritdoc />
+        protected override IEnumerable<FieldFileBase?> RelatedFiles 
+            => base.RelatedFiles");
+                foreach (var relatedFile in relatedFiles)
+                    sb.Append($@"{relatedFile}");
+                sb.AppendLine(";");
+            }
+
             sb.AppendLine($@"
         #region Collection
         public static {CollectionInfo.ClassName} GetCollection() 

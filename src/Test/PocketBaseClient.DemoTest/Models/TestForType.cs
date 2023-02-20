@@ -147,7 +147,7 @@ namespace PocketBaseClient.DemoTest.Models
         [JsonConverter(typeof(EnumConverter<SelectSingleEnum>))]
         public SelectSingleEnum? SelectSingle { get => Get(() => _SelectSingle); set => Set(value, ref _SelectSingle); }
 
-        private SelectMultipleList _SelectMultiple = new SelectMultipleList();
+        private SelectMultipleList? _SelectMultiple = null;
         /// <summary> Maps to 'select_multiple' field in PocketBase </summary>
         [JsonPropertyName("select_multiple")]
         [PocketBaseField(id: "8dks1xfy", name: "select_multiple", required: false, system: false, unique: false, type: "select")]
@@ -163,33 +163,49 @@ namespace PocketBaseClient.DemoTest.Models
         [Display(Name = "Json")]
         public dynamic? Json { get => Get(() => _Json); set => Set(value, ref _Json); }
 
-        private object? _FileSingleNoRestriction = null;
+        private FileSingleNoRestrictionFile? _FileSingleNoRestriction = null;
         /// <summary> Maps to 'file_single_no_restriction' field in PocketBase </summary>
         [JsonPropertyName("file_single_no_restriction")]
         [PocketBaseField(id: "mpnfu1ph", name: "file_single_no_restriction", required: false, system: false, unique: false, type: "file")]
         [Display(Name = "File single no restriction")]
-        public object? FileSingleNoRestriction { get => Get(() => _FileSingleNoRestriction); set => Set(value, ref _FileSingleNoRestriction); }
+        [JsonInclude]
+        [JsonConverter(typeof(FileConverter<FileSingleNoRestrictionFile>))]
+        public FileSingleNoRestrictionFile FileSingleNoRestriction { get => Get(() => _FileSingleNoRestriction ??= new FileSingleNoRestrictionFile(this)); private set => Set(value, ref _FileSingleNoRestriction); }
 
-        private object? _FileSingleRestriction = null;
+        private FileSingleRestrictionFile? _FileSingleRestriction = null;
         /// <summary> Maps to 'file_single_restriction' field in PocketBase </summary>
         [JsonPropertyName("file_single_restriction")]
         [PocketBaseField(id: "cn4tglcr", name: "file_single_restriction", required: false, system: false, unique: false, type: "file")]
         [Display(Name = "File single restriction")]
-        public object? FileSingleRestriction { get => Get(() => _FileSingleRestriction); set => Set(value, ref _FileSingleRestriction); }
+        [JsonInclude]
+        [MimeTypes("image/jpg,image/jpeg,image/png,image/svg+xml,image/gif", ErrorMessage = "Only MIME Types accepted: 'image/jpg,image/jpeg,image/png,image/svg+xml,image/gif'")]
+        [JsonConverter(typeof(FileConverter<FileSingleRestrictionFile>))]
+        public FileSingleRestrictionFile FileSingleRestriction { get => Get(() => _FileSingleRestriction ??= new FileSingleRestrictionFile(this)); private set => Set(value, ref _FileSingleRestriction); }
 
-        private object? _FileMultipleNoRestrictions = null;
+        private FileMultipleNoRestrictionsList? _FileMultipleNoRestrictions = null;
         /// <summary> Maps to 'file_multiple_no_restrictions' field in PocketBase </summary>
         [JsonPropertyName("file_multiple_no_restrictions")]
         [PocketBaseField(id: "mqokykua", name: "file_multiple_no_restrictions", required: false, system: false, unique: false, type: "file")]
         [Display(Name = "File multiple no restrictions")]
-        public object? FileMultipleNoRestrictions { get => Get(() => _FileMultipleNoRestrictions); set => Set(value, ref _FileMultipleNoRestrictions); }
+        [JsonInclude]
+        [JsonConverter(typeof(FileListConverter<FileMultipleNoRestrictionsList, FileMultipleNoRestrictionsFile>))]
+        public FileMultipleNoRestrictionsList FileMultipleNoRestrictions { get => Get(() => _FileMultipleNoRestrictions ??= new FileMultipleNoRestrictionsList(this)); private set => Set(value, ref _FileMultipleNoRestrictions); }
+        [JsonPropertyName("file_multiple_no_restrictions-")]
+        [JsonInclude]
+        public List<string> FileMultipleNoRestrictions_RemovedFileNames => FileMultipleNoRestrictions.GetRemovedFileNames();
 
-        private object? _FileMultipleRestrictions = null;
+        private FileMultipleRestrictionsList? _FileMultipleRestrictions = null;
         /// <summary> Maps to 'file_multiple_restrictions' field in PocketBase </summary>
         [JsonPropertyName("file_multiple_restrictions")]
         [PocketBaseField(id: "o4hs5o8n", name: "file_multiple_restrictions", required: false, system: false, unique: false, type: "file")]
         [Display(Name = "File multiple restrictions")]
-        public object? FileMultipleRestrictions { get => Get(() => _FileMultipleRestrictions); set => Set(value, ref _FileMultipleRestrictions); }
+        [JsonInclude]
+        [MimeTypes("image/jpg,image/jpeg,image/png,image/svg+xml,image/gif", ErrorMessage = "Only MIME Types accepted: 'image/jpg,image/jpeg,image/png,image/svg+xml,image/gif'")]
+        [JsonConverter(typeof(FileListConverter<FileMultipleRestrictionsList, FileMultipleRestrictionsFile>))]
+        public FileMultipleRestrictionsList FileMultipleRestrictions { get => Get(() => _FileMultipleRestrictions ??= new FileMultipleRestrictionsList(this)); private set => Set(value, ref _FileMultipleRestrictions); }
+        [JsonPropertyName("file_multiple_restrictions-")]
+        [JsonInclude]
+        public List<string> FileMultipleRestrictions_RemovedFileNames => FileMultipleRestrictions.GetRemovedFileNames();
 
         private TestForRelated? _ReationSingle = null;
         /// <summary> Maps to 'reation_single' field in PocketBase </summary>
@@ -199,7 +215,7 @@ namespace PocketBaseClient.DemoTest.Models
         [JsonConverter(typeof(RelationConverter<TestForRelated>))]
         public TestForRelated? ReationSingle { get => Get(() => _ReationSingle); set => Set(value, ref _ReationSingle); }
 
-        private RelationMultipleNoLimitList _RelationMultipleNoLimit = new RelationMultipleNoLimitList();
+        private RelationMultipleNoLimitList? _RelationMultipleNoLimit = null;
         /// <summary> Maps to 'relation_multiple_no_limit' field in PocketBase </summary>
         [JsonPropertyName("relation_multiple_no_limit")]
         [PocketBaseField(id: "a4chtr6c", name: "relation_multiple_no_limit", required: false, system: false, unique: false, type: "relation")]
@@ -208,7 +224,7 @@ namespace PocketBaseClient.DemoTest.Models
         [JsonConverter(typeof(RelationListConverter<RelationMultipleNoLimitList, TestForRelated>))]
         public RelationMultipleNoLimitList RelationMultipleNoLimit { get => Get(() => _RelationMultipleNoLimit ??= new RelationMultipleNoLimitList(this)); private set => Set(value, ref _RelationMultipleNoLimit); }
 
-        private RelationMultipleLimitList _RelationMultipleLimit = new RelationMultipleLimitList();
+        private RelationMultipleLimitList? _RelationMultipleLimit = null;
         /// <summary> Maps to 'relation_multiple_limit' field in PocketBase </summary>
         [JsonPropertyName("relation_multiple_limit")]
         [PocketBaseField(id: "otxwaoam", name: "relation_multiple_limit", required: false, system: false, unique: false, type: "relation")]
@@ -263,7 +279,7 @@ namespace PocketBaseClient.DemoTest.Models
         }
 
         [JsonConstructor]
-        public TestForType(string? id, DateTime? created, DateTime? updated, string? @textNoRestrictions, string? @textRestrictions, float? @numberNoRestrictions, float? @numberRestrictions, bool? @bool, MailAddress? @emailNoRestrictions, MailAddress? @emailRestrictionsExcept, MailAddress? @emailRestrictionsOnly, Uri? @urlNoRestrictions, Uri? @urlRestrictionsExcept, Uri? @urlRestrictionsOnly, DateTime? @datetimeNoRestrictions, DateTime? @datetimeRestrictions, SelectSingleEnum? @selectSingle, SelectMultipleList @selectMultiple, dynamic? @json, object? @fileSingleNoRestriction, object? @fileSingleRestriction, object? @fileMultipleNoRestrictions, object? @fileMultipleRestrictions, TestForRelated? @reationSingle, RelationMultipleNoLimitList @relationMultipleNoLimit, RelationMultipleLimitList @relationMultipleLimit)
+        public TestForType(string? id, DateTime? created, DateTime? updated, string? @textNoRestrictions, string? @textRestrictions, float? @numberNoRestrictions, float? @numberRestrictions, bool? @bool, MailAddress? @emailNoRestrictions, MailAddress? @emailRestrictionsExcept, MailAddress? @emailRestrictionsOnly, Uri? @urlNoRestrictions, Uri? @urlRestrictionsExcept, Uri? @urlRestrictionsOnly, DateTime? @datetimeNoRestrictions, DateTime? @datetimeRestrictions, SelectSingleEnum? @selectSingle, SelectMultipleList @selectMultiple, dynamic? @json, FileSingleNoRestrictionFile @fileSingleNoRestriction, FileSingleRestrictionFile @fileSingleRestriction, FileMultipleNoRestrictionsList @fileMultipleNoRestrictions, FileMultipleRestrictionsList @fileMultipleRestrictions, TestForRelated? @reationSingle, RelationMultipleNoLimitList @relationMultipleNoLimit, RelationMultipleLimitList @relationMultipleLimit)
             : base(id, created, updated)
         {
             this.TextNoRestrictions = @textNoRestrictions;
@@ -297,6 +313,10 @@ namespace PocketBaseClient.DemoTest.Models
         /// <inheritdoc />
         protected override IEnumerable<ItemBase?> RelatedItems 
             => base.RelatedItems.Union(new List<ItemBase?>() { ReationSingle }).Union(RelationMultipleNoLimit).Union(RelationMultipleLimit);
+
+        /// <inheritdoc />
+        protected override IEnumerable<FieldFileBase?> RelatedFiles 
+            => base.RelatedFiles.Union(new List<FieldFileBase?>() { FileSingleNoRestriction }).Union(new List<FieldFileBase?>() { FileSingleRestriction }).Union(FileMultipleNoRestrictions).Union(FileMultipleRestrictions);
 
         #region Collection
         public static CollectionTestForTypes GetCollection() 

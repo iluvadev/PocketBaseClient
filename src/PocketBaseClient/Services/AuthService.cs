@@ -8,6 +8,8 @@
 // pocketbase-csharp-sdk project: https://github.com/PRCV1/pocketbase-csharp-sdk 
 // pocketbase project: https://github.com/pocketbase/pocketbase
 
+using pocketbase_csharp_sdk;
+
 namespace PocketBaseClient.Services
 {
 
@@ -16,6 +18,11 @@ namespace PocketBaseClient.Services
     /// </summary>
     public class AuthService: ServiceBase
     {
+        /// <summary>
+        /// Current Authenticated information
+        /// </summary>
+        public AuthStore AuthStore => App.Sdk.AuthStore;
+
         private AuthAdminService? _Admin = null;
         /// <summary>
         /// Authenticate as Admin actions
