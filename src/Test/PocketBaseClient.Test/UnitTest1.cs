@@ -32,7 +32,6 @@ namespace PocketBaseClient.Test
             var col = myApp.Data.TestForTypesCollection;
             var elem = col.GetById("kabksx32qx1qhd5");
             Debug.WriteLine(elem);
-
             
             //elem.FileSingleNoRestriction.SaveToLocalFileAsync(@"C:\Dev\img.png").Wait();
             //elem.FileSingleRestriction.Thumb100x100f.SaveToLocalFileAsync(@"C:\Dev\thumb100.png").Wait();

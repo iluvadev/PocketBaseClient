@@ -15,7 +15,7 @@ namespace PocketBaseClient.DemoTest.Models
 {
     public partial class Users2
     {
-        public class Filters : ItemBaseFilters
+        public class Filters : ItemAuthBaseFilters
         {
 
             /// <summary> Gets a Filter to Query data over the 'public_name' field in PocketBase </summary>

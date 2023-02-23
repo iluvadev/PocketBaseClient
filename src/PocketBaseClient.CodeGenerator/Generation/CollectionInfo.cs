@@ -45,7 +45,7 @@ namespace PocketBaseClient.CodeGenerator.Generation
 
         public bool IsAuth => CollectionModel.Type == "auth";
 
-        public string ParentClassName => CollectionModel.Type == "auth" ? "CollectionAuthBase" : "CollectionBase";
+        public string ParentClassName => IsAuth ? "CollectionAuthBase" : "CollectionBase";
 
         /// <summary>
         /// Filename where save the Collection class, in the generated code

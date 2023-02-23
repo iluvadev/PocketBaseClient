@@ -27,7 +27,7 @@ namespace PocketBaseClient.CodeGenerator.Generation
         /// </summary>
         public string ClassName { get; }
 
-        public string ParentClassName => CollectionInfo.CollectionModel.Type == "auth" ? "ItemAuthBase" : "ItemBase";
+        public string ParentClassName => CollectionInfo.IsAuth ? "ItemAuthBase" : "ItemBase";
 
         /// <summary>
         /// Filename where save the Item class, in the generated code
@@ -240,6 +240,7 @@ namespace {settings.NamespaceModels}
         private GeneratedCodeFile GetCodeFileForFilters(Settings settings)
         {
             var fileName = Path.Combine(settings.PathModels, FiltersFileName);
+            var parentClass = CollectionInfo.IsAuth ? "ItemAuthBaseFilters" : "ItemBaseFilters";
             StringBuilder sb = new StringBuilder();
             sb.AppendLine($@"{settings.CodeHeader}
 using PocketBaseClient.Orm.Filters;
@@ -248,7 +249,7 @@ namespace {settings.NamespaceModels}
 {{
     public partial class {ClassName}
     {{
-        public class Filters : ItemBaseFilters
+        public class Filters : {parentClass}
         {{
 ");
             foreach (var field in Fields)
@@ -268,6 +269,7 @@ namespace {settings.NamespaceModels}
         private GeneratedCodeFile GetCodeFileForSorts(Settings settings)
         {
             var fileName = Path.Combine(settings.PathModels, SortsFileName);
+            var parentClass = CollectionInfo.IsAuth ? "ItemAuthBaseSorts" : "ItemBaseSorts";
             StringBuilder sb = new StringBuilder();
             sb.AppendLine($@"{settings.CodeHeader}
 using PocketBaseClient.Orm.Filters;
@@ -276,7 +278,7 @@ namespace {settings.NamespaceModels}
 {{
     public partial class {ClassName}
     {{
-        public class Sorts : ItemBaseSorts
+        public class Sorts : {parentClass}
         {{
 ");
             foreach (var field in Fields)
