@@ -29,7 +29,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\sdk\pocketbase-csharp-sdk\pocketbase-csharp-sdk.csproj" />
+    <ProjectReference Include="..\..\..\pocketbase-csharp-sdk\pocketbase-csharp-sdk\pocketbase-csharp-sdk.csproj" />
   </ItemGroup>
 
 </Project>

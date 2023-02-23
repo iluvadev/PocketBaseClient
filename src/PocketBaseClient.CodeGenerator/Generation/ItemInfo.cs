@@ -27,6 +27,8 @@ namespace PocketBaseClient.CodeGenerator.Generation
         /// </summary>
         public string ClassName { get; }
 
+        public string ParentClassName => CollectionInfo.CollectionModel.Type == "auth" ? "ItemAuthBase" : "ItemBase";
+
         /// <summary>
         /// Filename where save the Item class, in the generated code
         /// </summary>
@@ -118,7 +120,7 @@ using System.Text.Json.Serialization;
 
 namespace {settings.NamespaceModels}
 {{
-    public partial class {ClassName} : ItemBase
+    public partial class {ClassName} : {ParentClassName}
     {{
         #region Collection
         private static CollectionBase? _Collection = null;
@@ -154,17 +156,18 @@ namespace {settings.NamespaceModels}
         public {ClassName}() : base()
         {{
         }}");
-
+            string extraParams = ParentClassName == "ItemAuthBase" ? ", MailAddress? email, bool? emailVisibility, string? username, bool? verified" : "";
+            string extraCtorCallParams = ParentClassName == "ItemAuthBase" ? ", email, emailVisibility, username, verified" : "";
             sb.Append($@"
         [JsonConstructor]
-        public {ClassName}(string? id, DateTime? created, DateTime? updated");
+        public {ClassName}(string? id, DateTime? created, DateTime? updated{extraParams}");
             for (int i = 0; i < Fields.Count; i++)
             {
                 var typeName = Fields[i].TypeName + (Fields[i].IsTypeNullableInProperty ? "?" : "");
                 sb.Append($@", {typeName} {GetParameterNameForConstructor(Fields[i])}");
             }
             sb.AppendLine($@")
-            : base(id, created, updated)
+            : base(id, created, updated{extraCtorCallParams})
         {{");
             foreach (var field in Fields)
                 sb.AppendLine($@"            this.{field.PropertyName} = {GetParameterNameForConstructor(field)};");

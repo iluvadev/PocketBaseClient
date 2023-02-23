@@ -26,7 +26,7 @@
 
 Code generated with:
     PocketBaseClient CodeGenerator: pbcodegen v.0.6.1.0
-    At: 2023-02-20T16:00:30.7513240Z
+    At: 2023-02-23T12:36:58.5660170Z
 
 PocketBase Application: 
     Name: demo-test
@@ -48,6 +48,7 @@ Files Generated:
     C:\Dev\iluvadev\projects\PocketBaseClient-csharp\src\Test\PocketBaseClient.DemoTest\Models\CollectionTestForRelateds.cs
     C:\Dev\iluvadev\projects\PocketBaseClient-csharp\src\Test\PocketBaseClient.DemoTest\Models\CollectionTestForTypes.cs
     C:\Dev\iluvadev\projects\PocketBaseClient-csharp\src\Test\PocketBaseClient.DemoTest\Models\CollectionUsers.cs
+    C:\Dev\iluvadev\projects\PocketBaseClient-csharp\src\Test\PocketBaseClient.DemoTest\Models\CollectionUsers2.cs
     C:\Dev\iluvadev\projects\PocketBaseClient-csharp\src\Test\PocketBaseClient.DemoTest\Models\Post.CategoriesList.cs
     C:\Dev\iluvadev\projects\PocketBaseClient-csharp\src\Test\PocketBaseClient.DemoTest\Models\Post.cs
     C:\Dev\iluvadev\projects\PocketBaseClient-csharp\src\Test\PocketBaseClient.DemoTest\Models\Post.Filters.cs
@@ -78,5 +79,8 @@ Files Generated:
     C:\Dev\iluvadev\projects\PocketBaseClient-csharp\src\Test\PocketBaseClient.DemoTest\Models\User.cs
     C:\Dev\iluvadev\projects\PocketBaseClient-csharp\src\Test\PocketBaseClient.DemoTest\Models\User.Filters.cs
     C:\Dev\iluvadev\projects\PocketBaseClient-csharp\src\Test\PocketBaseClient.DemoTest\Models\User.Sorts.cs
+    C:\Dev\iluvadev\projects\PocketBaseClient-csharp\src\Test\PocketBaseClient.DemoTest\Models\Users2.cs
+    C:\Dev\iluvadev\projects\PocketBaseClient-csharp\src\Test\PocketBaseClient.DemoTest\Models\Users2.Filters.cs
+    C:\Dev\iluvadev\projects\PocketBaseClient-csharp\src\Test\PocketBaseClient.DemoTest\Models\Users2.Sorts.cs
     C:\Dev\iluvadev\projects\PocketBaseClient-csharp\src\Test\PocketBaseClient.DemoTest\PocketBaseClient.DemoTest.csproj
     C:\Dev\iluvadev\projects\PocketBaseClient-csharp\src\Test\PocketBaseClient.DemoTest\Services\DemoTestDataService.cs

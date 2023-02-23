@@ -22,7 +22,7 @@ using System.Text.Json.Serialization;
 
 namespace PocketBaseClient.DemoTest.Models
 {
-    public partial class User : ItemBase
+    public partial class User : ItemAuthBase
     {
         #region Collection
         private static CollectionBase? _Collection = null;
@@ -83,8 +83,8 @@ namespace PocketBaseClient.DemoTest.Models
         }
 
         [JsonConstructor]
-        public User(string? id, DateTime? created, DateTime? updated, string? @name, AvatarFile @avatar, Uri? @url)
-            : base(id, created, updated)
+        public User(string? id, DateTime? created, DateTime? updated, MailAddress? email, bool? emailVisibility, string? username, bool? verified, string? @name, AvatarFile @avatar, Uri? @url)
+            : base(id, created, updated, email, emailVisibility, username, verified)
         {
             this.Name = @name;
             this.Avatar = @avatar;

@@ -43,6 +43,8 @@ namespace PocketBaseClient.CodeGenerator.Generation
         /// </summary>
         public string ClassName => "Collection" + NaturalName.Pluralize().ToPascalCase();
 
+        public string ParentClassName => CollectionModel.Type == "auth" ? "CollectionAuthBase" : "CollectionBase";
+
         /// <summary>
         /// Filename where save the Collection class, in the generated code
         /// </summary>
@@ -112,7 +114,7 @@ using PocketBaseClient.Services;
 
 namespace {settings.NamespaceModels}
 {{
-    public partial class {ClassName} : CollectionBase<{ItemInfo.ClassName}>
+    public partial class {ClassName} : {ParentClassName}<{ItemInfo.ClassName}>
     {{
         /// <inheritdoc />
         public override string Id => ""{CollectionModel.Id}"";

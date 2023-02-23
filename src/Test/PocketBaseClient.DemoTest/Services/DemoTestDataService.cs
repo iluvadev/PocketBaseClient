@@ -32,6 +32,8 @@ namespace PocketBaseClient.DemoTest.Services
         public CollectionCategories CategoriesCollection { get; }
         /// <summary> Collection 'tags' in PocketBase </summary>
         public CollectionTags TagsCollection { get; }
+        /// <summary> Collection 'users2' in PocketBase </summary>
+        public CollectionUsers2 Users2Collection { get; }
 
         /// <inheritdoc />
         protected override void RegisterCollections()
@@ -43,6 +45,7 @@ namespace PocketBaseClient.DemoTest.Services
             RegisterCollection(typeof(PocketBaseClient.DemoTest.Models.Author), AuthorsCollection);
             RegisterCollection(typeof(PocketBaseClient.DemoTest.Models.Category), CategoriesCollection);
             RegisterCollection(typeof(PocketBaseClient.DemoTest.Models.Tag), TagsCollection);
+            RegisterCollection(typeof(PocketBaseClient.DemoTest.Models.Users2), Users2Collection);
         }
         #endregion Collections
 
@@ -57,6 +60,7 @@ namespace PocketBaseClient.DemoTest.Services
             AuthorsCollection = new CollectionAuthors(this);
             CategoriesCollection = new CollectionCategories(this);
             TagsCollection = new CollectionTags(this);
+            Users2Collection = new CollectionUsers2(this);
 
             RegisterCollections();
         }

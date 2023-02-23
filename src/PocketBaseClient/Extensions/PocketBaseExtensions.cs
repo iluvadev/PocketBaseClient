@@ -81,6 +81,10 @@ namespace PocketBaseClient
             // Convert Serialized element to Dictionary<string, object>
             var body = JsonSerializer.Deserialize<Dictionary<string, object>>(JsonSerializer.Serialize(element));
 
+            return await pocketBase.HttpPostAsync<T>(url, body);
+        }
+        internal static async Task<T?> HttpPostAsync<T>(this PocketBase pocketBase, string url, Dictionary<string, object>? body)
+        {
             return await pocketBase.SendAsync<T>(url, HttpMethod.Post, body: body);
         }
         internal static T? HttpPost<T>(this PocketBase pocketBase, string url, T element)
@@ -88,6 +92,10 @@ namespace PocketBaseClient
             // Convert Serialized element to Dictionary<string, object>
             var body = JsonSerializer.Deserialize<Dictionary<string, object>>(JsonSerializer.Serialize(element));
 
+            return pocketBase.HttpPost<T>(url, body: body);
+        }
+        internal static T? HttpPost<T>(this PocketBase pocketBase, string url, Dictionary<string, object>? body)
+        {
             return pocketBase.Send<T>(url, HttpMethod.Post, body: body);
         }
 

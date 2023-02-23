@@ -15,28 +15,28 @@ using PocketBaseClient.Services;
 
 namespace PocketBaseClient.DemoTest.Models
 {
-    public partial class CollectionUsers : CollectionAuthBase<User>
+    public partial class CollectionUsers2 : CollectionAuthBase<Users2>
     {
         /// <inheritdoc />
-        public override string Id => "_pb_users_auth_";
+        public override string Id => "y89kc8kxl8vts1k";
 
         /// <inheritdoc />
-        public override string Name => "users";
+        public override string Name => "users2";
 
         /// <inheritdoc />
         public override bool System => false;
 
-        /// <summary> Contructor: The Collection 'users' </summary>
+        /// <summary> Contructor: The Collection 'users2' </summary>
         /// <param name="context">The DataService for the collection</param>
-        internal CollectionUsers(DataServiceBase context) : base(context) { }
+        internal CollectionUsers2(DataServiceBase context) : base(context) { }
 
-        /// <summary> Query data at PocketBase, defining a Filter over collection 'users' </summary>
-        public CollectionQuery<CollectionUsers, User.Sorts, User> Filter(Func<User.Filters, FilterCommand> filter)
-            => new CollectionQuery<CollectionUsers, User.Sorts, User>(this, filter(new User.Filters()));
+        /// <summary> Query data at PocketBase, defining a Filter over collection 'users2' </summary>
+        public CollectionQuery<CollectionUsers2, Users2.Sorts, Users2> Filter(Func<Users2.Filters, FilterCommand> filter)
+            => new CollectionQuery<CollectionUsers2, Users2.Sorts, Users2>(this, filter(new Users2.Filters()));
 
-        /// <summary> Query all data at PocketBase, over collection 'users' </summary>
-        public CollectionQuery<CollectionUsers, User.Sorts, User> All()
-            => new CollectionQuery<CollectionUsers, User.Sorts, User>(this, null);
+        /// <summary> Query all data at PocketBase, over collection 'users2' </summary>
+        public CollectionQuery<CollectionUsers2, Users2.Sorts, Users2> All()
+            => new CollectionQuery<CollectionUsers2, Users2.Sorts, Users2>(this, null);
 
     }
 }
