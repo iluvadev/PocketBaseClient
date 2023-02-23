@@ -80,7 +80,8 @@ namespace PocketBaseClient.CodeGenerator.Generation
                 GeneratedFiles.AddRange(collection.GenerateCode(settings));
 
             GeneratedFiles.Add(GetCodeFileForApplication(settings));
-            GeneratedFiles.Add(GetCodeFileForService(settings));
+            GeneratedFiles.Add(GetCodeFileForDataService(settings));
+            GeneratedFiles.Add(GetCodeFileForAuthService(settings));
             GeneratedFiles.Add(GetCodeFileForProject(settings));
 
             GeneratedFiles.Add(GetCodeFileForSummary(settings));
@@ -102,7 +103,8 @@ namespace PocketBaseClient.CodeGenerator.Generation
         private GeneratedCodeFile GetCodeFileForApplication(Settings settings)
         {
             string appClassName = (settings.ApplicationName ?? "MyPocketBase").ToPascalCase() + "Application";
-            string serviceClassName = (settings.ApplicationName ?? "MyPocketBase").ToPascalCase() + "DataService";
+            string serviceDataClassName = (settings.ApplicationName ?? "MyPocketBase").ToPascalCase() + "DataService";
+            string serviceAuthClassName = (settings.ApplicationName ?? "MyPocketBase").ToPascalCase() + "AuthService";
             string fileName = Path.Combine(settings.BasePath, appClassName + ".cs");
 
             string content = $@"{settings.CodeHeader}
@@ -113,9 +115,13 @@ namespace {settings.BaseNamespace}
 {{
     public partial class {appClassName} : PocketBaseClientApplication
     {{
-        private {serviceClassName}? _Data = null;
+        private {serviceDataClassName}? _Data = null;
         /// <summary> Access to Data for Application {settings.ApplicationName} </summary>
-        public {serviceClassName} Data => _Data ??= new {serviceClassName}(this);
+        public {serviceDataClassName} Data => _Data ??= new {serviceDataClassName}(this);
+
+        private {serviceAuthClassName}? _Auth = null;
+        /// <summary> Access to Auth for Application {settings.ApplicationName} </summary>
+        public new {serviceAuthClassName} Auth => _Auth ??= new {serviceAuthClassName}(this);
 
         #region Constructors
         public {appClassName}() : this(""{settings.ApplicationUrl}"") {{ }}
@@ -132,10 +138,10 @@ namespace {settings.BaseNamespace}
         /// </summary>
         /// <param name="settings">Generation code settings</param>
         /// <returns></returns>
-        private GeneratedCodeFile GetCodeFileForService(Settings settings)
+        private GeneratedCodeFile GetCodeFileForDataService(Settings settings)
         {
-            string serviceClassName = (settings.ApplicationName ?? "MyPocketBase").ToPascalCase() + "DataService";
-            string fileName = Path.Combine(settings.PathServices, serviceClassName + ".cs");
+            string serviceDataClassName = (settings.ApplicationName ?? "MyPocketBase").ToPascalCase() + "DataService";
+            string fileName = Path.Combine(settings.PathServices, serviceDataClassName + ".cs");
 
             StringBuilder sb = new StringBuilder();
             sb.Append($@"{settings.CodeHeader}
@@ -145,7 +151,7 @@ using {settings.NamespaceModels};
 
 namespace {settings.NamespaceServices}
 {{
-    public partial class {serviceClassName} : DataServiceBase
+    public partial class {serviceDataClassName} : DataServiceBase
     {{
         #region Collections");
 
@@ -166,7 +172,7 @@ namespace {settings.NamespaceServices}
         #endregion Collections
 
         #region Constructor
-        public {serviceClassName}(PocketBaseClientApplication app) : base(app)
+        public {serviceDataClassName}(PocketBaseClientApplication app) : base(app)
         {{
             // Collections");
             foreach (var colInfo in Collections)
@@ -176,6 +182,45 @@ namespace {settings.NamespaceServices}
 
             RegisterCollections();
         }}
+        #endregion Constructor
+    }}
+}}
+");
+            return new GeneratedCodeFile(fileName, sb.ToString());
+        }
+
+        /// <summary>
+        /// Generates the code for the class with Service Auth
+        /// </summary>
+        /// <param name="settings">Generation code settings</param>
+        /// <returns></returns>
+        private GeneratedCodeFile GetCodeFileForAuthService(Settings settings)
+        {
+            string serviceAuthClassName = (settings.ApplicationName ?? "MyPocketBase").ToPascalCase() + "AuthService";
+            string serviceDataClassName = (settings.ApplicationName ?? "MyPocketBase").ToPascalCase() + "DataService";
+            string fileName = Path.Combine(settings.PathServices, serviceAuthClassName + ".cs");
+
+            StringBuilder sb = new StringBuilder();
+            sb.Append($@"{settings.CodeHeader}
+using PocketBaseClient;
+using PocketBaseClient.Services;
+using PocketBaseClient.Orm;
+using {settings.NamespaceModels};
+
+namespace {settings.NamespaceServices}
+{{
+    public partial class {serviceAuthClassName} : AuthServiceBase
+    {{
+        #region Auth Collections");
+            foreach (var colInfo in Collections.Where(c => c.IsAuth))
+                sb.Append($@"
+        /// <summary> Auth for Collection '{colInfo.CollectionModel.Name}' in PocketBase </summary>
+        public AuthCollectionService<{colInfo.ItemsClassName}> {colInfo.ItemsClassName} => ({serviceDataClassName}.GetCollection<{colInfo.ItemsClassName}>() as CollectionAuthBase<{colInfo.ItemsClassName}>)!.Auth;");
+            sb.Append($@"
+        #endregion Auth Collections
+
+        #region Constructor
+        public {serviceAuthClassName}(PocketBaseClientApplication app) : base(app) {{ }}
         #endregion Constructor
     }}
 }}

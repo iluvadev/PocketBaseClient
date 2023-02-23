@@ -28,11 +28,11 @@ namespace PocketBaseClient
         /// </summary>
         public string AppUrl { get; init; }
 
-        private AuthService? _Auth = null;
+        private AuthServiceBase? _Auth = null;
         /// <summary>
         /// Authentication operations
         /// </summary>
-        public AuthService Auth => _Auth ??= new AuthService(this);
+        public AuthServiceBase Auth => _Auth ??= new AuthServiceBase(this);
 
         /// <summary>
         /// Access to the PocketBase Sdk
@@ -50,6 +50,5 @@ namespace PocketBaseClient
             AppName = appName;
             Sdk = new PocketBase(url);
         }
-
     }
 }

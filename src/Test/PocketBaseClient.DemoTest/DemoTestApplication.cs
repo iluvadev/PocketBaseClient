@@ -20,6 +20,10 @@ namespace PocketBaseClient.DemoTest
         /// <summary> Access to Data for Application demo-test </summary>
         public DemoTestDataService Data => _Data ??= new DemoTestDataService(this);
 
+        private DemoTestAuthService? _Auth = null;
+        /// <summary> Access to Auth for Application demo-test </summary>
+        public new DemoTestAuthService Auth => _Auth ??= new DemoTestAuthService(this);
+
         #region Constructors
         public DemoTestApplication() : this("https://orm-csharp-test.pockethost.io") { }
         public DemoTestApplication(string url, string appName = "demo-test") : base(url, appName) { }
