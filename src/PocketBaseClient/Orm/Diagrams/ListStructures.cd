@@ -19,7 +19,7 @@
   <Class Name="PocketBaseClient.Orm.CollectionBase" Collapsed="true">
     <Position X="12.75" Y="6.25" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AQACAAgAAoAIIEIAIAAAAAQCAICAAAAEFAgAAAAAAAA=</HashCode>
+      <HashCode>gQACAIgAgsAIIEIAIAAAAAQCCICAAgAEFAgAAAAgAAA=</HashCode>
       <FileName>Orm\CollectionBase.cs</FileName>
     </TypeIdentifier>
     <Lollipop Position="0.2" />
@@ -27,7 +27,7 @@
   <Class Name="PocketBaseClient.Orm.CollectionBase&lt;T&gt;" Collapsed="true">
     <Position X="12.75" Y="7.5" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>gQAAAAAwAMAIIFIIIBBEEAACCIEIEggABAAAAAQAKAA=</HashCode>
+      <HashCode>gQAAAIAwAIAIIFIIIBBEEAACCoEIEggABAIAAAQAaIA=</HashCode>
       <FileName>Orm\CollectionBase[T].cs</FileName>
     </TypeIdentifier>
     <Lollipop Position="0.2" />
@@ -40,14 +40,14 @@
     </TypeIdentifier>
   </Interface>
   <Interface Name="PocketBaseClient.Orm.Structures.IBasicList" Collapsed="true">
-    <Position X="8" Y="1" Width="1.5" />
+    <Position X="8.75" Y="1" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAICAAAAQAAAAAAAAAAABAQAAAAAAAAAIAAAAIAEAAA=</HashCode>
       <FileName>Orm\Structures\IBasicList.cs</FileName>
     </TypeIdentifier>
   </Interface>
   <Interface Name="PocketBaseClient.Orm.Structures.IBasicList&lt;T&gt;" Collapsed="true">
-    <Position X="8" Y="2.75" Width="1.5" />
+    <Position X="6.5" Y="2.75" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAIAAAAAAAAAAAAAAAAABAAAAAAAAAAAAAAAAIAEAAA=</HashCode>
       <FileName>Orm\Structures\IBasicList[T].cs</FileName>
@@ -56,12 +56,12 @@
   <Interface Name="PocketBaseClient.Orm.Structures.IFieldBasicList&lt;T&gt;" Collapsed="true">
     <Position X="5" Y="4.25" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAACQAAA=</HashCode>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAAQAAA=</HashCode>
       <FileName>Orm\Structures\IFieldBasicList[T].cs</FileName>
     </TypeIdentifier>
   </Interface>
   <Interface Name="PocketBaseClient.Orm.Structures.IFieldItemList&lt;T&gt;" Collapsed="true">
-    <Position X="5.75" Y="6.25" Width="1.5" />
+    <Position X="6.25" Y="6.25" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>Orm\Structures\IFieldItemList[T].cs</FileName>
@@ -77,14 +77,14 @@
   <Interface Name="PocketBaseClient.Orm.Structures.IOwnedByItem" Collapsed="true">
     <Position X="2.25" Y="4.75" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAAAACAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <HashCode>AAAAAACAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACAAAA=</HashCode>
       <FileName>Orm\Structures\IOwnedByItem.cs</FileName>
     </TypeIdentifier>
   </Interface>
   <Interface Name="PocketBaseClient.Orm.Structures.IBasicCollection" Collapsed="true">
     <Position X="11" Y="2.75" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAAEAAAAAAAAAAAIAAAAAAAAAAAAAAAAA=</HashCode>
+      <HashCode>gAAAAAAAAAAAAEAAAAAAAAAAAIAAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>Orm\Structures\IBasicCollection.cs</FileName>
     </TypeIdentifier>
   </Interface>

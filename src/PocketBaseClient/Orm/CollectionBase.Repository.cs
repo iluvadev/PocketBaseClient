@@ -30,6 +30,7 @@ namespace PocketBaseClient.Orm
             var urlFile = collection.UrlFile(file);
             return await collection.App.Sdk.HttpGetStreamAsync(urlFile, thumb);
         }
+
         #region Cache
         internal abstract bool CacheContains<T>(T elem) where T : ItemBase;
 
