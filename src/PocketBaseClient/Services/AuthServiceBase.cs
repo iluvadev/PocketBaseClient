@@ -14,9 +14,9 @@ namespace PocketBaseClient.Services
 {
 
     /// <summary>
-    /// Authentication Operation types
+    /// Authentication Operations 
     /// </summary>
-    public class AuthService: ServiceBase
+    public class AuthServiceBase : ServiceBase
     {
         /// <summary>
         /// Current Authenticated information
@@ -29,16 +29,10 @@ namespace PocketBaseClient.Services
         /// </summary>
         public AuthAdminService Admin => _Admin ??= new AuthAdminService(App);
 
-        private AuthUserService? _User = null;
-        /// <summary>
-        /// Authenticate as User actions
-        /// </summary>
-        public AuthUserService User => _User ??= new AuthUserService(App);
-
         /// <summary>
         /// Ctor
         /// </summary>
         /// <param name="app"></param>
-        public AuthService(PocketBaseClientApplication app) : base(app) { }
+        public AuthServiceBase(PocketBaseClientApplication app) : base(app) { }
     }
 }

@@ -14,13 +14,22 @@
       "Updated": "26/12/2022 19:48:14",
       "Name": "users",
       "System": false,
-      "Type": null,
+      "Type": "auth",
       "ListRule": "id = @request.auth.id",
       "ViewRule": "id = @request.auth.id",
       "CreateRule": "",
       "UpdateRule": "id = @request.auth.id",
       "DeleteRule": "id = @request.auth.id",
-      "Options": null,
+      "Options": {
+        "AllowEmailAuth": true,
+        "AllowOAuth2Auth": true,
+        "AllowUsernameAuth": true,
+        "RequireEmail": false,
+        "MinPasswordLength": 8,
+        "ExceptEmailDomains": null,
+        "OnlyEmailDomains": null,
+        "ManageRule": null
+      },
       "Schema": [
         {
           "Id": "users_name",
@@ -72,16 +81,25 @@
     {
       "Id": "fyyuitlkl66dgyt",
       "Created": "26/11/2022 10:56:28",
-      "Updated": "31/12/2022 12:17:42",
+      "Updated": "12/2/2023 17:18:46",
       "Name": "test_for_types",
       "System": false,
-      "Type": null,
+      "Type": "base",
       "ListRule": "",
       "ViewRule": "",
-      "CreateRule": null,
-      "UpdateRule": null,
-      "DeleteRule": null,
-      "Options": null,
+      "CreateRule": "",
+      "UpdateRule": "",
+      "DeleteRule": "",
+      "Options": {
+        "AllowEmailAuth": null,
+        "AllowOAuth2Auth": null,
+        "AllowUsernameAuth": null,
+        "RequireEmail": null,
+        "MinPasswordLength": null,
+        "ExceptEmailDomains": null,
+        "OnlyEmailDomains": null,
+        "ManageRule": null
+      },
       "Schema": [
         {
           "Id": "kkyx3zk2",
@@ -418,16 +436,25 @@
     {
       "Id": "v2ge3yxdn90bhss",
       "Created": "26/11/2022 11:22:37",
-      "Updated": "26/12/2022 19:48:14",
+      "Updated": "12/2/2023 17:18:29",
       "Name": "test_for_related",
       "System": false,
-      "Type": null,
-      "ListRule": null,
-      "ViewRule": null,
-      "CreateRule": null,
-      "UpdateRule": null,
-      "DeleteRule": null,
-      "Options": null,
+      "Type": "base",
+      "ListRule": "",
+      "ViewRule": "",
+      "CreateRule": "",
+      "UpdateRule": "",
+      "DeleteRule": "",
+      "Options": {
+        "AllowEmailAuth": null,
+        "AllowOAuth2Auth": null,
+        "AllowUsernameAuth": null,
+        "RequireEmail": null,
+        "MinPasswordLength": null,
+        "ExceptEmailDomains": null,
+        "OnlyEmailDomains": null,
+        "ManageRule": null
+      },
       "Schema": [
         {
           "Id": "s10g39sb",
@@ -473,13 +500,22 @@
       "Updated": "26/12/2022 19:48:14",
       "Name": "posts",
       "System": false,
-      "Type": null,
+      "Type": "base",
       "ListRule": "",
       "ViewRule": "",
       "CreateRule": "",
       "UpdateRule": "",
       "DeleteRule": "",
-      "Options": null,
+      "Options": {
+        "AllowEmailAuth": null,
+        "AllowOAuth2Auth": null,
+        "AllowUsernameAuth": null,
+        "RequireEmail": null,
+        "MinPasswordLength": null,
+        "ExceptEmailDomains": null,
+        "OnlyEmailDomains": null,
+        "ManageRule": null
+      },
       "Schema": [
         {
           "Id": "eqr6uyuh",
@@ -597,13 +633,22 @@
       "Updated": "26/12/2022 19:48:14",
       "Name": "authors",
       "System": false,
-      "Type": null,
+      "Type": "base",
       "ListRule": "",
       "ViewRule": "",
       "CreateRule": "",
       "UpdateRule": "",
       "DeleteRule": "",
-      "Options": null,
+      "Options": {
+        "AllowEmailAuth": null,
+        "AllowOAuth2Auth": null,
+        "AllowUsernameAuth": null,
+        "RequireEmail": null,
+        "MinPasswordLength": null,
+        "ExceptEmailDomains": null,
+        "OnlyEmailDomains": null,
+        "ManageRule": null
+      },
       "Schema": [
         {
           "Id": "vxfcwb67",
@@ -663,13 +708,22 @@
       "Updated": "26/12/2022 19:48:14",
       "Name": "categories",
       "System": false,
-      "Type": null,
+      "Type": "base",
       "ListRule": "",
       "ViewRule": "",
       "CreateRule": "",
       "UpdateRule": "",
       "DeleteRule": "",
-      "Options": null,
+      "Options": {
+        "AllowEmailAuth": null,
+        "AllowOAuth2Auth": null,
+        "AllowUsernameAuth": null,
+        "RequireEmail": null,
+        "MinPasswordLength": null,
+        "ExceptEmailDomains": null,
+        "OnlyEmailDomains": null,
+        "ManageRule": null
+      },
       "Schema": [
         {
           "Id": "p221scv1",
@@ -692,13 +746,22 @@
       "Updated": "26/12/2022 19:48:14",
       "Name": "tags",
       "System": false,
-      "Type": null,
+      "Type": "base",
       "ListRule": "",
       "ViewRule": "",
       "CreateRule": "",
       "UpdateRule": "",
       "DeleteRule": "",
-      "Options": null,
+      "Options": {
+        "AllowEmailAuth": null,
+        "AllowOAuth2Auth": null,
+        "AllowUsernameAuth": null,
+        "RequireEmail": null,
+        "MinPasswordLength": null,
+        "ExceptEmailDomains": null,
+        "OnlyEmailDomains": null,
+        "ManageRule": null
+      },
       "Schema": [
         {
           "Id": "jdukbual",
@@ -710,6 +773,44 @@
           "Options": {
             "min": 2,
             "max": 10,
+            "pattern": ""
+          }
+        }
+      ]
+    },
+    {
+      "Id": "y89kc8kxl8vts1k",
+      "Created": "3/1/2023 12:15:43",
+      "Updated": "3/1/2023 12:15:43",
+      "Name": "users2",
+      "System": false,
+      "Type": "auth",
+      "ListRule": null,
+      "ViewRule": null,
+      "CreateRule": null,
+      "UpdateRule": null,
+      "DeleteRule": null,
+      "Options": {
+        "AllowEmailAuth": true,
+        "AllowOAuth2Auth": true,
+        "AllowUsernameAuth": true,
+        "RequireEmail": false,
+        "MinPasswordLength": 8,
+        "ExceptEmailDomains": null,
+        "OnlyEmailDomains": null,
+        "ManageRule": null
+      },
+      "Schema": [
+        {
+          "Id": "2caltbcc",
+          "Name": "public_name",
+          "Type": "text",
+          "System": false,
+          "Required": false,
+          "Unique": false,
+          "Options": {
+            "min": null,
+            "max": null,
             "pattern": ""
           }
         }

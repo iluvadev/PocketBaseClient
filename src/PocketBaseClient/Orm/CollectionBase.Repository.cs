@@ -1,4 +1,14 @@
-﻿using PocketBaseClient.Orm.Structures;
+﻿// Project site: https://github.com/iluvadev/PocketBaseClient-csharp
+//
+// Issues: https://github.com/iluvadev/PocketBaseClient-csharp/issues
+// License (MIT): https://github.com/iluvadev/PocketBaseClient-csharp/blob/main/LICENSE
+//
+// Copyright (c) 2022, iluvadev, and released under MIT License.
+//
+// pocketbase-csharp-sdk project: https://github.com/PRCV1/pocketbase-csharp-sdk 
+// pocketbase project: https://github.com/pocketbase/pocketbase
+
+using PocketBaseClient.Orm.Structures;
 using System.Collections;
 using System.Web;
 
@@ -7,7 +17,8 @@ namespace PocketBaseClient.Orm
     public partial class CollectionBase
     {
         #region Url
-        internal string UrlRecords => $"/api/collections/{HttpUtility.UrlEncode(Id)}/records";
+        internal string UrlCollection => $"/api/collections/{HttpUtility.UrlEncode(Id)}";
+        internal string UrlRecords => $"{UrlCollection}/records";
         internal string UrlRecord(string id) => $"{UrlRecords}/{HttpUtility.UrlEncode(id)}";
         internal string UrlFile(string recordId, string fileName) => $"/api/files/{HttpUtility.UrlEncode(Id)}/{HttpUtility.UrlEncode(recordId)}/{fileName}";
         internal string UrlFile(FieldFileBase file) => UrlFile(file.Item!.Id!, file.FileName!);

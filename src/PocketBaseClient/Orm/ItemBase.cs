@@ -19,14 +19,14 @@ namespace PocketBaseClient.Orm
     /// <summary>
     /// Base class for a mapped registry
     /// </summary>
-    public abstract class ItemBase : BaseModel
+    public abstract class ItemBase : IBaseModel
     {
         #region Field Properties
         private string? _Id = null;
         /// <summary> Maps to 'id' field in PocketBase </summary>
         [JsonPropertyName("id")]
         [JsonInclude]
-        public new string? Id
+        public string? Id
         {
             get => _Id ?? "";
             internal set
@@ -46,16 +46,19 @@ namespace PocketBaseClient.Orm
                 }
             }
         }
+        
 
         /// <summary> Maps to 'collectionId' field in PocketBase </summary>
         [JsonPropertyName("collectionId")]
         [JsonInclude]
-        public new string? CollectionId => Collection.Id;
+        public string? CollectionId => Collection.Id;
+
 
         /// <summary> Maps to 'collectionName' field in PocketBase </summary>
         [JsonPropertyName("collectionName")]
         [JsonInclude]
-        public new string? CollectionName => Collection.Name;
+        public string? CollectionName => Collection.Name;
+
 
         /// <summary> The Collection where the Item belongs to </summary>
         [JsonIgnore]
@@ -65,13 +68,13 @@ namespace PocketBaseClient.Orm
         [JsonPropertyName("created")]
         [JsonConverter(typeof(DateTimeConverter))]
         [JsonInclude]
-        public new DateTime? Created { get; private set; }
+        public DateTime? Created { get; private set; }
 
         /// <summary> Maps to 'updated' field in PocketBase </summary>
         [JsonPropertyName("updated")]
         [JsonConverter(typeof(DateTimeConverter))]
         [JsonInclude]
-        public new DateTime? Updated { get; private set; }
+        public DateTime? Updated { get; private set; }
         #endregion Field Properties
 
         #region Get and Set 
@@ -252,7 +255,7 @@ namespace PocketBaseClient.Orm
         /// </summary>
         /// <param name="item"></param>
         /// <returns></returns>
-        public bool IsSame(BaseModel? item)
+        public bool IsSame(IBaseModel? item)
             => item != null && item.CollectionId == CollectionId && item.Id == Id;
 
         protected internal virtual IEnumerable<ItemBase?> RelatedItems
@@ -281,6 +284,7 @@ namespace PocketBaseClient.Orm
             Updated = itemBase.Updated;
         }
 
+        #region Ctor
         /// <summary>
         /// Ctor
         /// </summary>
@@ -297,6 +301,7 @@ namespace PocketBaseClient.Orm
             Updated = updated;
             Metadata_.SetLoaded();
         }
+        #endregion Ctor
 
         protected object? AddInternal(object? element) => Collection.AddInternal(element);
 

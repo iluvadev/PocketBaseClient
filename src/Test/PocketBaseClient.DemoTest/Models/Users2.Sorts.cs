@@ -13,19 +13,13 @@ using PocketBaseClient.Orm.Filters;
 
 namespace PocketBaseClient.DemoTest.Models
 {
-    public partial class User
+    public partial class Users2
     {
-        public class Filters : ItemAuthBaseFilters
+        public class Sorts : ItemAuthBaseSorts
         {
 
-            /// <summary> Gets a Filter to Query data over the 'name' field in PocketBase </summary>
-            public FieldFilterText Name => new FieldFilterText("name");
-
-            /// <summary> Gets a Filter to Query data over the 'avatar' field in PocketBase </summary>
-            public FieldFilterText Avatar => new FieldFilterText("avatar");
-
-            /// <summary> Gets a Filter to Query data over the 'url' field in PocketBase </summary>
-            public FieldFilterUri Url => new FieldFilterUri("url");
+            /// <summary>Makes a SortCommand to Order by the 'public_name' field</summary>
+            public SortCommand PublicName => new SortCommand("public_name");
 
 
         }

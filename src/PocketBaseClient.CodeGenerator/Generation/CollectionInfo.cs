@@ -43,6 +43,10 @@ namespace PocketBaseClient.CodeGenerator.Generation
         /// </summary>
         public string ClassName => "Collection" + NaturalName.Pluralize().ToPascalCase();
 
+        public bool IsAuth => CollectionModel.Type == "auth";
+
+        public string ParentClassName => IsAuth ? "CollectionAuthBase" : "CollectionBase";
+
         /// <summary>
         /// Filename where save the Collection class, in the generated code
         /// </summary>
@@ -51,7 +55,7 @@ namespace PocketBaseClient.CodeGenerator.Generation
         /// <summary>
         /// Name of the Class that represents the items of the collection, in the generated code
         /// </summary>
-        private string ItemsClassName => NaturalName.Singularize().ToPascalCase();
+        public string ItemsClassName => NaturalName.Singularize().ToPascalCase();
 
         /// <summary>
         /// Information about the Items of the Collection
@@ -112,7 +116,7 @@ using PocketBaseClient.Services;
 
 namespace {settings.NamespaceModels}
 {{
-    public partial class {ClassName} : CollectionBase<{ItemInfo.ClassName}>
+    public partial class {ClassName} : {ParentClassName}<{ItemInfo.ClassName}>
     {{
         /// <inheritdoc />
         public override string Id => ""{CollectionModel.Id}"";

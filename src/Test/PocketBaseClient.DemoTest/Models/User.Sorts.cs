@@ -15,7 +15,7 @@ namespace PocketBaseClient.DemoTest.Models
 {
     public partial class User
     {
-        public class Sorts : ItemBaseSorts
+        public class Sorts : ItemAuthBaseSorts
         {
 
             /// <summary>Makes a SortCommand to Order by the 'name' field</summary>
