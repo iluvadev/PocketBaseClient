@@ -17,6 +17,10 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Sdk", "Sdk", "{07E825C0-BB7
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "pocketbase-csharp-sdk", "..\sdk\pocketbase-csharp-sdk\pocketbase-csharp-sdk.csproj", "{EC6BAA10-EA65-4320-9820-0FC0F93ED46D}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "pocketbase-csharp-sdk.Tests", "..\sdk\pocketbase-csharp-sdk.Tests\pocketbase-csharp-sdk.Tests.csproj", "{8FD5BDBA-925E-4714-BEEA-F3DBE1721AFC}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Example", "..\sdk\Example\Example.csproj", "{C0C5243B-2808-4FFA-87B4-92D18B49BB10}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -43,6 +47,14 @@ Global
 		{EC6BAA10-EA65-4320-9820-0FC0F93ED46D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{EC6BAA10-EA65-4320-9820-0FC0F93ED46D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{EC6BAA10-EA65-4320-9820-0FC0F93ED46D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8FD5BDBA-925E-4714-BEEA-F3DBE1721AFC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8FD5BDBA-925E-4714-BEEA-F3DBE1721AFC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8FD5BDBA-925E-4714-BEEA-F3DBE1721AFC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8FD5BDBA-925E-4714-BEEA-F3DBE1721AFC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C0C5243B-2808-4FFA-87B4-92D18B49BB10}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C0C5243B-2808-4FFA-87B4-92D18B49BB10}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C0C5243B-2808-4FFA-87B4-92D18B49BB10}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C0C5243B-2808-4FFA-87B4-92D18B49BB10}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -51,6 +63,8 @@ Global
 		{D112C5A5-38CD-4FFB-9674-65FA61C07C10} = {0D4E72E6-4620-439F-A302-3AFCB7BEF6F2}
 		{AD01E4F3-7FE6-4B89-937E-2413EADF302E} = {0D4E72E6-4620-439F-A302-3AFCB7BEF6F2}
 		{EC6BAA10-EA65-4320-9820-0FC0F93ED46D} = {07E825C0-BB7C-48E9-B919-8FB75E42D190}
+		{8FD5BDBA-925E-4714-BEEA-F3DBE1721AFC} = {07E825C0-BB7C-48E9-B919-8FB75E42D190}
+		{C0C5243B-2808-4FFA-87B4-92D18B49BB10} = {07E825C0-BB7C-48E9-B919-8FB75E42D190}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {9C86BEE7-8359-48F9-8628-7357AEB0C833}
