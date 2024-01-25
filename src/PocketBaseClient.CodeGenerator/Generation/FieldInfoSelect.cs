@@ -12,6 +12,7 @@ using pocketbase_csharp_sdk.Models.Collection;
 using PocketBaseClient.CodeGenerator.Models;
 using System.Text;
 using System.Text.Json;
+using System.Text.RegularExpressions;
 
 namespace PocketBaseClient.CodeGenerator.Generation
 {
@@ -79,7 +80,13 @@ namespace {settings.NamespaceModels}
             foreach (var value in Options.Values ?? new List<string>())
             {
                 sb.AppendLine(@$"{indent}[Description(""{value}"")]");
-                sb.AppendLine(@$"{indent}{value.ToPascalCase()},");
+                // Rough check if the value is a valid C# identifier
+                // If the value is not a valid C# identifier, prefix it with E
+                // https://learn.microsoft.com/en-us/dotnet/csharp/language-reference/language-specification/lexical-structure#643-identifiers
+                if (Regex.IsMatch(value, @"^[\p{L}\p{Nl}_]"))
+                    sb.AppendLine(@$"{indent}{value.ToPascalCase()},");
+                else
+                    sb.AppendLine(@$"{indent}E{value.ToPascalCase()},");
                 sb.AppendLine();
             }
             sb.Append($@"
