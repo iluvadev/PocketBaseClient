@@ -1,4 +1,5 @@
 ﻿using pocketbase_csharp_sdk.Models;
+using pocketbase_csharp_sdk.Models.Auth;
 using pocketbase_csharp_sdk.Models.Log;
 using pocketbase_csharp_sdk.Services;
 using PocketBaseClient.Orm;
@@ -11,8 +12,11 @@ namespace PocketBaseClient.Services
     {
         internal CollectionBase<T> Collection { get; private set; }
 
-        private CollectionAuthService<T>? _AuthService;
-        private CollectionAuthService<T> AuthService => _AuthService ??= new CollectionAuthService<T>(Collection.App.Sdk, Collection.Name!);
+        private CollectionAuthService<RecordAuthModel<T>,T>? _AuthService;
+        private CollectionAuthService<RecordAuthModel<T>, T> AuthService => _AuthService ??= new CollectionAuthService<RecordAuthModel<T>, T>(Collection.App.Sdk, Collection.Name!);
+
+        private UserService? _UserService;
+        private UserService UserService => _UserService ?? new UserService(Collection.App.Sdk);
 
         public AuthCollectionService(CollectionBase<T> collection)
         {
@@ -125,5 +129,13 @@ namespace PocketBaseClient.Services
 
         public void UnlinkExternalAuthentication(string userId, string provider)
             => AuthService.UnlinkExternalAuthentication(userId, provider);
+
+        public Task RefreshAsync()
+          => AuthService.RefreshAsync();
+        public void Refresh()
+          => AuthService.Refresh();
+
+        public Task<UserAuthModel?> AuthenticateWithPasswordAsync(string username, string password) => UserService.AuthenticateWithPasswordAsync(username, password);
+        public UserAuthModel? AuthenticateWithPassword(string username, string password) => UserService.AuthenticateWithPassword(username, password);
     }
 }
