@@ -11,7 +11,11 @@
 using pocketbase_csharp_sdk;
 using pocketbase_csharp_sdk.Models;
 using PocketBaseClient.Orm;
+using PocketBaseClient.Orm.Json;
+using System.Collections.Generic;
+using System.Reflection;
 using System.Text.Json;
+using System.Text.Json.Serialization;
 
 namespace PocketBaseClient
 {
@@ -103,15 +107,24 @@ namespace PocketBaseClient
         internal static async Task<T?> HttpPatchAsync<T>(this PocketBase pocketBase, string url, T item)
             where T : ItemBase
         {
-            // Convert Serialized element to Dictionary<string, object>
             var body = JsonSerializer.Deserialize<Dictionary<string, object>>(JsonSerializer.Serialize(item));
             var files = item.RelatedFiles.Where(f => f != null && f.HasChanges)?.Select(f => f!.GetSdkFileToUpload()).Where(f => f != null).Select(f => f!)?.ToList();
 
-            var result = await pocketBase.SendAsync<T>(url, HttpMethod.Patch, body: body);
-
             if (files?.Any() ?? false)
-                return await pocketBase.SendAsync<T>(url, HttpMethod.Patch, files: files);
-
+            {
+                await pocketBase.SendAsync<T>(url, HttpMethod.Patch, files: files);
+            }
+            // remove FieldFileBase field for fix The field contains unknown filenames.
+            foreach (var property in typeof(T).GetProperties(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.Static)
+                     .Where(prop => prop.PropertyType.IsSubclassOf(typeof(FieldFileBase))))
+            {
+                var jsonPropertyNameAttribute = property.GetCustomAttribute<JsonPropertyNameAttribute>();
+                if (jsonPropertyNameAttribute is not null)
+                {
+                    body.Remove(jsonPropertyNameAttribute.Name);
+                }
+            }
+            var result = await pocketBase.SendAsync<T>(url, HttpMethod.Patch, body: body);
             return result;
         }
         internal static T? HttpPatch<T>(this PocketBase pocketBase, string url, T item)

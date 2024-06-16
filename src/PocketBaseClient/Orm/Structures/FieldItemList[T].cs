@@ -8,6 +8,7 @@
 // pocketbase-csharp-sdk project: https://github.com/PRCV1/pocketbase-csharp-sdk 
 // pocketbase project: https://github.com/pocketbase/pocketbase
 
+
 namespace PocketBaseClient.Orm.Structures
 {
     /// <summary>
@@ -26,6 +27,7 @@ namespace PocketBaseClient.Orm.Structures
         /// <param name="propertyId"></param>
         /// <param name="maxSize"></param>
         public FieldItemList(ItemBase? owner, string propertyName, string propertyId, int? maxSize = null)
+
             : base(owner, propertyName, propertyId, maxSize)
         {
         }
@@ -60,5 +62,26 @@ namespace PocketBaseClient.Orm.Structures
         public bool Delete(T? item)
             => Remove(item)?.Delete() ?? false;
 
+        public async IAsyncEnumerable<T> GetItemsAsync(bool reload = false, GetItemsFilter include = GetItemsFilter.Load | GetItemsFilter.New, CancellationToken cancellationToken = default)
+        {
+            foreach (var item in InnerList)
+            {
+                if (cancellationToken.IsCancellationRequested)
+                {
+                    yield break;
+                }
+
+                if (reload)
+                {
+                    item.Metadata_.SetNeedBeLoaded();
+                }
+
+                if (item.Metadata_.MatchFilter(include))
+                {
+                    await Task.Yield(); // Simulate asynchronous operation
+                    yield return item;
+                }
+            }
+        }
     }
 }

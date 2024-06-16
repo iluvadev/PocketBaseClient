@@ -9,6 +9,7 @@
 // pocketbase project: https://github.com/pocketbase/pocketbase
 
 using System.Runtime.CompilerServices;
+using System.Threading;
 
 namespace PocketBaseClient.Orm.Structures
 {
@@ -43,6 +44,8 @@ namespace PocketBaseClient.Orm.Structures
         /// <returns></returns>
         IEnumerable<T> GetItems(bool reload = false, GetItemsFilter include = GetItemsFilter.Load | GetItemsFilter.New);
 
+        IAsyncEnumerable<T> GetItemsAsync(bool reload = false, GetItemsFilter include = GetItemsFilter.Load | GetItemsFilter.New, CancellationToken cancellationToken=default);
+
         /// <summary>
         /// Gets all ids of the items in the list
         /// </summary>
@@ -51,6 +54,7 @@ namespace PocketBaseClient.Orm.Structures
         /// <returns></returns>
         IEnumerable<string> GetItemIds(bool reload = false, GetItemsFilter include = GetItemsFilter.Load | GetItemsFilter.New)
             => GetItems(reload, include).Select(i => i.Id!);
+
 
         /// <summary>
         /// Adds a new item to the list

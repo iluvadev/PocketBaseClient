@@ -101,5 +101,20 @@ namespace PocketBaseClient.Orm.Structures
             return element is T item ? Remove(item) : default;
         }
 
+        public async IAsyncEnumerator<T> GetAsyncEnumerator(CancellationToken cancellationToken = default)
+        {
+            for (int i = 0; i < InnerList.Count; i++)
+            {
+                // Check for cancellation
+                if (cancellationToken.IsCancellationRequested)
+                {
+                    yield break;
+                }
+
+                // Simulate asynchronous operation
+                await Task.Yield();
+                yield return InnerList[i];
+            }
+        }
     }
 }

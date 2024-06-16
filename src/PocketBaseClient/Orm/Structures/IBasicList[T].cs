@@ -8,9 +8,10 @@
 // pocketbase-csharp-sdk project: https://github.com/PRCV1/pocketbase-csharp-sdk 
 // pocketbase project: https://github.com/pocketbase/pocketbase
 
+
 namespace PocketBaseClient.Orm.Structures
 {
-    public interface IBasicList<T> : IBasicList, IEnumerable<T>
+    public interface IBasicList<T> : IBasicList, IEnumerable<T>, IAsyncEnumerable<T>
     {
 
         /// <summary>
@@ -29,7 +30,7 @@ namespace PocketBaseClient.Orm.Structures
             foreach (var element in elements)
                 Add(element);
         }
-
+ 
         /// <summary>
         /// Removes the element from the list
         /// </summary>

@@ -15,5 +15,6 @@ namespace PocketBaseClient.Orm.Structures
         Unknown = 0,
         PocketBase = 1,
         LocalSystem = 2,
+        MemoryStream = 3,
     }
 }
