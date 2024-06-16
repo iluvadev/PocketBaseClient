@@ -6,7 +6,7 @@ namespace pocketbase_csharp_sdk.Services
         where T : AuthModel
     {
         protected readonly PocketBase client;
-        public BaseAuthService(PocketBase client)
+        public BaseAuthService(PocketBase client) : base(client)
         {
             this.client = client;
         }
@@ -141,7 +141,7 @@ namespace pocketbase_csharp_sdk.Services
         /// <param name="headers">The headers to send to the API. Default is null.</param>
         /// <param name="cancellationToken">A cancellation token to cancel the operation. Default is the default cancellation token.</param>
         /// <returns>An object of type T containing the authenticated user's updated information.</returns>
-        public async Task<T?> ConfirmPasswordResetAsync(string passwordResetToken, string password, string passwordConfirm, IDictionary<string, object>? body = null, IDictionary<string, object?>? query = null, IDictionary<string, string>? headers = null, CancellationToken cancellationToken = default)
+        public async Task ConfirmPasswordResetAsync(string passwordResetToken, string password, string passwordConfirm, IDictionary<string, object>? body = null, IDictionary<string, object?>? query = null, IDictionary<string, string>? headers = null, CancellationToken cancellationToken = default)
         {
             body ??= new Dictionary<string, object>();
             body.Add("token", passwordResetToken);
@@ -149,11 +149,7 @@ namespace pocketbase_csharp_sdk.Services
             body.Add("passwordConfirm", passwordConfirm);
 
             var url = $"{BasePath()}/confirm-password-reset";
-            var result = await client.SendAsync<T>(url, HttpMethod.Post, headers: headers, query: query, body: body, cancellationToken: cancellationToken);
-
-            SaveAuthentication(result);
-
-            return result;
+            await client.SendAsync(url, HttpMethod.Post, headers: headers, query: query, body: body, cancellationToken: cancellationToken);
         }
 
         /// <summary>
@@ -167,7 +163,7 @@ namespace pocketbase_csharp_sdk.Services
         /// <param name="headers">The headers to send to the API. Default is null.</param>
         /// <param name="cancellationToken">A cancellation token to cancel the operation. Default is the default cancellation token.</param>
         /// <returns>An object of type T containing the authenticated user's updated information.</returns>
-        public T? ConfirmPasswordReset(string passwordResetToken, string password, string passwordConfirm, IDictionary<string, object>? body = null, IDictionary<string, object?>? query = null, IDictionary<string, string>? headers = null, CancellationToken cancellationToken = default)
+        public void ConfirmPasswordReset(string passwordResetToken, string password, string passwordConfirm, IDictionary<string, object>? body = null, IDictionary<string, object?>? query = null, IDictionary<string, string>? headers = null, CancellationToken cancellationToken = default)
         {
             body ??= new Dictionary<string, object>();
             body.Add("token", passwordResetToken);
@@ -175,11 +171,7 @@ namespace pocketbase_csharp_sdk.Services
             body.Add("passwordConfirm", passwordConfirm);
 
             var url = $"{BasePath()}/confirm-password-reset";
-            var result = client.Send<T>(url, HttpMethod.Post, headers: headers, query: query, body: body, cancellationToken: cancellationToken);
-
-            SaveAuthentication(result);
-
-            return result;
+            client.Send(url, HttpMethod.Post, headers: headers, query: query, body: body, cancellationToken: cancellationToken);
         }
 
 

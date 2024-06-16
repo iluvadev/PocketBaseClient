@@ -13,10 +13,14 @@ namespace pocketbase_csharp_sdk.Models.Files
     public class FilepathFile : BaseFile, IFile
     {
         public string? FilePath { get; set; }
-
+        private Stream? _stream;
         public Stream? GetStream()
         {
-
+            if(_stream is not null)
+            {
+                _stream.Position = 0;
+                return _stream;
+            }
             if (string.IsNullOrWhiteSpace(FilePath))
             {
                 return null;
@@ -41,6 +45,11 @@ namespace pocketbase_csharp_sdk.Models.Files
         {
             this.FilePath = filePath;
         }
-
+        public FilepathFile(string? fileName,Stream stream)
+        {
+            this.FilePath = fileName;
+            this.FileName = fileName;
+            _stream = stream;
+        }
     }
 }

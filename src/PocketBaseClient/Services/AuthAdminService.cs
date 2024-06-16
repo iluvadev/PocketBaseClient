@@ -47,8 +47,8 @@ namespace PocketBaseClient.Services
         /// <param name="password"></param>
         /// <param name="passwordConfirm"></param>
         /// <returns></returns>
-        public async Task<AdminAuthModel?> ConfirmPasswordResetAsync(string passwordResetToken, string password, string passwordConfirm)
-            => await App.Sdk.Admin.ConfirmPasswordResetAsync(passwordResetToken, password, passwordConfirm);
+        public  Task ConfirmPasswordResetAsync(string passwordResetToken, string password, string passwordConfirm)
+            =>  App.Sdk.Admin.ConfirmPasswordResetAsync(passwordResetToken, password, passwordConfirm);
 
     }
 }

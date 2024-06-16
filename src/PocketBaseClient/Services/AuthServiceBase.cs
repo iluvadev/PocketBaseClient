@@ -9,6 +9,7 @@
 // pocketbase project: https://github.com/pocketbase/pocketbase
 
 using pocketbase_csharp_sdk;
+using pocketbase_csharp_sdk.Services;
 
 namespace PocketBaseClient.Services
 {
@@ -28,6 +29,13 @@ namespace PocketBaseClient.Services
         /// Authenticate as Admin actions
         /// </summary>
         public AuthAdminService Admin => _Admin ??= new AuthAdminService(App);
+
+
+        private UserService? _UserService;
+        /// <summary>
+        /// User Service
+        /// </summary>
+        public UserService UserService => _UserService ?? new UserService(App.Sdk);
 
         /// <summary>
         /// Ctor

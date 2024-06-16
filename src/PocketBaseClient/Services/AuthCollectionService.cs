@@ -1,4 +1,5 @@
 ﻿using pocketbase_csharp_sdk.Models;
+using pocketbase_csharp_sdk.Models.Auth;
 using pocketbase_csharp_sdk.Models.Log;
 using pocketbase_csharp_sdk.Services;
 using PocketBaseClient.Orm;
@@ -11,8 +12,8 @@ namespace PocketBaseClient.Services
     {
         internal CollectionBase<T> Collection { get; private set; }
 
-        private CollectionAuthService<T>? _AuthService;
-        private CollectionAuthService<T> AuthService => _AuthService ??= new CollectionAuthService<T>(Collection.App.Sdk, Collection.Name!);
+        private CollectionAuthService<RecordAuthModel<T>, T>? _AuthService;
+        private CollectionAuthService<RecordAuthModel<T>, T> AuthService => _AuthService ??= new CollectionAuthService<RecordAuthModel<T>, T>(Collection.App.Sdk, Collection.Name!);
 
         public AuthCollectionService(CollectionBase<T> collection)
         {
@@ -34,7 +35,7 @@ namespace PocketBaseClient.Services
                 { "password", password },
                 { "passwordConfirm", passwordConfirm },
             };
-            return await Collection.App.Sdk.HttpPostAsync<T>(Collection.UrlCollection, body);
+            return await Collection.App.Sdk.HttpPostAsync<T>(Collection.UrlRecords, body);
         }
         /// <summary>
         /// Create an Auth item with email and password
@@ -96,11 +97,9 @@ namespace PocketBaseClient.Services
         public void RequestVerification(string email)
             => AuthService.RequestVerification(email);
 
-        public async Task<T?> ConfirmVerificationAsync(string token)
-            => (await AuthService.ConfirmVerificationAsync(token))?.Record;
+        public  Task ConfirmVerificationAsync(string token)  => AuthService.ConfirmVerificationAsync(token);
 
-        public T? ConfirmVerification(string token)
-            => AuthService.ConfirmVerification(token)?.Record;
+        public void ConfirmVerification(string token) => AuthService.ConfirmVerification(token);
 
         public async Task RequestEmailChangeAsync(string newEmail)
             => await AuthService.RequestEmailChangeAsync(newEmail);
@@ -108,10 +107,10 @@ namespace PocketBaseClient.Services
         public void RequestEmailChange(string newEmail)
             => AuthService.RequestEmailChange(newEmail);
 
-        public async Task<T?> ConfirmEmailChangeAsync(string emailChangeToken, string userPassword)
-            => (await AuthService.ConfirmEmailChangeAsync(emailChangeToken, userPassword))?.Record;
-        public T? ConfirmEmailChange(string emailChangeToken, string userPassword)
-            => AuthService.ConfirmEmailChange(emailChangeToken, userPassword)?.Record;
+        public async Task ConfirmEmailChangeAsync(string emailChangeToken, string userPassword)
+            => await AuthService.ConfirmEmailChangeAsync(emailChangeToken, userPassword);
+        public void ConfirmEmailChange(string emailChangeToken, string userPassword)
+            => AuthService.ConfirmEmailChange(emailChangeToken, userPassword);
 
 
         public async Task<IEnumerable<ExternalAuthModel>?> GetExternalAuthenticationMethodsAsync(string userId)
@@ -125,5 +124,12 @@ namespace PocketBaseClient.Services
 
         public void UnlinkExternalAuthentication(string userId, string provider)
             => AuthService.UnlinkExternalAuthentication(userId, provider);
+
+
+        public Task RequestPasswordResetAsync(string email) => AuthService.RequestPasswordResetAsync(email);
+        public void RequestPasswordReset(string email) => AuthService.RequestPasswordReset(email);
+
+        public Task ConfirmPasswordResetAsync(string passwordResetToken, string password, string passwordConfirm) => AuthService.ConfirmPasswordResetAsync(passwordResetToken, password, passwordConfirm);
+        public void ConfirmPasswordReset(string passwordResetToken, string password, string passwordConfirm) => AuthService.ConfirmPasswordReset(passwordResetToken, password, passwordConfirm);
     }
 }

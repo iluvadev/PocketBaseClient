@@ -10,6 +10,7 @@
 
 using PocketBaseClient.Orm.Structures;
 using System.Collections;
+using System.Runtime.CompilerServices;
 
 namespace PocketBaseClient.Orm
 {
@@ -27,6 +28,23 @@ namespace PocketBaseClient.Orm
         /// <inheritdoc />
         public IEnumerator<T> GetEnumerator()
             => GetItems().GetEnumerator();
+
+        /// <inheritdoc />
+        public IAsyncEnumerable<T> GetItemsAsync(bool reload = false, GetItemsFilter include = GetItemsFilter.Load | GetItemsFilter.New, CancellationToken cancellationToken = default)
+             => GetItemsInternalAsync(reload, include);
+
+        /// <inheritdoc />
+        public IAsyncEnumerator<T> GetEnumeratorAsync(CancellationToken cancellationToken = default)
+            => GetItemsAsync().GetAsyncEnumerator();
+
+
+        public async IAsyncEnumerator<T> GetAsyncEnumerator(CancellationToken cancellationToken = default)
+        {
+            await foreach (var item in GetItemsAsync(false, GetItemsFilter.Load | GetItemsFilter.New, cancellationToken))
+            {
+                yield return item;
+            }
+        }
 
         /// <summary>
         /// Gets the item, with its id (async)
